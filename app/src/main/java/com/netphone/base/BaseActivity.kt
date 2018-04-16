@@ -12,6 +12,7 @@ import android.view.View
 import com.netphone.R
 import com.netphone.netsdk.base.AppBean
 import com.netphone.netsdk.utils.EventBusUtil
+import com.netphone.utils.LightStatusBarUtils
 import com.netphone.utils.ProgressUtils
 import com.netphone.utils.StatusBarUtils
 import com.netphone.utils.ToastUtil
@@ -63,12 +64,13 @@ open abstract class BaseActivity<T : ViewDataBinding> : AppCompatActivity() {
         EventBusUtil.register(this);
         isRegisterEventBus = true
     }
+
     /**
      * 取消绑定事件总线
      */
     protected fun unregisterEventBus() {
         if (isRegisterEventBus)
-        EventBusUtil.unregister(this);
+            EventBusUtil.unregister(this);
         isRegisterEventBus = false
     }
 
@@ -88,7 +90,7 @@ open abstract class BaseActivity<T : ViewDataBinding> : AppCompatActivity() {
      */
     fun showProgress() {
         if (!activity.isFinishing)
-        ProgressUtils.showProgressDialog(context)
+            ProgressUtils.showProgressDialog(context)
 
     }
 
@@ -100,7 +102,9 @@ open abstract class BaseActivity<T : ViewDataBinding> : AppCompatActivity() {
      * 绑定
      */
     fun initBinding(layout: Int) {
+
         binding = DataBindingUtil.setContentView<T>(this, layout)!!
+        setBarColor(R.color.white)
 
         initData()
         initListener()
@@ -182,9 +186,6 @@ open abstract class BaseActivity<T : ViewDataBinding> : AppCompatActivity() {
      * @param appBean 粘性事件
      */
     abstract fun receiveStickyEvent(appBean: AppBean<Any>)
-
-
-
 
 
 }

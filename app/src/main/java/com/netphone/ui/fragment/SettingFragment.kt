@@ -29,6 +29,8 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>() {
     }
 
     override fun initData() {
+        binding.title.back.visibility = View.INVISIBLE
+        binding.title.title.text = context.resources.getString(R.string.setting)
     }
 
 }

@@ -3,7 +3,9 @@ package com.netphone.ui.activity
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentPagerAdapter
+import android.view.KeyEvent
 import android.view.View
+import android.widget.Toast
 import com.netphone.R
 import com.netphone.databinding.ActivityMainBinding
 import com.netphone.netsdk.LTConfigure
@@ -14,6 +16,8 @@ import com.netphone.ui.fragment.FriendsFragment
 import com.netphone.ui.fragment.GroupsFragment
 import com.netphone.ui.fragment.SessionFragment
 import com.netphone.ui.fragment.SettingFragment
+import com.netphone.utils.LightStatusBarUtils
+import com.storm.developapp.tools.AppManager
 import com.storm.tool.base.BaseActivity
 
 class MainActivity : BaseActivity<ActivityMainBinding>() {
@@ -22,8 +26,19 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initBinding(R.layout.activity_main)
+    }
 
+    override fun onResume() {
+        super.onResume()
+        LightStatusBarUtils.setLightStatusBar(activity, true)
+    }
 
+    override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            exitSystem()
+            return false
+        }
+        return super.onKeyDown(keyCode, event)
     }
 
     override fun initData() {
@@ -76,6 +91,9 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     override fun receiveStickyEvent(appBean: AppBean<Any>) {
     }
 
+
+
+
     inner class OnClick {
         open fun message(view: View) {
             binding.viewpage.setCurrentItem(0,false)
@@ -95,6 +113,20 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 
         open fun setting(view: View) {
             binding.viewpage.setCurrentItem(4,false)
+        }
+    }
+
+    /**
+     * 退出系统
+     */
+    private var exitTime: Long = 0
+    private fun exitSystem() {
+        if (System.currentTimeMillis() - exitTime > 2000) {
+            Toast.makeText(applicationContext, "再按一次返回键退出程序",
+                    Toast.LENGTH_SHORT).show()
+            exitTime = System.currentTimeMillis()
+        } else {
+           AppManager.appManager.AppExit(context)
         }
     }
 }

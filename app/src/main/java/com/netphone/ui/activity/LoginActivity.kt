@@ -81,6 +81,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>() {
 //                    LogUtil.error("LoginActivity.kt", "onComplete\n" + Gson().toJson(userListBean))
                     Constant.listBean = userListBean;
                     jump(MainActivity::class.java)
+                    finish()
                 }
             })
         }

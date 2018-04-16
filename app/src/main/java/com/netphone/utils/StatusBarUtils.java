@@ -28,6 +28,7 @@ public class StatusBarUtils {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             window.setStatusBarColor(colorResId);
         }
+
         //设置系统状态栏处于可见状态
         window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
         //让view不根据系统窗口来调整自己的布局
@@ -37,7 +38,6 @@ public class StatusBarUtils {
             ViewCompat.setFitsSystemWindows(mChildView, false);
             ViewCompat.requestApplyInsets(mChildView);
         }
-
     }
 
     public static void setWindowStatusBarColor2(Activity activity, int colorResId){

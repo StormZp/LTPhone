@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="bg">#EE6969</color>
+    <color name="bg">@color/white</color>
     <color name="colorPrimary">@color/bg</color><!--应用的主要色调，actionBar默认使用该颜色，Toolbar导航栏的底色-->
     <color name="colorPrimaryDark">@color/bg</color><!--应用的主要暗色调 状态栏颜色也用这个-->
     <color name="colorAccent">#FF4081</color>
