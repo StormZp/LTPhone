@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <data>
+        <variable
+            name="click"
+            type="com.netphone.ui.activity.MainActivity.OnClick"/>
+
+    </data>
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:fresco="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
@@ -12,13 +18,86 @@
            app:layout_heightPercent="%h"
            app:layout_widthPercent="%w"
         -->
-        <TextView
-            android:id="@+id/text"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="123" />
+            android:orientation="vertical">
+
+            <com.netphone.view.ScrollViewPager
+                android:id="@+id/viewpage"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+              >
+
+            </com.netphone.view.ScrollViewPager>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp65">
 
 
-    </LinearLayout>
+                <RadioGroup
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp65"
+                    android:orientation="horizontal">
+
+                    <RadioButton
+                        style="@style/tab_menu_item"
+                        android:drawableTop="@drawable/tab_menu_message"
+                        android:onClick="@{click.message}"
+                        android:text="消息" />
+
+                    <RadioButton
+                        style="@style/tab_menu_item"
+                        android:drawableTop="@drawable/tab_menu_friends"
+                        android:onClick="@{click.friends}"
+                        android:text="好友" />
+
+                    <RadioButton
+                        style="@style/tab_menu_item"
+                        android:text="" />
+
+                    <RadioButton
+                        style="@style/tab_menu_item"
+                        android:drawableTop="@drawable/tab_menu_groups"
+                        android:onClick="@{click.groups}"
+                        android:text="群组" />
+
+                    <RadioButton
+                        style="@style/tab_menu_item"
+                        android:drawableTop="@drawable/tab_menu_setting"
+                        android:onClick="@{click.setting}"
+                        android:text="设置" />
+
+                </RadioGroup>
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/dp92"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="@dimen/dp65"
+                android:layout_height="@dimen/dp65"
+                android:src="@drawable/tab_menu_huatong"
+                android:onClick="@{click.call}"
+                android:clickable="true"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="群组"
+                android:layout_gravity="center_horizontal"
+                android:textColor="@color/textcolor_dhr"
+                android:textSize="@dimen/sp18" />
+        </LinearLayout>
+    </RelativeLayout>
 </layout>

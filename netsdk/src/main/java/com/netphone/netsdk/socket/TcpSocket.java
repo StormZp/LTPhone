@@ -217,7 +217,7 @@ public class TcpSocket {
 
     private synchronized void handleData(final byte[] data) {
         try {
-            LogUtil.error("原始数据长度:" + data.length + "");
+            LogUtil.error("原始数据长度:" + data.length + "\n" + new Gson().toJson(data));
             List<Byte> tempLists = Bytes.asList(data);
             list.addAll(tempLists);
         } catch (Exception e) {
@@ -274,7 +274,8 @@ public class TcpSocket {
 
     //添加发送数据
     public void addData(byte[] datas) {
-        LogUtil.error("添加发送数据");
+        LogUtil.error("添加发送数据" + new Gson().toJson(datas
+        ));
         if (datas != null && mSocket != null)
             addLinkQueue(datas);
     }
