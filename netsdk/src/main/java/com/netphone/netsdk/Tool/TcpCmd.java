@@ -3,7 +3,7 @@ package com.netphone.netsdk.Tool;
 import com.google.gson.Gson;
 import com.netphone.netsdk.LTConfigure;
 import com.netphone.netsdk.R;
-import com.netphone.netsdk.bean.PersonInfo;
+import com.netphone.netsdk.bean.UserInfoBean;
 import com.netphone.netsdk.bean.UserListBean;
 import com.netphone.netsdk.utils.ByteIntUtils;
 import com.netphone.netsdk.utils.DataTypeChangeHelper;
@@ -40,7 +40,7 @@ public class TcpCmd {
                                 String body = ByteIntUtils.utfToString(jsonBytes);
                                 LogUtil.error("TAG\n", body);
                                 Gson gson = new Gson();
-                                PersonInfo user = gson.fromJson(body, PersonInfo.class);
+                                UserInfoBean user = gson.fromJson(body, UserInfoBean.class);
                                 if (user == null) {
                                     LogUtil.error( "user =null");
                                     return;
@@ -124,8 +124,8 @@ public class TcpCmd {
                 switch (pagBytes[8]) {
                     case 0x00://推送用户列表信息,由于socket写在服务里原因，在主页没能正常停止服务，会导致服务一直开启，socket写入数据
                         String body = ByteIntUtils.utfToString(bodyBytes);
-
                         Gson gson = new Gson();
+                        LogUtil.error("TcpCmd", "127\tcmdExplore()\n" +body);
                         try {
                             UserListBean  userListBean = gson.fromJson(body, UserListBean.class);
                             LTConfigure.getInstance().getLtApi().mOnLoginListener.onComplete(userListBean);

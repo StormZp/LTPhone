@@ -1,12 +1,17 @@
 package com.netphone.netsdk.bean;
 
+import android.support.annotation.NonNull;
+import android.text.TextUtils;
+
+import com.netphone.netsdk.utils.Cn2Spell;
+
 import java.io.Serializable;
 
 /**
  * Created by lgp on 2017/8/23.
  * 用户列表item
  */
-public class UserInfoBean implements Serializable {
+public class UserInfoBean implements Serializable, Comparable<UserInfoBean> {
     /**
      * IsOnLine : 0
      * RealName : gongjie3
@@ -14,12 +19,18 @@ public class UserInfoBean implements Serializable {
      * IsDizzy : false
      */
 
+    private String RealName;//用户姓名
+    private String UserId;//用户ID
+    private int IsDizzy;//是否遥晕 1:是,0:否
     private int IsOnLine;
-    private String RealName;
-    private String UserId;
     private String HeadIcon;
+    private String Description;
+    private String Gender;
     private String ExpiredDate;
-    private boolean IsDizzy;
+
+
+    private String pinyin; // 姓名对应的拼音
+    private String firstLetter; // 拼音的首字母
 
     public String getExpiredDate() {
         return ExpiredDate;
@@ -29,13 +40,6 @@ public class UserInfoBean implements Serializable {
         ExpiredDate = expiredDate;
     }
 
-    public boolean isDizzy() {
-        return IsDizzy;
-    }
-
-    public void setDizzy(boolean dizzy) {
-        IsDizzy = dizzy;
-    }
 
     public String getHeadIcon() {
         return HeadIcon;
@@ -69,21 +73,69 @@ public class UserInfoBean implements Serializable {
         this.UserId = UserId;
     }
 
-    public boolean isIsDizzy() {
+    public int getIsDizzy() {
         return IsDizzy;
     }
 
-    public void setIsDizzy(boolean IsDizzy) {
-        this.IsDizzy = IsDizzy;
+    public void setIsDizzy(int isDizzy) {
+        IsDizzy = isDizzy;
     }
 
+    public String getDescription() {
+        return Description;
+    }
+
+    public void setDescription(String description) {
+        Description = description;
+    }
+
+    public String getGender() {
+        return Gender;
+    }
+
+    public void setGender(String gender) {
+        Gender = gender;
+    }
+
+    public String getPinyin() {
+        if (TextUtils.isEmpty(pinyin)) {
+            pinyin = Cn2Spell.getPinYin(RealName); // 根据姓名获取拼音
+            firstLetter = pinyin.substring(0, 1).toUpperCase(); // 获取拼音首字母并转成大写
+            if (!firstLetter.matches("[A-Z]")) { // 如果不在A-Z中则默认为“#”
+                firstLetter = "#";
+            }
+        }
+        return pinyin;
+    }
+
+    public void setPinyin(String pinyin) {
+        this.pinyin = pinyin;
+    }
+
+    public String getFirstLetter() {
+        if (TextUtils.isEmpty(firstLetter)) {
+            pinyin = Cn2Spell.getPinYin(RealName); // 根据姓名获取拼音
+            firstLetter = pinyin.substring(0, 1).toUpperCase(); // 获取拼音首字母并转成大写
+            if (!firstLetter.matches("[A-Z]")) { // 如果不在A-Z中则默认为“#”
+                firstLetter = "#";
+            }
+        }
+        return firstLetter;
+    }
+
+    public void setFirstLetter(String firstLetter) {
+        this.firstLetter = firstLetter;
+    }
+
+
     @Override
-    public String toString() {
-        return "UserInfoBean{" +
-                "IsOnLine=" + IsOnLine +
-                ", RealName='" + RealName + '\'' +
-                ", UserId='" + UserId + '\'' +
-                ", IsDizzy=" + IsDizzy +
-                '}';
+    public int compareTo(@NonNull UserInfoBean userInfoBean) {
+        if (!userInfoBean.getFirstLetter().equals("#")) {
+            return 1;
+        } else if (userInfoBean.getFirstLetter().equals("#")) {
+            return -1;
+        } else {
+            return pinyin.compareToIgnoreCase(userInfoBean.getPinyin());
+        }
     }
 }

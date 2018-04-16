@@ -56,6 +56,7 @@
     <string name="delivery_location">发送位置</string>
     <string name="Upload_photo">上传图片</string>
     <string name="upload_file">上传文件</string>
+    <string name="receive_file">接收文件</string>
     <string name="upload_seccess">上传成功</string>
     <string name="upload_fail">上传失败</string>
     <string name="set_online_state">设置在线状态</string>
@@ -104,6 +105,7 @@
     <string name="choose_communication_type">请选择通讯方式</string>
     <string name="need_premission">app需要开启权限才能使用此功能</string>
     <string name="setting">设置</string>
+    <string name="setting_content">设置中心</string>
     <string name="service_mandatory_brocast">服务端强制广播</string>
     <string name="service_accept_brocast">服务端接听广播</string>
     <string name="service_accept_listener">服务端接听监听</string>
@@ -113,6 +115,7 @@
     <string name="been_shaken">您已被摇晕</string>
     <string name="chat_with_u">你不能跟自己聊天</string>
     <string name="change_info">修改个人信息</string>
+    <string name="user_info">个人资料</string>
     <string name="woman">女</string>
     <string name="man">男</string>
     <string name="account">账号名</string>

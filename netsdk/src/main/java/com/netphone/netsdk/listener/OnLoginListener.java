@@ -1,6 +1,6 @@
 package com.netphone.netsdk.listener;
 
-import com.netphone.netsdk.bean.PersonInfo;
+import com.netphone.netsdk.bean.UserInfoBean;
 import com.netphone.netsdk.bean.UserListBean;
 
 /**
@@ -8,7 +8,7 @@ import com.netphone.netsdk.bean.UserListBean;
  */
 
 public interface OnLoginListener {
-    void onSuccess(PersonInfo personBean);
+    void onSuccess(UserInfoBean bean);
     void onFail(int code,String error);
     void onComplete(UserListBean userListBean);
 }

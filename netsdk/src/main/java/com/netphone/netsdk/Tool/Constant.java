@@ -1,6 +1,6 @@
 package com.netphone.netsdk.Tool;
 
-import com.netphone.netsdk.bean.PersonInfo;
+import com.netphone.netsdk.bean.UserInfoBean;
 import com.netphone.netsdk.bean.UserListBean;
 
 /**
@@ -24,6 +24,6 @@ public class Constant {
     public static final String username = "username";
     public static final String password = "password";
 
-    public static  PersonInfo  info;
+    public static UserInfoBean info;
     public static UserListBean listBean;
 }
