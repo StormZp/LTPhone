@@ -128,6 +128,8 @@
     <string name="remark"> remark</string>
     <string name="choose_sex"> choose sex</string>
     <string name="change_seccess"> change seccess</string>
+    <string name="Current_Group">Current Group</string>
+    <string name="Other_Group">Other Group</string>
     <string name="old_password_fail"> Error of original password verification</string>
     <string name="not_null"> Can\'t be empty</string>
     <string name="old_passowrd"> Old Password</string>

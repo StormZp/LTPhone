@@ -10,6 +10,7 @@ import com.netphone.databinding.FragmentSettingBinding
 import com.netphone.netsdk.Tool.Constant
 import com.netphone.netsdk.Tool.TcpConfig
 import com.netphone.netsdk.base.AppBean
+import com.netphone.ui.activity.ChangePWActivity
 import com.netphone.ui.activity.UserInfoActivity
 import com.netphone.utils.GlideCircleTransform
 import com.storm.tool.base.BaseFragment
@@ -44,7 +45,7 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>() {
             binding.onlineSwitch.isChecked = true
 
 
-            Glide.with(context).load("http://" + TcpConfig.HOST + Constant.info.getHeadIcon()).placeholder(R.mipmap.icon_defult_detail).error(R.mipmap.icon_defult_detail).transform(GlideCircleTransform(context)).into(binding.ivHead)
+            Glide.with(context).load( TcpConfig.URL + Constant.info.getHeadIcon()).placeholder(R.mipmap.icon_defult_detail).error(R.mipmap.icon_defult_detail).transform(GlideCircleTransform(context)).into(binding.ivHead)
 
         }
     }
@@ -52,6 +53,8 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>() {
     inner class onClick {
         open fun openUserInfo(view: View) {
             jump(UserInfoActivity::class.java)
+        } open fun openPwChange(view: View) {
+            jump(ChangePWActivity::class.java)
         }
     }
 

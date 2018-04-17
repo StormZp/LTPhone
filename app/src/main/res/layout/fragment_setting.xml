@@ -60,6 +60,7 @@
                         android:paddingTop="@dimen/dp8"
                         android:paddingBottom="@dimen/dp8"
                         android:onClick="@{click.openUserInfo}"
+
                         android:drawableRight="@mipmap/right_arrow"
                         android:gravity="center_vertical"
                         android:text="@string/user_info" />
@@ -263,6 +264,7 @@
                     android:layout_marginTop="@dimen/dp1"
                     android:background="@color/white"
                     android:gravity="center_vertical"
+                    android:onClick="@{click.openPwChange}"
                     android:orientation="horizontal">
 
 

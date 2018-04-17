@@ -74,7 +74,7 @@ public class FriendAdapter extends BaseAdapter {
         viewHolder.catalog.setText(user.getFirstLetter().toUpperCase());
         viewHolder.online.setText(user.getIsOnLine() == 0 ? mContext.getResources().getString(R.string.off_line) : mContext.getResources().getString(R.string.onLine));
 //        LogUtil.error("FriendAdapter", "62\tgetView()\n" + user.getHeadIcon());
-        Glide.with(mContext).load("http://" + TcpConfig.HOST + user.getHeadIcon()).placeholder(R.mipmap.icon_defult_detail).error(R.mipmap.icon_defult_detail).transform(mGlideCircleTransform).into(viewHolder.head);
+        Glide.with(mContext).load(TcpConfig.URL + user.getHeadIcon()).placeholder(R.mipmap.icon_defult_detail).error(R.mipmap.icon_defult_detail).transform(mGlideCircleTransform).into(viewHolder.head);
 
 
         view.setOnClickListener(new View.OnClickListener() {

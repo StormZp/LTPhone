@@ -58,6 +58,10 @@
             android:name=".ui.activity.UserInfoActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|stateUnchanged"></activity>
+        <activity
+            android:name=".ui.activity.ChangePWActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|stateUnchanged"></activity>
 
         <service android:name="com.netphone.netsdk.service.SocketManageService"></service>
     </application>

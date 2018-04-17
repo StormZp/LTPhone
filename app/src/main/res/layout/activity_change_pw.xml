@@ -1,26 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
 
+    <data>
+
+        <variable
+            name="click"
+            type="com.netphone.ui.activity.ChangePWActivity.onClick"/>
+    </data>
+
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:orientation="vertical"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:focusableInTouchMode="true"
+        android:orientation="vertical">
+
         <include
             android:id="@+id/title"
             layout="@layout/titlebar" />
-
-        <include
-            android:id="@+id/title_search"
-            layout="@layout/title_search"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp48"
-            android:layout_below="@+id/title" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:text="会话"
-            />
+            android:text="修改密码" />
     </LinearLayout>
 </layout>

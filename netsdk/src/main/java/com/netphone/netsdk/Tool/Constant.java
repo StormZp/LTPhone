@@ -23,6 +23,7 @@ public class Constant {
 
     public static final String username = "username";
     public static final String password = "password";
+    public static final String currentGroupId = "currentGroupId";
 
     public static UserInfoBean info;
     public static UserListBean listBean;
