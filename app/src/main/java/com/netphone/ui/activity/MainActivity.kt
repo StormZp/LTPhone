@@ -28,10 +28,16 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         initBinding(R.layout.activity_main)
     }
 
+    override fun onStart() {
+        super.onStart()
+        LightStatusBarUtils.setLightStatusBar(activity, true)
+    }
+
     override fun onResume() {
         super.onResume()
         LightStatusBarUtils.setLightStatusBar(activity, true)
     }
+
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
@@ -92,15 +98,13 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     }
 
 
-
-
     inner class OnClick {
         open fun message(view: View) {
-            binding.viewpage.setCurrentItem(0,false)
+            binding.viewpage.setCurrentItem(0, false)
         }
 
         open fun friends(view: View) {
-            binding.viewpage.setCurrentItem(1,false)
+            binding.viewpage.setCurrentItem(1, false)
         }
 
         open fun call(view: View) {
@@ -108,11 +112,11 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         }
 
         open fun groups(view: View) {
-            binding.viewpage.setCurrentItem(3,false)
+            binding.viewpage.setCurrentItem(3, false)
         }
 
         open fun setting(view: View) {
-            binding.viewpage.setCurrentItem(4,false)
+            binding.viewpage.setCurrentItem(4, false)
         }
     }
 
@@ -120,13 +124,14 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
      * 退出系统
      */
     private var exitTime: Long = 0
+
     private fun exitSystem() {
         if (System.currentTimeMillis() - exitTime > 2000) {
             Toast.makeText(applicationContext, "再按一次返回键退出程序",
                     Toast.LENGTH_SHORT).show()
             exitTime = System.currentTimeMillis()
         } else {
-           AppManager.appManager.AppExit(context)
+            AppManager.appManager.AppExit(context)
         }
     }
 }

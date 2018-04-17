@@ -10,6 +10,7 @@ import com.netphone.databinding.FragmentSettingBinding
 import com.netphone.netsdk.Tool.Constant
 import com.netphone.netsdk.Tool.TcpConfig
 import com.netphone.netsdk.base.AppBean
+import com.netphone.ui.activity.UserInfoActivity
 import com.netphone.utils.GlideCircleTransform
 import com.storm.tool.base.BaseFragment
 
@@ -30,6 +31,7 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>() {
     }
 
     override fun initListener() {
+        binding.click = onClick()
     }
 
     override fun initData() {
@@ -44,6 +46,12 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>() {
 
             Glide.with(context).load("http://" + TcpConfig.HOST + Constant.info.getHeadIcon()).placeholder(R.mipmap.icon_defult_detail).error(R.mipmap.icon_defult_detail).transform(GlideCircleTransform(context)).into(binding.ivHead)
 
+        }
+    }
+
+    inner class onClick {
+        open fun openUserInfo(view: View) {
+            jump(UserInfoActivity::class.java)
         }
     }
 

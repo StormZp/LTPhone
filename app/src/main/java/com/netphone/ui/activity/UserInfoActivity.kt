@@ -5,7 +5,6 @@ import android.view.View
 import com.netphone.R
 import com.netphone.databinding.ActivityUserInfoBinding
 import com.netphone.netsdk.base.AppBean
-import com.netphone.netsdk.bean.UserInfoBean
 import com.storm.tool.base.BaseActivity
 
 /**
@@ -19,8 +18,7 @@ open class UserInfoActivity : BaseActivity<ActivityUserInfoBinding>() {
     }
 
     override fun initData() {
-        var userInfoBean = intent.extras.getSerializable("bean") as UserInfoBean
-        binding.title.title.text = userInfoBean.realName
+        binding.title.title.text ="ldkjgfldf"
     }
 
     override fun initListener() {

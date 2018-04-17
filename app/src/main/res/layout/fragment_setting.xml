@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
 
+    <data>
+        <variable
+            name="click"
+            type="com.netphone.ui.fragment.SettingFragment.onClick"/>
+
+    </data>
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -23,7 +29,7 @@
 
 
                 <LinearLayout
-                    android:id="@+id/money"
+                    android:id="@+id/user"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp90"
                     android:background="@color/white"
@@ -49,8 +55,11 @@
 
                     <TextView
                         android:layout_width="wrap_content"
-                        android:layout_height="@dimen/dp24"
+                        android:layout_height="wrap_content"
                         android:layout_marginRight="8dp"
+                        android:paddingTop="@dimen/dp8"
+                        android:paddingBottom="@dimen/dp8"
+                        android:onClick="@{click.openUserInfo}"
                         android:drawableRight="@mipmap/right_arrow"
                         android:gravity="center_vertical"
                         android:text="@string/user_info" />
@@ -115,8 +124,8 @@
                             android:textSize="18dp" />
 
                         <ImageView
-                            android:layout_width="@dimen/dp48"
-                            android:layout_height="@dimen/dp48"
+                            android:layout_width="@dimen/dp42"
+                            android:layout_height="@dimen/dp42"
                             android:layout_marginLeft="@dimen/dp9"
                             android:src="@mipmap/icon_weizhi" />
 
@@ -128,6 +137,8 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp90"
+                    android:paddingRight="@dimen/dp8"
+                    android:paddingLeft="@dimen/dp8"
                     android:layout_marginTop="@dimen/dp8"
                     android:background="@color/white">
 
@@ -140,8 +151,8 @@
                         android:orientation="vertical">
 
                         <ImageView
-                            android:layout_width="@dimen/dp48"
-                            android:layout_height="@dimen/dp48"
+                            android:layout_width="@dimen/dp42"
+                            android:layout_height="@dimen/dp42"
                             android:src="@mipmap/icon_pic" />
 
                         <TextView
@@ -161,8 +172,8 @@
                         android:orientation="vertical">
 
                         <ImageView
-                            android:layout_width="@dimen/dp48"
-                            android:layout_height="@dimen/dp48"
+                            android:layout_width="@dimen/dp42"
+                            android:layout_height="@dimen/dp42"
                             android:src="@mipmap/icon_wenjian" />
 
                         <TextView
@@ -182,8 +193,8 @@
                         android:orientation="vertical">
 
                         <ImageView
-                            android:layout_width="@dimen/dp48"
-                            android:layout_height="@dimen/dp48"
+                            android:layout_width="@dimen/dp42"
+                            android:layout_height="@dimen/dp42"
                             android:src="@mipmap/icon_download" />
 
                         <TextView
@@ -215,6 +226,7 @@
                         android:textSize="15sp" />
 
                     <LinearLayout
+                        android:id="@+id/online_lay"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:gravity="center"
@@ -223,9 +235,11 @@
 
                         <CheckBox
                             android:id="@+id/online_switch"
-                            android:layout_width="wrap_content"
-                            android:layout_height="@dimen/dp24"
+                            android:layout_width="@dimen/dp32"
+                            android:layout_height="@dimen/dp16"
                             android:button="@null"
+                            android:layout_gravity="center_horizontal"
+                            android:gravity="center_horizontal"
                             android:background="@drawable/button_font"
                           />
 

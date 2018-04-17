@@ -2,8 +2,6 @@ package com.netphone.ui.activity
 
 import android.os.Bundle
 import android.view.View
-import android.view.Window
-import android.view.WindowManager
 import android.widget.Toast
 import com.netphone.R
 import com.netphone.databinding.ActivityLoginBinding
@@ -25,11 +23,6 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        //无title
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        //全屏
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         initBinding(R.layout.activity_login)
     }
@@ -47,7 +40,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>() {
 
     override fun initData() {
         binding.click = onClick()
-
+        setBarColor(R.color.black)
     }
 
     inner class onClick {
