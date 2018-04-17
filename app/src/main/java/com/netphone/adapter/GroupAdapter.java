@@ -1,6 +1,8 @@
 package com.netphone.adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -11,6 +13,7 @@ import android.widget.TextView;
 
 import com.netphone.R;
 import com.netphone.netsdk.bean.GroupInfoBean;
+import com.netphone.ui.activity.GroupChatActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,13 +47,24 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        GroupInfoBean groupInfoBean = datas.get(position);
-        if (!TextUtils.isEmpty(id)&&id.equals(groupInfoBean.getGroupID())) {
+        final GroupInfoBean groupInfoBean = datas.get(position);
+        if (!TextUtils.isEmpty(id) && id.equals(groupInfoBean.getGroupID())) {
             holder.getView().setVisibility(View.GONE);
         } else {
             holder.getView().setVisibility(View.VISIBLE);
         }
         holder.tvName.setText(groupInfoBean.getGroupName());
+
+        holder.getView().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mContext, GroupChatActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("bean", groupInfoBean);
+                intent.putExtras(bundle);
+                mContext.startActivity(intent);
+            }
+        });
 
     }
 

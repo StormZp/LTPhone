@@ -3,7 +3,7 @@ package com.netphone.ui.activity
 import android.os.Bundle
 import android.view.View
 import com.netphone.R
-import com.netphone.databinding.ActivityChatGroupBinding
+import com.netphone.databinding.ActivityInfoGroupBinding
 import com.netphone.netsdk.base.AppBean
 import com.netphone.netsdk.bean.GroupInfoBean
 import com.storm.tool.base.BaseActivity
@@ -11,23 +11,20 @@ import com.storm.tool.base.BaseActivity
 /**
  * Created by XYSM on 2018/4/16.
  */
-open class GroupChatActivity : BaseActivity<ActivityChatGroupBinding>() {
+open class GroupInfoActivity : BaseActivity<ActivityInfoGroupBinding>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        initBinding(R.layout.activity_chat_group)
+        initBinding(R.layout.activity_info_group)
     }
 
     override fun initData() {
         var userInfoBean = intent.extras.getSerializable("bean") as GroupInfoBean
         binding.title.title.text = userInfoBean.groupName
-        binding.title.menuDate.visibility = View.VISIBLE
-        binding.title.menuDate.setImageResource(R.mipmap.icon_qz)
     }
 
     override fun initListener() {
         binding.title.back.setOnClickListener { finish() }
-        binding.title.menuDate.setOnClickListener {jump(GroupInfoActivity::class.java,intent.extras)}
     }
 
     override fun receiveEvent(appBean: AppBean<Any>) {

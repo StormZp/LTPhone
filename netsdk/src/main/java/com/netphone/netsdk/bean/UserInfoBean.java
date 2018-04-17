@@ -27,6 +27,7 @@ public class UserInfoBean implements Serializable, Comparable<UserInfoBean> {
     private String Description;
     private String Gender;
     private String ExpiredDate;
+    private LastPositionBean LastPosition;
 
 
     private String pinyin; // 姓名对应的拼音
