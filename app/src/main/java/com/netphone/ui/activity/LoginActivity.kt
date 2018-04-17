@@ -65,6 +65,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>() {
                     Constant.info = bean;
                     activity.runOnUiThread {
                         Toast.makeText(context, "登录成功", Toast.LENGTH_SHORT).show()
+
                     }
                     Constant.info = bean;
 

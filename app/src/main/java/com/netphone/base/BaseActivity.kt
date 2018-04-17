@@ -12,7 +12,6 @@ import android.view.View
 import com.netphone.R
 import com.netphone.netsdk.base.AppBean
 import com.netphone.netsdk.utils.EventBusUtil
-import com.netphone.utils.LightStatusBarUtils
 import com.netphone.utils.ProgressUtils
 import com.netphone.utils.StatusBarUtils
 import com.netphone.utils.ToastUtil
@@ -47,6 +46,7 @@ open abstract class BaseActivity<T : ViewDataBinding> : AppCompatActivity() {
         super.onResume()
 
     }
+
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {
         super.onWindowFocusChanged(hasFocus)

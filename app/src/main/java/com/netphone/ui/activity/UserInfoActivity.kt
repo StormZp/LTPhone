@@ -1,9 +1,11 @@
 package com.netphone.ui.activity
 
 import android.os.Bundle
+import android.text.TextUtils
 import android.view.View
 import com.netphone.R
 import com.netphone.databinding.ActivityUserInfoBinding
+import com.netphone.netsdk.Tool.Constant
 import com.netphone.netsdk.base.AppBean
 import com.storm.tool.base.BaseActivity
 
@@ -18,7 +20,17 @@ open class UserInfoActivity : BaseActivity<ActivityUserInfoBinding>() {
     }
 
     override fun initData() {
-        binding.title.title.text ="ldkjgfldf"
+        binding.title.title.text =context.resources.getString(R.string.user_info)
+
+        if (Constant.info!=null){
+            if (TextUtils.isEmpty(Constant.info.realName)){
+                binding.account.setText( Constant.info.realName)
+                binding.sex.setText( Constant.info.gender)
+//                binding.phone.setText(SharedPreferenceUtil.read())
+
+
+             }
+        }
     }
 
     override fun initListener() {

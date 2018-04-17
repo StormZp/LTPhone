@@ -118,9 +118,11 @@
     <string name="user_info">个人资料</string>
     <string name="woman">女</string>
     <string name="man">男</string>
-    <string name="account">账号名</string>
+    <string name="account">账号名称</string>
     <string name="name">姓名</string>
+    <string name="name_true">姓名</string>
     <string name="sex">性别</string>
+    <string name="photo_number">手机号码</string>
     <string name="remark">备注</string>
     <string name="choose_sex">请选择男或女</string>
     <string name="change_seccess">修改成功</string>

@@ -122,7 +122,9 @@
     <string name="voice">voice</string>
     <string name="video">video</string>
     <string name="name">name</string>
+    <string name="name_true">True Name </string>
     <string name="sex">sex</string>
+    <string name="photo_number">Phone Number</string>
     <string name="remark"> remark</string>
     <string name="choose_sex"> choose sex</string>
     <string name="change_seccess"> change seccess</string>
