@@ -14,7 +14,7 @@
     <string name="network_not_well">Poor network check network settings</string>
     <string name="text_network">Poor network check network settings</string>
     <string name="current_group">Current group:</string>
-
+    <string name="account_not_null">Account number cannot be null</string>
 
     <string name="text_network_time_out">Connection timeout, please detect network configuration</string>
     <string name="net_exception">network anomaly</string>

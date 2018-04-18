@@ -24,7 +24,7 @@ public class TcpCmd {
             bodyBytes = new byte[bodyLength];
             System.arraycopy(pagBytes, 11, bodyBytes, 0, bodyLength);
         }
-        cmdExplore(pagBytes,bodyBytes);
+        cmdExplore(pagBytes, bodyBytes);
     }
 
     private void cmdExplore(byte[] pagBytes, byte[] bodyBytes) {
@@ -32,37 +32,39 @@ public class TcpCmd {
         switch (pagBytes[7]) {
             case 0x00://终端>>服务端指令列表
                 switch (pagBytes[8]) {
-                    case 0x00://登录回复
-                        switch (bodyBytes[0]){
-                            case 0x00://登录成功
-                                byte[] jsonBytes = new byte[bodyBytes.length - 1];
-                                System.arraycopy(bodyBytes, 1, jsonBytes, 0, bodyBytes.length - 1);
-                                String body = ByteIntUtils.utfToString(jsonBytes);
-                                LogUtil.error("TAG\n", body);
-                                Gson gson = new Gson();
-                                UserInfoBean user = gson.fromJson(body, UserInfoBean.class);
-                                if (user == null) {
-                                    LogUtil.error( "user =null");
-                                    return;
-                                } else {
-                                    LogUtil.error("user= " + user.toString());
-                                }
-                                LTConfigure.getInstance().getLtApi().mOnLoginListener.onSuccess(user);
-                                break;
-                            case 0x01://登录失败
-                                LTConfigure.getInstance().getLtApi().mOnLoginListener.onFail(1,LTConfigure.getInstance().getContext().getResources().getString(R.string.account_or_password_mistake));
-                                break;
-                            case 0x02://该终端被遥弊
-                                LTConfigure.getInstance().getLtApi().mOnLoginListener.onFail(2,LTConfigure.getInstance().getContext().getResources().getString(R.string.terminal_malpractices));
-                                break;
-                            case 0x03://账号过期
-                                LTConfigure.getInstance().getLtApi().mOnLoginListener.onFail(3,LTConfigure.getInstance().getContext().getResources().getString(R.string.Account_expiration));
-                                break;
-                            case 0x08://该账号已经登录
-                                LTConfigure.getInstance().getLtApi().mOnLoginListener.onFail(8,LTConfigure.getInstance().getContext().getResources().getString(R.string.account_already_login));
-                                break;
 
-                        }
+                    case 0x00://登录回复
+                        if (LTConfigure.getInstance().getLtApi().mOnLoginListener != null)
+                            switch (bodyBytes[0]) {
+                                case 0x00://登录成功
+                                    byte[] jsonBytes = new byte[bodyBytes.length - 1];
+                                    System.arraycopy(bodyBytes, 1, jsonBytes, 0, bodyBytes.length - 1);
+                                    String body = ByteIntUtils.utfToString(jsonBytes);
+                                    LogUtil.error("TAG\n" + body.length());
+                                    Gson gson = new Gson();
+                                    UserInfoBean user = gson.fromJson(body, UserInfoBean.class);
+                                    if (user == null) {
+                                        LogUtil.error("user =null");
+                                        return;
+                                    } else {
+                                        LogUtil.error("user= " + user.toString());
+                                    }
+                                    LTConfigure.getInstance().getLtApi().mOnLoginListener.onSuccess(user);
+                                    break;
+                                case 0x01://登录失败
+                                    LTConfigure.getInstance().getLtApi().mOnLoginListener.onFail(1, LTConfigure.getInstance().getContext().getResources().getString(R.string.account_or_password_mistake));
+                                    break;
+                                case 0x02://该终端被遥弊
+                                    LTConfigure.getInstance().getLtApi().mOnLoginListener.onFail(2, LTConfigure.getInstance().getContext().getResources().getString(R.string.terminal_malpractices));
+                                    break;
+                                case 0x03://账号过期
+                                    LTConfigure.getInstance().getLtApi().mOnLoginListener.onFail(3, LTConfigure.getInstance().getContext().getResources().getString(R.string.Account_expiration));
+                                    break;
+                                case 0x08://该账号已经登录
+                                    LTConfigure.getInstance().getLtApi().mOnLoginListener.onFail(8, LTConfigure.getInstance().getContext().getResources().getString(R.string.account_already_login));
+                                    break;
+
+                            }
                         break;
                     case 0x01://上传GPS的回复
                         break;
@@ -125,9 +127,10 @@ public class TcpCmd {
                     case 0x00://推送用户列表信息,由于socket写在服务里原因，在主页没能正常停止服务，会导致服务一直开启，socket写入数据
                         String body = ByteIntUtils.utfToString(bodyBytes);
                         Gson gson = new Gson();
-                        LogUtil.error("TcpCmd", "127\tcmdExplore()\n" +body);
+//                        LogUtil.saveLog(LTConfigure.getInstance().getContext(), "127\tcmdExplore()\n" +body);
                         try {
-                            UserListBean  userListBean = gson.fromJson(body, UserListBean.class);
+                            LogUtil.error("TcpCmd", "130\tcmdExplore()\n" + body.length());
+                            UserListBean userListBean = gson.fromJson(body, UserListBean.class);
                             LTConfigure.getInstance().getLtApi().mOnLoginListener.onComplete(userListBean);
                         } catch (Exception e) {
 
@@ -216,7 +219,7 @@ public class TcpCmd {
                         break;
                     case 0x03://CRC校验错误
                         break;
-                    case 0x04://被遥弊
+                        case 0x04://被遥弊
                         break;
                     case 0x05://未知错误
                         break;

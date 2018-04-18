@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.google.common.primitives.Bytes;
 import com.google.gson.Gson;
+import com.netphone.netsdk.LTConfigure;
 import com.netphone.netsdk.Tool.TcpCmd;
 import com.netphone.netsdk.Tool.TcpConfig;
 import com.netphone.netsdk.utils.ByteUtil;
@@ -108,6 +109,7 @@ public class TcpSocket {
 
     private void onConnectSuccess() {
         LogUtil.error("tcp connect 建立成功,开始启动接发线程");
+        LTConfigure.getInstance().mOnNetworkListener.onServiceConnect();
 //        setClientState(ClientState.Connected);//标记为已连接
 
         new Thread(sendThread).start();

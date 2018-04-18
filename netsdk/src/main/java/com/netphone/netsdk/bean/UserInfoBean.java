@@ -99,12 +99,15 @@ public class UserInfoBean implements Serializable, Comparable<UserInfoBean> {
     }
 
     public String getPinyin() {
-        if (TextUtils.isEmpty(pinyin)) {
+        if (TextUtils.isEmpty(pinyin) && !TextUtils.isEmpty(RealName)) {
             pinyin = Cn2Spell.getPinYin(RealName); // 根据姓名获取拼音
             firstLetter = pinyin.substring(0, 1).toUpperCase(); // 获取拼音首字母并转成大写
             if (!firstLetter.matches("[A-Z]")) { // 如果不在A-Z中则默认为“#”
                 firstLetter = "#";
             }
+        } else {
+            if (TextUtils.isEmpty(pinyin))
+                pinyin = "#";
         }
         return pinyin;
     }
@@ -114,12 +117,15 @@ public class UserInfoBean implements Serializable, Comparable<UserInfoBean> {
     }
 
     public String getFirstLetter() {
-        if (TextUtils.isEmpty(firstLetter)) {
+        if (TextUtils.isEmpty(firstLetter) && !TextUtils.isEmpty(RealName)) {
             pinyin = Cn2Spell.getPinYin(RealName); // 根据姓名获取拼音
             firstLetter = pinyin.substring(0, 1).toUpperCase(); // 获取拼音首字母并转成大写
             if (!firstLetter.matches("[A-Z]")) { // 如果不在A-Z中则默认为“#”
                 firstLetter = "#";
             }
+        } else {
+            if (TextUtils.isEmpty(firstLetter))
+                firstLetter = "#";
         }
         return firstLetter;
     }
@@ -131,12 +137,12 @@ public class UserInfoBean implements Serializable, Comparable<UserInfoBean> {
 
     @Override
     public int compareTo(@NonNull UserInfoBean userInfoBean) {
-        if (!userInfoBean.getFirstLetter().equals("#")) {
+        if (!TextUtils.isEmpty(userInfoBean.getFirstLetter()) && !userInfoBean.getFirstLetter().equals("#")) {
             return 1;
-        } else if (userInfoBean.getFirstLetter().equals("#")) {
+        } else if (!TextUtils.isEmpty(userInfoBean.getFirstLetter()) && userInfoBean.getFirstLetter().equals("#")) {
             return -1;
         } else {
-            return pinyin.compareToIgnoreCase(userInfoBean.getPinyin());
+            return getPinyin().compareToIgnoreCase(userInfoBean.getPinyin());
         }
     }
 }

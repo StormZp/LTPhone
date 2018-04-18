@@ -75,6 +75,10 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 
     override fun initListener() {
         LTConfigure.getInstance().setOnNetworkListener(object : OnNetworkListener {
+            override fun onServiceConnect() {
+                toasts(context.resources.getString(R.string.net_connect) + " "+context.resources.getString(R.string.success))
+            }
+
             override fun onNoNet() {
                 LogUtil.error("MainActivity.kt", "onNoNet\n" + "这里有个文本")
             }

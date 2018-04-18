@@ -13,6 +13,7 @@
     <string name="network_not_well">网络不佳请检查网络设置</string>
     <string name="text_network">网络异常,请检测网络配置</string>
     <string name="current_group">当前群组：</string>
+    <string name="account_not_null">账号不能为空</string>
 
     <string name="text_network_time_out">连接超时,请检测网络配置</string>
     <string name="net_exception">网络异常</string>

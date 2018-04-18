@@ -26,7 +26,7 @@ public class SocketManageService extends Service {
     }
 
     @Override
-    public void onCreate() {
+    public void onCreate()  {
         super.onCreate();
         LogUtil.error("SocketManageService", "30\nonCreate()" + "SocketManageService启动了");
 //        mTcpSocket = new TcpSocket(LTConfigure.getInstance().getContext());
