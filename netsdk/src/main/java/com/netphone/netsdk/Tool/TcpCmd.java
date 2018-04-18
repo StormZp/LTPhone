@@ -369,21 +369,27 @@ public class TcpCmd {
                 }
                 break;
             case 0x02://服务端>>终端(其他)
-                switch (pagBytes[8]) {
-                    case 0x00://收到服务端心跳包回复
-                        conncetBeatCount = 0;
-                        break;
-                    case 0x01://指令不正确
-                        break;
-                    case 0x02://未登陆
-                        break;
-                    case 0x03://CRC校验错误
-                        break;
-                    case 0x04://被遥弊
-                        break;
-                    case 0x05://未知错误
-                        break;
-                }
+                if (LTConfigure.getInstance().mOnErrorListener != null)
+                    switch (pagBytes[8]) {
+                        case 0x00://收到服务端心跳包回复
+                            conncetBeatCount = 0;
+                            LTConfigure.getInstance().mOnErrorListener.onError();
+                            break;
+                        case 0x01://指令不正确
+                            LTConfigure.getInstance().mOnErrorListener.onOrderError();
+                            break;
+                        case 0x02://未登陆
+                            LTConfigure.getInstance().mOnErrorListener.onNotLogin();
+                            break;
+                        case 0x03://CRC校验错误
+                            LTConfigure.getInstance().mOnErrorListener.onCRCError();
+                            break;
+                        case 0x04://被遥弊
+                            break;
+                        case 0x05://未知错误
+                            LTConfigure.getInstance().mOnErrorListener.onError();
+                            break;
+                    }
                 break;
         }
     }

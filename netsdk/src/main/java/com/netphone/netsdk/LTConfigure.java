@@ -11,6 +11,7 @@ import com.netphone.gen.GroupInfoBeanDao;
 import com.netphone.netsdk.Tool.Constant;
 import com.netphone.netsdk.Tool.TcpCmd;
 import com.netphone.netsdk.bean.GroupInfoBean;
+import com.netphone.netsdk.listener.OnErrorListener;
 import com.netphone.netsdk.listener.OnNetworkListener;
 import com.netphone.netsdk.service.NetworkConnectChangedReceiver;
 import com.netphone.netsdk.service.SocketManageService;
@@ -26,7 +27,7 @@ import com.netphone.netsdk.utils.SharedPreferenceUtil;
 public class LTConfigure {
     private static LTApi ltApi;
     public OnNetworkListener mOnNetworkListener;
-
+    public OnErrorListener mOnErrorListener;
 
     private static LTConfigure mlt;
     private static Context mContext;

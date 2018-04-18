@@ -6,7 +6,7 @@ package com.netphone.netsdk.listener;
 
 public interface OnErrorListener {
     void onOrderError();
-    void onNotLogin(String error);
+    void onNotLogin();
     void onCRCError();
     void onError();
 }
