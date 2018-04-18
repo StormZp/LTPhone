@@ -14,6 +14,7 @@ import com.netphone.netsdk.utils.LogUtil;
 import java.io.BufferedOutputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
+import java.net.DatagramSocket;
 import java.net.Socket;
 import java.net.SocketException;
 import java.util.ArrayList;
@@ -28,6 +29,8 @@ public class TcpSocket {
     private static TcpSocket instance;//单例模式，因为只会在android主线程调用，不存在线程安全问题。
     private static Context mContext;
     private Socket mSocket;//socket通信
+    private DatagramSocket client;//UDP客户端
+
 
     private boolean connectThreadStart;//socket连接线程
     private boolean receiveThreadStart;//接收socket数据线程
@@ -37,6 +40,7 @@ public class TcpSocket {
     private LinkedBlockingQueue<byte[]> msgQueue = new LinkedBlockingQueue<>();//发送的消息队列
 
     private TcpCmd mCmd;
+
 
     public static TcpSocket getInstance() {
         if (instance == null) {
@@ -106,11 +110,35 @@ public class TcpSocket {
         }
     };
 
+    public DatagramSocket getClient() {
+        if (client == null || client.isClosed())
+            try {
+                client = new DatagramSocket(getSocket().getLocalPort());//新建一个DatagramSocket
+                LogUtil.error("TcpSocket", "116\tgetClient()\n" + getSocket().getLocalPort());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        return client;
+    }
+
+    public void setClient() {
+        LogUtil.error("TcpSocket", "123\tsetClient()\n" + "更新本地端口");
+        //更新tcp本地端口
+        if (client != null) {
+            client.close();
+            client = null;
+            try {
+                client = new DatagramSocket(getSocket().getLocalPort());//新建一个DatagramSocket,获取客户端本地端口号
+            } catch (SocketException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
     private void onConnectSuccess() {
         LogUtil.error("tcp connect 建立成功,开始启动接发线程");
-        LTConfigure.getInstance().mOnNetworkListener.onServiceConnect();
-//        setClientState(ClientState.Connected);//标记为已连接
+        if (LTConfigure.getInstance().mOnNetworkListener != null)
+            LTConfigure.getInstance().mOnNetworkListener.onServiceConnect();
 
         new Thread(sendThread).start();
         new Thread(receiveThread).start();
@@ -205,6 +233,7 @@ public class TcpSocket {
         }
     }
 
+
     /**
      * 将指令反馈给服务类以便进行UI的交互等。
      *
@@ -219,7 +248,7 @@ public class TcpSocket {
 
     private synchronized void handleData(final byte[] data) {
         try {
-            LogUtil.error("原始数据长度:" + data.length + "\n" + new Gson().toJson(data));
+            LogUtil.error("TcpSocket", "251\thandleData()\n" + "原始数据长度:" + data.length + "\n" + new Gson().toJson(data));
             List<Byte> tempLists = Bytes.asList(data);
             list.addAll(tempLists);
         } catch (Exception e) {

@@ -1,19 +1,36 @@
 package com.netphone.netsdk.Tool;
 
+import android.os.SystemClock;
+
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.netphone.netsdk.LTConfigure;
 import com.netphone.netsdk.R;
 import com.netphone.netsdk.bean.UserInfoBean;
 import com.netphone.netsdk.bean.UserListBean;
+import com.netphone.netsdk.socket.TcpSocket;
 import com.netphone.netsdk.utils.ByteIntUtils;
+import com.netphone.netsdk.utils.ByteUtil;
+import com.netphone.netsdk.utils.CmdUtils;
 import com.netphone.netsdk.utils.DataTypeChangeHelper;
 import com.netphone.netsdk.utils.LogUtil;
+
+import java.io.IOException;
+import java.net.DatagramPacket;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by XYSM on 2018/4/13.
  */
 
 public class TcpCmd {
+
+    private InetAddress addr = null;
+    private int port;
+
     public void cmdData(byte[] pagBytes) {
         byte[] tempBytes = new byte[2];
         System.arraycopy(pagBytes, 9, tempBytes, 0, 2);
@@ -49,6 +66,8 @@ public class TcpCmd {
                                     } else {
                                         LogUtil.error("user= " + user.toString());
                                     }
+                                    isConnectBeat = true;
+                                    startBeat.start();
                                     LTConfigure.getInstance().getLtApi().mOnLoginListener.onSuccess(user);
                                     break;
                                 case 0x01://登录失败
@@ -73,6 +92,27 @@ public class TcpCmd {
                     case 0x03://退出通话(挂断)
                         break;
                     case 0x04://收到加入群聊回复
+                        if (LTConfigure.getInstance().getLtApi().groupComeInListener != null) {
+                            if (bodyBytes.length < 5) {
+                                LTConfigure.getInstance().getLtApi().groupComeInListener.onComeInFail(0x02, LTConfigure.getInstance().getContext().getResources().getString(R.string.add_fail));
+                            }
+                            switch (bodyBytes[0]) {
+                                case 0x00:
+                                    port = ByteUtil.getInt(bodyBytes, 1);//udp端口,占4位
+                                    isGroupBeat= true;
+                                    LTConfigure.getInstance().getLtApi().groupComeInListener.onComeInSuccess();
+                                    break;
+                                case 0x01:
+                                    LTConfigure.getInstance().getLtApi().groupComeInListener.onComeInFail(0x02, LTConfigure.getInstance().getContext().getResources().getString(R.string.add_fail));
+                                    break;
+                                case 0x07:
+                                    LTConfigure.getInstance().getLtApi().groupComeInListener.onComeInFail(0x02, LTConfigure.getInstance().getContext().getResources().getString(R.string.not_login));
+                                    break;
+                                case 0x05:
+                                    LTConfigure.getInstance().getLtApi().groupComeInListener.onComeInFail(0x02, LTConfigure.getInstance().getContext().getResources().getString(R.string.grouid_id_incorrect));
+                                    break;
+                            }
+                        }
                         break;
                     case 0x05://注册用户
                         break;
@@ -85,10 +125,48 @@ public class TcpCmd {
                     case 0x09://取消呼叫
                         break;
                     case 0x0A://退出群聊
+
                         break;
                     case 0x0B://主动抢麦回复
+                        if (LTConfigure.getInstance().getLtApi().groupStateListener != null) {
+                            switch (bodyBytes[0]) {
+                                case 0x00:
+                                    LTConfigure.getInstance().getLtApi().groupStateListener.onGrabWheatSuccess();
+                                    break;
+                                case 0x01:
+                                    LTConfigure.getInstance().getLtApi().groupStateListener.onGrabWheatFail(0x01, LTConfigure.getInstance().getContext().getResources().getString(R.string.preemption) + LTConfigure.getInstance().getContext().getResources().getString(R.string.fail));
+
+                                    break;
+                                case 0x03:
+                                    LTConfigure.getInstance().getLtApi().groupStateListener.onGrabWheatFail(0x01, LTConfigure.getInstance().getContext().getResources().getString(R.string.not_in_group));
+                                    break;
+                                case 0x04:
+                                    LTConfigure.getInstance().getLtApi().groupStateListener.onGrabWheatFail(0x01, LTConfigure.getInstance().getContext().getResources().getString(R.string.using_mic));
+                                    break;
+                                case 0x07:
+                                    LTConfigure.getInstance().getLtApi().groupStateListener.onGrabWheatFail(0x01, LTConfigure.getInstance().getContext().getResources().getString(R.string.not_login));
+                                    break;
+                            }
+                        }
                         break;
                     case 0x0C://主动释放麦回复
+                        if (LTConfigure.getInstance().getLtApi().groupStateListener != null) {
+                            switch (bodyBytes[0]) {
+                                case 0x00:
+                                    LTConfigure.getInstance().getLtApi().groupStateListener.onRelaxedMacSuccess();
+                                    break;
+                                case 0x01:
+                                    LTConfigure.getInstance().getLtApi().groupStateListener.onRelaxedMacFail(0x01, LTConfigure.getInstance().getContext().getResources().getString(R.string.release) + LTConfigure.getInstance().getContext().getResources().getString(R.string.fail));
+
+                                    break;
+                                case 0x03:
+                                    LTConfigure.getInstance().getLtApi().groupStateListener.onRelaxedMacFail(0x01, LTConfigure.getInstance().getContext().getResources().getString(R.string.not_in_group));
+                                    break;
+                                case 0x04:
+                                    LTConfigure.getInstance().getLtApi().groupStateListener.onRelaxedMacFail(0x01, LTConfigure.getInstance().getContext().getResources().getString(R.string.not_mic_premission));
+                                    break;
+                            }
+                        }
                         break;
                     case 0x0D://获取当前终端的通话记录
                         break;
@@ -119,22 +197,39 @@ public class TcpCmd {
                     case 0x1A://设置呼叫转移
                         break;
                     case 0x1B://获取群组成员信息
+                        if (LTConfigure.getInstance().getLtApi().getGroupMemberListener != null) {
+                            switch (bodyBytes[0]) {
+                                case 0x00:
+                                    byte[] bytes = Arrays.copyOfRange(bodyBytes, 1, bodyBytes.length);
+                                    String json = ByteIntUtils.utfToString(bytes);
+                                    List<UserInfoBean> bean = new Gson().fromJson(json, new TypeToken<List<UserInfoBean>>() {
+                                    }.getType());
+                                    LTConfigure.getInstance().getLtApi().getGroupMemberListener.onGetMemberSuccess(bean);
+                                    break;
+                                case 0x01:
+                                    LTConfigure.getInstance().getLtApi().getGroupMemberListener.onGetMemberFail();
+                                    break;
+                            }
+                        }
                         break;
                 }
                 break;
             case 0x01://服务端>>终端指令列表
                 switch (pagBytes[8]) {
                     case 0x00://推送用户列表信息,由于socket写在服务里原因，在主页没能正常停止服务，会导致服务一直开启，socket写入数据
-                        String body = ByteIntUtils.utfToString(bodyBytes);
-                        Gson gson = new Gson();
+                        if (LTConfigure.getInstance().getLtApi().mOnLoginListener != null) {
+                            String body = ByteIntUtils.utfToString(bodyBytes);
+                            Gson gson = new Gson();
 //                        LogUtil.saveLog(LTConfigure.getInstance().getContext(), "127\tcmdExplore()\n" +body);
-                        try {
-                            LogUtil.error("TcpCmd", "130\tcmdExplore()\n" + body.length());
-                            UserListBean userListBean = gson.fromJson(body, UserListBean.class);
-                            LTConfigure.getInstance().getLtApi().mOnLoginListener.onComplete(userListBean);
-                        } catch (Exception e) {
+                            try {
+                                LogUtil.error("TcpCmd", "130\tcmdExplore()\n" + body.length());
+                                UserListBean userListBean = gson.fromJson(body, UserListBean.class);
+                                LTConfigure.getInstance().getLtApi().mOnLoginListener.onComplete(userListBean);
+                            } catch (Exception e) {
 
+                            }
                         }
+
                         break;
                     case 0x01://被叫语音通话
                         break;
@@ -153,14 +248,42 @@ public class TcpCmd {
                     case 0x08://收到文字消息
                         break;
                     case 0x09://当有新的终端加入到当前的活动群聊中时
+                        if (LTConfigure.getInstance().getLtApi().groupStateListener != null) {
+                            String body = ByteIntUtils.utfToString(bodyBytes);
+                            Gson gson = new Gson();
+                            UserInfoBean user = gson.fromJson(body, UserInfoBean.class);
+                            LTConfigure.getInstance().getLtApi().groupStateListener.onMenberJoin(user);
+                        }
+
                         break;
                     case 0x0A://当现有终端退出了当前的活动群聊中时
+                        if (LTConfigure.getInstance().getLtApi().groupStateListener != null) {
+                            String body = ByteIntUtils.utfToString(bodyBytes);
+                            Gson gson = new Gson();
+                            UserInfoBean user = gson.fromJson(body, UserInfoBean.class);
+                            LTConfigure.getInstance().getLtApi().groupStateListener.onMenberExit(user);
+                        }
                         break;
                     case 0x0B://在群聊中时,麦权被抢占
+                        if (LTConfigure.getInstance().getLtApi().groupStateListener != null) {
+                            String body = ByteIntUtils.utfToString(bodyBytes);
+                            Gson gson = new Gson();
+                            UserInfoBean user = gson.fromJson(body, UserInfoBean.class);
+                            LTConfigure.getInstance().getLtApi().groupStateListener.onMenberhaveMac(user);
+                        }
                         break;
                     case 0x0C://麦权被释放
+                        if (LTConfigure.getInstance().getLtApi().groupStateListener != null) {
+                            String body = ByteIntUtils.utfToString(bodyBytes);
+                            Gson gson = new Gson();
+                            UserInfoBean user = gson.fromJson(body, UserInfoBean.class);
+                            LTConfigure.getInstance().getLtApi().groupStateListener.onMemberRelaxedMac(user);
+                        }
                         break;
                     case 0x0D://麦权被系统回收
+                        if (LTConfigure.getInstance().getLtApi().groupStateListener != null) {
+                            LTConfigure.getInstance().getLtApi().groupStateListener.onSystemReLaxedMac();
+                        }
                         break;
                     case 0x0E://被遥晕
                         break;
@@ -212,6 +335,7 @@ public class TcpCmd {
             case 0x02://服务端>>终端(其他)
                 switch (pagBytes[8]) {
                     case 0x00://收到服务端心跳包回复
+                        conncetBeatCount = 0;
                         break;
                     case 0x01://指令不正确
                         break;
@@ -219,7 +343,7 @@ public class TcpCmd {
                         break;
                     case 0x03://CRC校验错误
                         break;
-                        case 0x04://被遥弊
+                    case 0x04://被遥弊
                         break;
                     case 0x05://未知错误
                         break;
@@ -227,4 +351,41 @@ public class TcpCmd {
                 break;
         }
     }
+
+    private boolean isGroupBeat = false;//群聊心跳包
+    private boolean isConnectBeat = false;//联网心跳包
+
+    private int conncetBeatCount;//联网心跳包发送次数,超过3次不归0,即认定socket断了，需要重连。
+
+    Thread startBeat = new Thread(new Runnable() {
+        @Override
+        public void run() {
+            if (addr==null){
+                try {
+                    addr = InetAddress.getByName(TcpConfig.HOST);
+                } catch (UnknownHostException e) {
+                }
+            }
+            while (true) {
+                if (isGroupBeat) {
+                    byte[] enmy = CmdUtils.getInstance().sendGroupBeat();
+                    DatagramPacket packet = new DatagramPacket(enmy, 0, enmy.length, addr, port);
+                    try {
+                        TcpSocket.getInstance().getClient().send(packet);
+//                        LogUtil.error("TcpCmd", "364\tonTick()\n" + "群聊心跳包");
+                    } catch (IOException e) {
+                    }
+                }
+                if (isConnectBeat) {
+                    conncetBeatCount++;
+                    byte[] heart = CmdUtils.getInstance().sendHeratPackage();
+                    TcpSocket.getInstance().addData(heart);//定时发送心跳包
+//                    LogUtil.error("TcpCmd", "370\tonTick()\n" + "定时发送心跳包");
+                }
+                SystemClock.sleep(10 * 1000);
+            }
+        }
+    });
+
+
 }

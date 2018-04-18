@@ -145,6 +145,12 @@ public class CmdUtils {
      */
     private Context context = LTConfigure.getInstance().getContext();
 
+    /**
+     * 发送登录
+     * @param account
+     * @param password
+     * @return
+     */
     public byte[] sendLogin( String account, String password) {
 //        this.context = context;
 //        this.context = MyApp.app.mContext;
@@ -159,6 +165,24 @@ public class CmdUtils {
         byte cmdId2 = 0x00;
         byte[] temp = sendCmds(cmdId, cmdId2, byteArray);
         return temp;
+    }
+
+
+    /**
+     * 发送群聊心跳包
+     * @return
+     */
+    public byte[] sendGroupBeat() {
+        byte[] enmy = new byte[8];
+        enmy[0] = (byte) 0xff;
+        enmy[1] = (byte) 0;
+        enmy[2] = (byte) 0;
+        enmy[3] = idBytes[0];
+        enmy[4] = idBytes[1];
+        enmy[5] = idBytes[2];
+        enmy[6] = idBytes[3];
+        enmy[7] = (byte) 0xff;
+        return enmy;
     }
 
     /**

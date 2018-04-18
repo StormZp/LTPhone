@@ -39,7 +39,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>() {
     override fun initListener() {
         LTConfigure.getInstance().setOnNetworkListener(object : OnNetworkListener {
             override fun onServiceConnect() {
-                toasts(context.resources.getString(R.string.net_connect) + " " + context.resources.getString(R.string.success))
+                toasts(context.resources.getString(R.string.net_connect) + context.resources.getString(R.string.success))
             }
 
             override fun onNoNet() {
@@ -94,7 +94,6 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>() {
                         toasts(context.resources.getString(R.string.text_login) + context.resources.getString(R.string.success))
                     }
                     Constant.info = bean;
-                    showProgress()
                 }
 
 
@@ -107,7 +106,6 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>() {
             })
         }
     }
-
 }
 
 
