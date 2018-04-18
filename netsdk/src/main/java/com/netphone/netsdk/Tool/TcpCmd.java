@@ -26,7 +26,6 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.List;
 
@@ -40,7 +39,7 @@ public class TcpCmd {
     private int port;
     private UserInfoBeanDao mUserInfoBeanDao;
     private GroupInfoBeanDao mGroupInfoBeanDao;
-    private SimpleDateFormat dateformat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+
 
     public void cmdData(byte[] pagBytes) {
         byte[] tempBytes = new byte[2];
@@ -84,6 +83,7 @@ public class TcpCmd {
                                         LogUtil.error("user= " + user.toString());
                                     }
                                     isConnectBeat = true;
+                                    SharedPreferenceUtil.Companion.put(Constant.UserId, user.getUserId());
                                     startBeat.start();
                                     mUserInfoBeanDao.insertOrReplace(user);
                                     LTConfigure.getInstance().getLtApi().mOnLoginListener.onSuccess(user);
@@ -360,7 +360,8 @@ public class TcpCmd {
                         LogUtil.error("TcpCmd", "356\tcmdExplore()\n" + body);
                         Gson gson = new Gson();
                         GroupChatMsgBean msg = gson.fromJson(body, GroupChatMsgBean.class);
-                        msg.setDateTime(dateformat.format(System.currentTimeMillis()));
+                        msg.setDateTime(System.currentTimeMillis());
+                        msg.setReceiveId(SharedPreferenceUtil.Companion.read(Constant.UserId, ""));
 
                         GroupChatMsgBeanDao groupInfoBeanDao = LTConfigure.getInstance().getDaoSession().getGroupChatMsgBeanDao();
                         groupInfoBeanDao.insertOrReplace(msg);

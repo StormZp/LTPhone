@@ -8,10 +8,7 @@ import android.view.View
 import android.widget.Toast
 import com.netphone.R
 import com.netphone.databinding.ActivityMainBinding
-import com.netphone.netsdk.LTConfigure
 import com.netphone.netsdk.base.AppBean
-import com.netphone.netsdk.listener.OnNetworkListener
-import com.netphone.netsdk.utils.LogUtil
 import com.netphone.ui.fragment.FriendsFragment
 import com.netphone.ui.fragment.GroupsFragment
 import com.netphone.ui.fragment.SessionFragment
@@ -74,24 +71,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     }
 
     override fun initListener() {
-        LTConfigure.getInstance().setOnNetworkListener(object : OnNetworkListener {
-            override fun onServiceConnect() {
-                toasts(context.resources.getString(R.string.net_connect) + " "+context.resources.getString(R.string.success))
-            }
-
-            override fun onNoNet() {
-                LogUtil.error("MainActivity.kt", "onNoNet\n" + "这里有个文本")
-            }
-
-            override fun onWifiNet() {
-                LogUtil.error("MainActivity.kt", "onWifiNet\n" + "这里有个文本")
-
-            }
-
-            override fun onMobileNet() {
-                LogUtil.error("MainActivity.kt", "onMobileNet\n" + "这里有个文本")
-            }
-        })
 
     }
 

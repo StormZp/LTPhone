@@ -4,8 +4,8 @@ import android.app.Application;
 import android.content.Context;
 import android.support.multidex.MultiDex;
 
-import com.netphone.utils.CrashHandler;
 import com.netphone.netsdk.LTConfigure;
+import com.netphone.utils.CrashHandler;
 import com.netphone.utils.ToastUtil;
 
 /**

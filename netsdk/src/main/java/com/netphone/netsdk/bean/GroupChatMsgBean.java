@@ -40,8 +40,11 @@ public class GroupChatMsgBean implements Serializable {
 
     @ToOne(joinProperty = "FromUserId")
     private UserInfoBean UserInfoBean;
+    private String receiveId;
+    @ToOne(joinProperty = "receiveId")
+    private UserInfoBean receiveBean;
 
-    private String dateTime;
+    private Long dateTime;
 
     /**
      * Used to resolve relations
@@ -56,26 +59,31 @@ public class GroupChatMsgBean implements Serializable {
     private transient GroupChatMsgBeanDao myDao;
 
 
-    @Generated(hash = 1183722487)
+    @Generated(hash = 500398444)
+    private transient String GroupInfoBean__resolvedKey;
+
+    @Generated(hash = 1253302719)
+    private transient String UserInfoBean__resolvedKey;
+
+    @Generated(hash = 1153883242)
+    private transient String receiveBean__resolvedKey;
+
+
+    @Generated(hash = 276494666)
     public GroupChatMsgBean(String FromUserId, String FromUserName, String Msg,
-                            String FromGroupId, Long id, String dateTime) {
+            String FromGroupId, Long id, String receiveId, Long dateTime) {
         this.FromUserId = FromUserId;
         this.FromUserName = FromUserName;
         this.Msg = Msg;
         this.FromGroupId = FromGroupId;
         this.id = id;
+        this.receiveId = receiveId;
         this.dateTime = dateTime;
     }
 
     @Generated(hash = 1465497762)
     public GroupChatMsgBean() {
     }
-
-    @Generated(hash = 500398444)
-    private transient String GroupInfoBean__resolvedKey;
-
-    @Generated(hash = 1253302719)
-    private transient String UserInfoBean__resolvedKey;
 
 
     public String getFromUserId() {
@@ -119,11 +127,11 @@ public class GroupChatMsgBean implements Serializable {
     }
 
 
-    public String getDateTime() {
+    public Long getDateTime() {
         return dateTime;
     }
 
-    public void setDateTime(String dateTime) {
+    public void setDateTime(Long dateTime) {
         this.dateTime = dateTime;
     }
 
@@ -206,7 +214,9 @@ public class GroupChatMsgBean implements Serializable {
         myDao = daoSession != null ? daoSession.getGroupChatMsgBeanDao() : null;
     }
 
-    /** To-one relationship, resolved on first access. */
+    /**
+     * To-one relationship, resolved on first access.
+     */
     @Generated(hash = 918976156)
     public UserInfoBean getUserInfoBean() {
         String __key = this.FromUserId;
@@ -225,13 +235,52 @@ public class GroupChatMsgBean implements Serializable {
         return UserInfoBean;
     }
 
-    /** called by internal mechanisms, do not call yourself. */
+    /**
+     * called by internal mechanisms, do not call yourself.
+     */
     @Generated(hash = 2131795543)
     public void setUserInfoBean(UserInfoBean UserInfoBean) {
         synchronized (this) {
             this.UserInfoBean = UserInfoBean;
             FromUserId = UserInfoBean == null ? null : UserInfoBean.getUserId();
             UserInfoBean__resolvedKey = FromUserId;
+        }
+    }
+
+    public String getReceiveId() {
+        return this.receiveId;
+    }
+
+    public void setReceiveId(String receiveId) {
+        this.receiveId = receiveId;
+    }
+
+    /** To-one relationship, resolved on first access. */
+    @Generated(hash = 595854603)
+    public UserInfoBean getReceiveBean() {
+        String __key = this.receiveId;
+        if (receiveBean__resolvedKey == null || receiveBean__resolvedKey != __key) {
+            final DaoSession daoSession = this.daoSession;
+            if (daoSession == null) {
+                throw new DaoException("Entity is detached from DAO context");
+            }
+            UserInfoBeanDao targetDao = daoSession.getUserInfoBeanDao();
+            UserInfoBean receiveBeanNew = targetDao.load(__key);
+            synchronized (this) {
+                receiveBean = receiveBeanNew;
+                receiveBean__resolvedKey = __key;
+            }
+        }
+        return receiveBean;
+    }
+
+    /** called by internal mechanisms, do not call yourself. */
+    @Generated(hash = 745371903)
+    public void setReceiveBean(UserInfoBean receiveBean) {
+        synchronized (this) {
+            this.receiveBean = receiveBean;
+            receiveId = receiveBean == null ? null : receiveBean.getUserId();
+            receiveBean__resolvedKey = receiveId;
         }
     }
 }
