@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,10 +33,6 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
         mLayoutInflater = LayoutInflater.from(mContext);
     }
 
-    public void setCurrentId(String id) {
-        this.id = id;
-        notifyDataSetChanged();
-    }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -48,11 +43,6 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         final GroupInfoBean groupInfoBean = datas.get(position);
-        if (!TextUtils.isEmpty(id) && id.equals(groupInfoBean.getGroupID())) {
-            holder.getView().setVisibility(View.GONE);
-        } else {
-            holder.getView().setVisibility(View.VISIBLE);
-        }
         holder.tvName.setText(groupInfoBean.getGroupName());
 
         holder.getView().setOnClickListener(new View.OnClickListener() {

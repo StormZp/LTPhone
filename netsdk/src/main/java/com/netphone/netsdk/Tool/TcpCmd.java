@@ -1,9 +1,13 @@
 package com.netphone.netsdk.Tool;
 
 import android.os.SystemClock;
+import android.text.TextUtils;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.netphone.gen.GroupInfoBeanDao;
+import com.netphone.gen.UserInfoBeanDao;
+import com.netphone.netsdk.LTApi;
 import com.netphone.netsdk.LTConfigure;
 import com.netphone.netsdk.R;
 import com.netphone.netsdk.bean.UserInfoBean;
@@ -14,6 +18,7 @@ import com.netphone.netsdk.utils.ByteUtil;
 import com.netphone.netsdk.utils.CmdUtils;
 import com.netphone.netsdk.utils.DataTypeChangeHelper;
 import com.netphone.netsdk.utils.LogUtil;
+import com.netphone.netsdk.utils.SharedPreferenceUtil;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
@@ -30,6 +35,8 @@ public class TcpCmd {
 
     private InetAddress addr = null;
     private int port;
+    private UserInfoBeanDao mUserInfoBeanDao;
+    private GroupInfoBeanDao mGroupInfoBeanDao;
 
     public void cmdData(byte[] pagBytes) {
         byte[] tempBytes = new byte[2];
@@ -45,6 +52,12 @@ public class TcpCmd {
     }
 
     private void cmdExplore(byte[] pagBytes, byte[] bodyBytes) {
+        if (mUserInfoBeanDao == null) {
+            mUserInfoBeanDao = LTConfigure.getInstance().getDaoSession().getUserInfoBeanDao();
+        }
+        if (mGroupInfoBeanDao == null) {
+            mGroupInfoBeanDao = LTConfigure.getInstance().getDaoSession().getGroupInfoBeanDao();
+        }
         LogUtil.error(String.format("pagBytes[7] == %x && pagBytes[8] == %x", pagBytes[7], pagBytes[8]));
         switch (pagBytes[7]) {
             case 0x00://终端>>服务端指令列表
@@ -68,6 +81,7 @@ public class TcpCmd {
                                     }
                                     isConnectBeat = true;
                                     startBeat.start();
+                                    mUserInfoBeanDao.insertOrReplace(user);
                                     LTConfigure.getInstance().getLtApi().mOnLoginListener.onSuccess(user);
                                     break;
                                 case 0x01://登录失败
@@ -99,8 +113,11 @@ public class TcpCmd {
                             switch (bodyBytes[0]) {
                                 case 0x00:
                                     port = ByteUtil.getInt(bodyBytes, 1);//udp端口,占4位
-                                    isGroupBeat= true;
-                                    LTConfigure.getInstance().getLtApi().groupComeInListener.onComeInSuccess();
+                                    isGroupBeat = true;
+                                    if (!TextUtils.isEmpty(LTApi.newInstance().groupId)) {
+                                        SharedPreferenceUtil.Companion.put(Constant.currentGroupId, LTApi.newInstance().groupId);
+                                        LTConfigure.getInstance().getLtApi().groupComeInListener.onComeInSuccess();
+                                    }
                                     break;
                                 case 0x01:
                                     LTConfigure.getInstance().getLtApi().groupComeInListener.onComeInFail(0x02, LTConfigure.getInstance().getContext().getResources().getString(R.string.add_fail));
@@ -224,6 +241,8 @@ public class TcpCmd {
                             try {
                                 LogUtil.error("TcpCmd", "130\tcmdExplore()\n" + body.length());
                                 UserListBean userListBean = gson.fromJson(body, UserListBean.class);
+                                mUserInfoBeanDao.insertOrReplaceInTx(userListBean.getUserInfo());
+                                mGroupInfoBeanDao.insertOrReplaceInTx(userListBean.getGroupInfo());
                                 LTConfigure.getInstance().getLtApi().mOnLoginListener.onComplete(userListBean);
                             } catch (Exception e) {
 
@@ -329,7 +348,6 @@ public class TcpCmd {
                         break;
                     case 0x25://播放监听文件
                         break;
-
                 }
                 break;
             case 0x02://服务端>>终端(其他)
@@ -360,13 +378,13 @@ public class TcpCmd {
     Thread startBeat = new Thread(new Runnable() {
         @Override
         public void run() {
-            if (addr==null){
+            if (addr == null) {
                 try {
                     addr = InetAddress.getByName(TcpConfig.HOST);
                 } catch (UnknownHostException e) {
                 }
             }
-            while (isConnectBeat||isGroupBeat) {
+            while (isConnectBeat || isGroupBeat) {
                 if (isGroupBeat) {
                     byte[] enmy = CmdUtils.getInstance().sendGroupBeat();
                     DatagramPacket packet = new DatagramPacket(enmy, 0, enmy.length, addr, port);

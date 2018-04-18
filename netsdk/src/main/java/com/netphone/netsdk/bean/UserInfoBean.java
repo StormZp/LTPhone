@@ -5,12 +5,18 @@ import android.text.TextUtils;
 
 import com.netphone.netsdk.utils.Cn2Spell;
 
+import org.greenrobot.greendao.annotation.Entity;
+import org.greenrobot.greendao.annotation.Generated;
+import org.greenrobot.greendao.annotation.Id;
+import org.greenrobot.greendao.annotation.Transient;
+
 import java.io.Serializable;
 
 /**
  * Created by lgp on 2017/8/23.
  * 用户列表item
  */
+@Entity
 public class UserInfoBean implements Serializable, Comparable<UserInfoBean> {
     /**
      * IsOnLine : 0
@@ -18,8 +24,10 @@ public class UserInfoBean implements Serializable, Comparable<UserInfoBean> {
      * UserId : 17072514050381189
      * IsDizzy : false
      */
+    static final long serialVersionUID = 42L;
 
     private String RealName;//用户姓名
+    @Id
     private String UserId;//用户ID
     private int IsDizzy;//是否遥晕 1:是,0:否
     private int IsOnLine;
@@ -27,11 +35,33 @@ public class UserInfoBean implements Serializable, Comparable<UserInfoBean> {
     private String Description;
     private String Gender;
     private String ExpiredDate;
+    @Transient
     private LastPositionBean LastPosition;
 
 
     private String pinyin; // 姓名对应的拼音
     private String firstLetter; // 拼音的首字母
+
+    @Generated(hash = 855395406)
+    public UserInfoBean(String RealName, String UserId, int IsDizzy, int IsOnLine,
+            String HeadIcon, String Description, String Gender, String ExpiredDate,
+            String pinyin, String firstLetter) {
+        this.RealName = RealName;
+        this.UserId = UserId;
+        this.IsDizzy = IsDizzy;
+        this.IsOnLine = IsOnLine;
+        this.HeadIcon = HeadIcon;
+        this.Description = Description;
+        this.Gender = Gender;
+        this.ExpiredDate = ExpiredDate;
+        this.pinyin = pinyin;
+        this.firstLetter = firstLetter;
+    }
+
+    @Generated(hash = 1818808915)
+    public UserInfoBean() {
+    }
+
 
     public String getExpiredDate() {
         return ExpiredDate;

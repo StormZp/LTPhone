@@ -16,6 +16,10 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
     }
+    dexOptions {
+        incremental true
+        javaMaxHeapSize "4g"
+    }
 
     buildTypes {
         release {
@@ -24,6 +28,11 @@ android {
         }
     }
 
+}
+greendao {
+    schemaVersion 1
+    daoPackage 'com.netphone.gen'
+    targetGenDir 'src/main/java'
 }
 
 dependencies {

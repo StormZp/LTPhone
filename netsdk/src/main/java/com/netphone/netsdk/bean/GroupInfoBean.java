@@ -1,11 +1,17 @@
 package com.netphone.netsdk.bean;
 
+import org.greenrobot.greendao.annotation.Entity;
+import org.greenrobot.greendao.annotation.Generated;
+import org.greenrobot.greendao.annotation.Id;
+import org.greenrobot.greendao.annotation.Transient;
+
 import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by lgp on 2017/8/23.
  */
+@Entity
 public class GroupInfoBean implements Serializable {
     /**
      * GroupID : 17080718265624509
@@ -21,14 +27,30 @@ public class GroupInfoBean implements Serializable {
      * OnLineCount : 0
      * Micer : {}
      */
-
+    static final long serialVersionUID = 42L;
+    @Id
     private String GroupID;
     private String GroupName;
     private String HeadIcon;
     private int AllCount;
     private int OnLineCount;
+    @Transient
     private UserInfoBean Micer;
+    @Transient
     private List<UserInfoBean> GroupChilds;
+
+    @Generated(hash = 881559806)
+    public GroupInfoBean(String GroupID, String GroupName, String HeadIcon, int AllCount, int OnLineCount) {
+        this.GroupID = GroupID;
+        this.GroupName = GroupName;
+        this.HeadIcon = HeadIcon;
+        this.AllCount = AllCount;
+        this.OnLineCount = OnLineCount;
+    }
+
+    @Generated(hash = 1490267550)
+    public GroupInfoBean() {
+    }
 
     public String getGroupID() {
         return GroupID;

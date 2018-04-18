@@ -35,9 +35,7 @@ class FriendsFragment : BaseFragment<FragmentFriendsBinding>() {
         binding.sideBar.setOnStrSelectCallBack { index, selectStr ->
             for (i in 0 until Constant.listBean.userInfo.size) {
                 if (selectStr.equals(Constant.listBean.userInfo.get(i).getFirstLetter())) {
-//                    listView.setSelection(i) // 选择到首字母出现的位置
-//                    binding.listView.scrollTo(index * AppUtil.dip2Px(context, 48F), 0) // 选择到首字母出现的位置
-                    smoothMoveToPosition( binding.listView, i);
+                    smoothMoveToPosition( binding.listView, i);// 选择到首字母出现的位置
                     break
                 }
             }

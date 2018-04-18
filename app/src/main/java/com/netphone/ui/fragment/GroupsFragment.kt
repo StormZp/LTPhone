@@ -9,9 +9,12 @@ import android.view.ViewGroup
 import com.netphone.R
 import com.netphone.adapter.GroupAdapter
 import com.netphone.databinding.FragmentGroupsBinding
+import com.netphone.netsdk.LTConfigure
 import com.netphone.netsdk.Tool.Constant
 import com.netphone.netsdk.base.AppBean
-import com.netphone.netsdk.utils.SharedPreferenceUtil
+import com.netphone.netsdk.bean.GroupInfoBean
+import com.netphone.netsdk.utils.LogUtil
+import com.netphone.ui.activity.GroupChatActivity
 import com.storm.tool.base.BaseFragment
 
 /**
@@ -39,25 +42,51 @@ class GroupsFragment : BaseFragment<FragmentGroupsBinding>() {
     }
 
     lateinit var groupAdapter: GroupAdapter
-    private var currentId = "";
+    private var currentGroup: GroupInfoBean? = null;
 
     override fun initData() {
         binding.title.back.visibility = View.INVISIBLE
         binding.title.title.text = context.resources.getString(R.string.groups)
-        currentId = SharedPreferenceUtil.read(Constant.currentGroupId, "")
-        if (TextUtils.isEmpty(currentId)) {
+
+        currentGroup = LTConfigure.getInstance().currentGroup
+
+        LogUtil.error("GroupsFragment.kt", "50\tinitData()\n" + currentGroup!!.groupID);
+        if (currentGroup == null) {
             binding.layCurrent.visibility = View.GONE
         } else {
             binding.layCurrent.visibility = View.VISIBLE
+            binding.tvCurrent.setText(currentGroup!!.groupName)
+
+            binding.layCurrent.setOnClickListener {
+                val bundle = Bundle()
+                bundle.putSerializable("bean", currentGroup)
+                jump(GroupChatActivity::class.java, bundle)
+            }
+
         }
 
-        if (Constant.listBean != null && Constant.listBean.groupInfo != null) {
+        if (currentGroup != null) {
+            var arrss: ArrayList<GroupInfoBean> = arrayListOf<GroupInfoBean>()
+            if (Constant.listBean != null && Constant.listBean.groupInfo != null) {
+                for (i in 0 until Constant.listBean.groupInfo.size) {
+                    if (!TextUtils.isEmpty(currentGroup!!.groupID) && currentGroup!!.groupID.equals(Constant.listBean.groupInfo[i].groupID)) {
+                        continue
+                    }
+                    arrss.add(Constant.listBean.groupInfo[i])
+
+                }
+                groupAdapter = GroupAdapter(context, arrss)
+
+                binding.recycle.layoutManager = LinearLayoutManager(context)
+                binding.recycle.adapter = groupAdapter
+            }
+        } else {
             groupAdapter = GroupAdapter(context, Constant.listBean.groupInfo)
-            if (!TextUtils.isEmpty(currentId))
-                groupAdapter.setCurrentId(currentId)
+
             binding.recycle.layoutManager = LinearLayoutManager(context)
             binding.recycle.adapter = groupAdapter
         }
+
     }
 
 }

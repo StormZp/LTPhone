@@ -32,13 +32,13 @@ public class LTApi {
     public OnGroupComeInListener groupComeInListener;
     public OnGetGroupMemberListener getGroupMemberListener;
     public OnGroupStateListener groupStateListener;
-
+    public String groupId;
 
     public void joinGroup(String groupID, OnGroupComeInListener groupComeInListener, OnGetGroupMemberListener getGroupMemberListener, OnGroupStateListener groupStateListener) {
         this.groupComeInListener = groupComeInListener;
         this.getGroupMemberListener = getGroupMemberListener;
         this.groupStateListener = groupStateListener;
-
+        this.groupId = groupID;
         byte[] joinGroup = CmdUtils.getInstance().commonApi((byte) 0x00, (byte) 0x04, groupID);
         TcpSocket.getInstance().addData(joinGroup);
     }
