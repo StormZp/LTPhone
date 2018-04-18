@@ -112,7 +112,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         }
 
         open fun call(view: View) {
-            toasts("通话")
+
         }
 
         open fun groups(view: View) {

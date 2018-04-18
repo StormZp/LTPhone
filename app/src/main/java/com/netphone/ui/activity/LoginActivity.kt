@@ -62,7 +62,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>() {
         setBarColor(R.color.black)
 
         if (BuildConfig.DEBUG){
-            binding.etAccount.setText("debug")
+            binding.etAccount.setText("测试企业2")
             binding.etPassword.setText("123456")
         }
     }

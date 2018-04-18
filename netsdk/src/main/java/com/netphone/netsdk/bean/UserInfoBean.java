@@ -136,13 +136,13 @@ public class UserInfoBean implements Serializable, Comparable<UserInfoBean> {
 
 
     @Override
-    public int compareTo(@NonNull UserInfoBean userInfoBean) {
-        if (!TextUtils.isEmpty(userInfoBean.getFirstLetter()) && !userInfoBean.getFirstLetter().equals("#")) {
+    public int compareTo(@NonNull UserInfoBean another) {
+        if (getFirstLetter().equals("#") && !another.getFirstLetter().equals("#")) {
             return 1;
-        } else if (!TextUtils.isEmpty(userInfoBean.getFirstLetter()) && userInfoBean.getFirstLetter().equals("#")) {
+        } else if (!getFirstLetter().equals("#") && another.getFirstLetter().equals("#")){
             return -1;
         } else {
-            return getPinyin().compareToIgnoreCase(userInfoBean.getPinyin());
+            return getPinyin().compareToIgnoreCase(another.getPinyin());
         }
     }
 }

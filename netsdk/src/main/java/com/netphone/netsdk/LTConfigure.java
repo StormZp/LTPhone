@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 
+import com.netphone.netsdk.Tool.TcpCmd;
 import com.netphone.netsdk.listener.OnNetworkListener;
 import com.netphone.netsdk.service.NetworkConnectChangedReceiver;
 import com.netphone.netsdk.service.SocketManageService;
@@ -18,7 +19,6 @@ import com.netphone.netsdk.utils.SharedPreferenceUtil;
 public class LTConfigure {
     private static LTApi ltApi;
     public OnNetworkListener mOnNetworkListener;
-
 
 
     private static LTConfigure mlt;
@@ -72,12 +72,15 @@ public class LTConfigure {
         mContext.unregisterReceiver(mNetworkConnectChangedReceiver);
         mNetworkConnectChangedReceiver = null;
         mlt = null;
+        TcpCmd.isConnectBeat = false;
+        TcpCmd.isGroupBeat = false;
     }
 
 
-    public LTApi getLtApi(){
+    public LTApi getLtApi() {
         return ltApi;
     }
+
     /**
      * 获取当前类
      *
@@ -99,7 +102,6 @@ public class LTConfigure {
     public void setOnNetworkListener(OnNetworkListener onNetworkListener) {
         mOnNetworkListener = onNetworkListener;
     }
-
 
 
 }

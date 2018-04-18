@@ -24,6 +24,11 @@ class GroupsFragment : BaseFragment<FragmentGroupsBinding>() {
         return mView
     }
 
+    override fun onResume() {
+        super.onResume()
+        initData()
+    }
+
     override fun receiveEvent(appBean: AppBean<Any>) {
     }
 
@@ -35,6 +40,7 @@ class GroupsFragment : BaseFragment<FragmentGroupsBinding>() {
 
     lateinit var groupAdapter: GroupAdapter
     private var currentId = "";
+
     override fun initData() {
         binding.title.back.visibility = View.INVISIBLE
         binding.title.title.text = context.resources.getString(R.string.groups)

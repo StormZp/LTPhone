@@ -352,8 +352,8 @@ public class TcpCmd {
         }
     }
 
-    private boolean isGroupBeat = false;//群聊心跳包
-    private boolean isConnectBeat = false;//联网心跳包
+    public static boolean isGroupBeat = false;//群聊心跳包
+    public static boolean isConnectBeat = false;//联网心跳包
 
     private int conncetBeatCount;//联网心跳包发送次数,超过3次不归0,即认定socket断了，需要重连。
 
@@ -366,7 +366,7 @@ public class TcpCmd {
                 } catch (UnknownHostException e) {
                 }
             }
-            while (true) {
+            while (isConnectBeat||isGroupBeat) {
                 if (isGroupBeat) {
                     byte[] enmy = CmdUtils.getInstance().sendGroupBeat();
                     DatagramPacket packet = new DatagramPacket(enmy, 0, enmy.length, addr, port);
@@ -380,7 +380,6 @@ public class TcpCmd {
                     conncetBeatCount++;
                     byte[] heart = CmdUtils.getInstance().sendHeratPackage();
                     TcpSocket.getInstance().addData(heart);//定时发送心跳包
-//                    LogUtil.error("TcpCmd", "370\tonTick()\n" + "定时发送心跳包");
                 }
                 SystemClock.sleep(10 * 1000);
             }

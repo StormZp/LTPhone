@@ -6,6 +6,7 @@ import com.google.gson.Gson
 import com.netphone.R
 import com.netphone.databinding.ActivityChatGroupBinding
 import com.netphone.netsdk.LTConfigure
+import com.netphone.netsdk.Tool.Constant
 import com.netphone.netsdk.base.AppBean
 import com.netphone.netsdk.bean.GroupInfoBean
 import com.netphone.netsdk.bean.UserInfoBean
@@ -13,6 +14,7 @@ import com.netphone.netsdk.listener.OnGetGroupMemberListener
 import com.netphone.netsdk.listener.OnGroupComeInListener
 import com.netphone.netsdk.listener.OnGroupStateListener
 import com.netphone.netsdk.utils.LogUtil
+import com.netphone.netsdk.utils.SharedPreferenceUtil
 import com.storm.tool.base.BaseActivity
 
 /**
@@ -32,6 +34,7 @@ open class GroupChatActivity : BaseActivity<ActivityChatGroupBinding>() {
         binding.title.menuDate.setImageResource(R.mipmap.icon_qz)
         LTConfigure.getInstance().ltApi.joinGroup(groupInfoBean.groupID, object : OnGroupComeInListener {
             override fun onComeInSuccess() {
+                SharedPreferenceUtil.put(Constant.currentGroupId, groupInfoBean.groupID)
                 LogUtil.error("GroupChatActivity.kt", "34\tonComeInSuccess()\n" + "加入成功");
             }
 
