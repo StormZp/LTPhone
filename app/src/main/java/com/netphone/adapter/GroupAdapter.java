@@ -10,9 +10,12 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.netphone.R;
+import com.netphone.netsdk.Tool.TcpConfig;
 import com.netphone.netsdk.bean.GroupInfoBean;
 import com.netphone.ui.activity.GroupChatActivity;
+import com.netphone.utils.GlideCircleTransform;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,11 +29,13 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
     private Context mContext;
     private List<GroupInfoBean> datas = new ArrayList<>();
     private String id;
+    private GlideCircleTransform mGlideCircleTransform;
 
     public GroupAdapter(Context mContext, List<GroupInfoBean> datas) {
         this.mContext = mContext;
         this.datas = datas;
         mLayoutInflater = LayoutInflater.from(mContext);
+        mGlideCircleTransform = new GlideCircleTransform(mContext);
     }
 
 
@@ -44,6 +49,7 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
     public void onBindViewHolder(ViewHolder holder, int position) {
         final GroupInfoBean groupInfoBean = datas.get(position);
         holder.tvName.setText(groupInfoBean.getGroupName());
+        Glide.with(mContext).load(TcpConfig.URL + groupInfoBean.getHeadIcon()).placeholder(R.mipmap.icon_defult_detail).error(R.mipmap.icon_defult_detail).transform(mGlideCircleTransform).into(holder.ivHead);
 
         holder.getView().setOnClickListener(new View.OnClickListener() {
             @Override

@@ -18,10 +18,117 @@
             android:id="@+id/title"
             layout="@layout/titlebar" />
 
-        <TextView
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/px1"
+            android:layout_alignParentBottom="true"
+            android:src="@color/line_view" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp65"
+            android:background="@color/white"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/iv_current"
+                android:layout_width="@dimen/dp48"
+                android:layout_height="@dimen/dp48"
+                android:layout_marginLeft="@dimen/dp14"
+                android:src="@mipmap/icon_defult_list" />
+
+            <TextView
+                android:id="@+id/tv_current"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/dp8"
+                android:layout_toRightOf="@+id/iv_current"
+                android:gravity="center"
+                android:text="张三"
+                android:textColor="@color/textcolor_black" />
+
+            <TextView
+                android:id="@+id/tv_hint"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/dp8"
+                android:layout_toRightOf="@+id/iv_current"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:text="抢麦成功,正在说话"
+                android:textColor="@color/textcolor_gray" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/dp14"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="@dimen/dp36"
+                    android:layout_height="@dimen/dp36"
+                    android:src="@mipmap/icon_sy" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="没金银" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycle"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="会话页面" />
+            android:layout_marginTop="@dimen/dp8"
+            android:layout_weight="1" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp48"
+            android:gravity="center_vertical">
+
+
+            <ImageView
+                android:id="@+id/keyboard"
+                android:layout_width="@dimen/dp36"
+                android:layout_height="@dimen/dp36"
+                android:layout_marginLeft="@dimen/dp14"
+                android:src="@mipmap/icon_jp2" />
+
+            <ImageView
+                android:id="@+id/iv_voice"
+                android:layout_width="@dimen/dp36"
+                android:layout_height="@dimen/dp36"
+                android:layout_marginLeft="@dimen/dp8"
+                android:src="@mipmap/icon_yy" />
+
+            <EditText
+                android:id="@+id/et_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/dp8"
+                android:layout_marginRight="@dimen/dp8"
+                android:layout_weight="1"
+                android:background="@drawable/shape_btn_gray_line_white_bg" />
+
+            <TextView
+                android:id="@+id/submit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/dp8"
+                android:background="@drawable/shape_btn_green_bg"
+                android:padding="@dimen/dp3"
+                android:onClick="@{click.submit}"
+                android:text="@string/text_send"
+                android:textColor="@color/white" />
+
+        </LinearLayout>
+
     </LinearLayout>
+
+
 </layout>

@@ -5,11 +5,13 @@ import android.text.TextUtils;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.netphone.gen.GroupChatMsgBeanDao;
 import com.netphone.gen.GroupInfoBeanDao;
 import com.netphone.gen.UserInfoBeanDao;
 import com.netphone.netsdk.LTApi;
 import com.netphone.netsdk.LTConfigure;
 import com.netphone.netsdk.R;
+import com.netphone.netsdk.bean.GroupChatMsgBean;
 import com.netphone.netsdk.bean.UserInfoBean;
 import com.netphone.netsdk.bean.UserListBean;
 import com.netphone.netsdk.socket.TcpSocket;
@@ -24,6 +26,7 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.List;
 
@@ -37,6 +40,7 @@ public class TcpCmd {
     private int port;
     private UserInfoBeanDao mUserInfoBeanDao;
     private GroupInfoBeanDao mGroupInfoBeanDao;
+    private SimpleDateFormat dateformat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
     public void cmdData(byte[] pagBytes) {
         byte[] tempBytes = new byte[2];
@@ -229,6 +233,9 @@ public class TcpCmd {
                             }
                         }
                         break;
+                    case 0x1c://发送群聊消息的回复
+
+                        break;
                 }
                 break;
             case 0x01://服务端>>终端指令列表
@@ -347,6 +354,16 @@ public class TcpCmd {
                     case 0x24://停止播放监听内容
                         break;
                     case 0x25://播放监听文件
+                        break;
+                    case 0x26://收到群聊消息
+                        String body = ByteIntUtils.utfToString(bodyBytes);
+                        LogUtil.error("TcpCmd", "356\tcmdExplore()\n" + body);
+                        Gson gson = new Gson();
+                        GroupChatMsgBean msg = gson.fromJson(body, GroupChatMsgBean.class);
+                        msg.setDateTime(dateformat.format(System.currentTimeMillis()));
+
+                        GroupChatMsgBeanDao groupInfoBeanDao = LTConfigure.getInstance().getDaoSession().getGroupChatMsgBeanDao();
+                        groupInfoBeanDao.insertOrReplace(msg);
                         break;
                 }
                 break;

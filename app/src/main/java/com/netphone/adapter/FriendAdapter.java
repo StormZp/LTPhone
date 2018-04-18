@@ -21,7 +21,7 @@ import java.util.List;
 
 public class FriendAdapter extends BaseAdapter {
 
-    private final GlideCircleTransform mGlideCircleTransform;
+    private  GlideCircleTransform mGlideCircleTransform;
     private List<UserInfoBean> list = null;
     private Context mContext;
 

@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:gravity="center_vertical"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@drawable/shape_btn_white_line_gray_bg_big"
+        android:paddingBottom="@dimen/dp3"
+        android:paddingLeft="@dimen/dp8"
+        android:paddingRight="@dimen/dp8"
+        android:paddingTop="@dimen/dp3"
+        android:text="2018年4月18日17:19:56"
+        android:textColor="@color/textcolor_gray"
+        android:textSize="@dimen/dp14" />
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:id="@+id/lay_left"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp48"
+            android:background="@color/white"
+            android:gravity="center_vertical">
+
+            <ImageView
+                android:id="@+id/left_head"
+                android:layout_width="@dimen/dp36"
+                android:layout_height="@dimen/dp36"
+                android:layout_marginLeft="@dimen/dp16"
+                android:src="@mipmap/icon_defult_detail"
+
+                />
+
+            <TextView
+                android:id="@+id/left_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/left_head"
+                android:gravity="center_vertical"
+                android:text="123"
+                android:textColor="@color/textcolor_black"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/left_content"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/left_name"
+                android:layout_toRightOf="@+id/left_head"
+                android:gravity="center_vertical"
+                android:text="在线"
+                android:textColor="@color/textcolor_black"
+                android:textSize="16sp" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/lay_right"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp48"
+            android:background="@color/white"
+            android:visibility="gone"
+            android:gravity="center_vertical">
+
+            <ImageView
+                android:id="@+id/right_head"
+                android:layout_width="@dimen/dp36"
+                android:layout_height="@dimen/dp36"
+                android:layout_alignParentRight="true"
+                android:layout_marginLeft="@dimen/dp16"
+                android:src="@mipmap/icon_defult_detail"
+
+                />
+
+            <TextView
+                android:id="@+id/right_content"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/right_name"
+                android:layout_toLeftOf="@+id/right_head"
+                android:gravity="center_vertical"
+                android:text="在线"
+                android:textColor="@color/textcolor_black"
+                android:textSize="16sp" />
+        </RelativeLayout>
+    </RelativeLayout>
+</LinearLayout>

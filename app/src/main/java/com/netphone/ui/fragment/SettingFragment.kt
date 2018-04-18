@@ -46,7 +46,6 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>() {
 //            binding.onlineState.text = if (Constant.info.isOnLine == 1) "在线1" else "离线1"
             binding.onlineSwitch.isChecked = true
 
-
             Glide.with(context).load(TcpConfig.URL + Constant.info.getHeadIcon()).placeholder(R.mipmap.icon_defult_detail).error(R.mipmap.icon_defult_detail).transform(GlideCircleTransform(context)).into(binding.ivHead)
 
         }

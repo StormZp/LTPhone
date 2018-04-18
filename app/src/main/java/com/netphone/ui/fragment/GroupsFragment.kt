@@ -6,15 +6,18 @@ import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.bumptech.glide.Glide
 import com.netphone.R
 import com.netphone.adapter.GroupAdapter
 import com.netphone.databinding.FragmentGroupsBinding
 import com.netphone.netsdk.LTConfigure
 import com.netphone.netsdk.Tool.Constant
+import com.netphone.netsdk.Tool.TcpConfig
 import com.netphone.netsdk.base.AppBean
 import com.netphone.netsdk.bean.GroupInfoBean
 import com.netphone.netsdk.utils.LogUtil
 import com.netphone.ui.activity.GroupChatActivity
+import com.netphone.utils.GlideCircleTransform
 import com.storm.tool.base.BaseFragment
 
 /**
@@ -50,12 +53,13 @@ class GroupsFragment : BaseFragment<FragmentGroupsBinding>() {
 
         currentGroup = LTConfigure.getInstance().currentGroup
 
-        LogUtil.error("GroupsFragment.kt", "50\tinitData()\n" + currentGroup!!.groupID);
         if (currentGroup == null) {
             binding.layCurrent.visibility = View.GONE
         } else {
+        LogUtil.error("GroupsFragment.kt", "50\tinitData()\n" + currentGroup!!.groupID);
             binding.layCurrent.visibility = View.VISIBLE
             binding.tvCurrent.setText(currentGroup!!.groupName)
+            Glide.with(context).load(TcpConfig.URL + currentGroup!!.headIcon).placeholder(R.mipmap.icon_defult_detail).error(R.mipmap.icon_defult_detail).transform(GlideCircleTransform(context)).into(binding.ivCurrent)
 
             binding.layCurrent.setOnClickListener {
                 val bundle = Bundle()

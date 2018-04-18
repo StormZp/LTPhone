@@ -382,6 +382,23 @@ public class CmdUtils {
     }
 
     /**
+     * 发群消息
+     *
+     * @param ReceiveId
+     * @param msg
+     */
+    public byte[] sendGroupCommonBeanApi(String ReceiveId, String msg, byte cmdId, byte cmdId2) {
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("GroupId", ReceiveId);
+        map.put("Message", msg);
+        String json = new Gson().toJson(map);
+        //再进行UTF8编码
+        byte[] byteArray = json.getBytes(Charset.forName("utf-8"));
+        byte[] temp = sendCmds(cmdId, cmdId2, byteArray);
+        return temp;
+    }
+
+    /**
      * 上传文件，图片，视频...
      */
     public byte[] uploadFile(byte[] fileArray, byte cmdId, byte cmdId2, Map<String, Object> map) {
