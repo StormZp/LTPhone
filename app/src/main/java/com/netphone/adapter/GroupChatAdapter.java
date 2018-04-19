@@ -38,6 +38,11 @@ public class GroupChatAdapter extends RecyclerView.Adapter<GroupChatAdapter.View
         mGlideCircleTransform = new GlideCircleTransform(mContext);
     }
 
+    public void addMsg(GroupChatMsgBean msgBean) {
+        mDatas.add(0, msgBean);
+        notifyDataSetChanged();
+    }
+
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = mLayoutInflater.inflate(R.layout.item_chat, parent, false);

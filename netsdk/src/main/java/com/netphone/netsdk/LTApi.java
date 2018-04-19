@@ -3,6 +3,7 @@ package com.netphone.netsdk;
 import com.netphone.gen.GroupChatMsgBeanDao;
 import com.netphone.netsdk.bean.GroupChatMsgBean;
 import com.netphone.netsdk.listener.OnGetGroupMemberListener;
+import com.netphone.netsdk.listener.OnGroupChatListener;
 import com.netphone.netsdk.listener.OnGroupComeInListener;
 import com.netphone.netsdk.listener.OnGroupStateListener;
 import com.netphone.netsdk.listener.OnLoginListener;
@@ -39,12 +40,14 @@ public class LTApi {
     public OnGroupComeInListener groupComeInListener;
     public OnGetGroupMemberListener getGroupMemberListener;
     public OnGroupStateListener groupStateListener;
+    public OnGroupChatListener groupChatListener;
     public String groupId;
 
-    public void joinGroup(String groupID, OnGroupComeInListener groupComeInListener, OnGetGroupMemberListener getGroupMemberListener, OnGroupStateListener groupStateListener) {
+    public void joinGroup(String groupID, OnGroupComeInListener groupComeInListener, OnGetGroupMemberListener getGroupMemberListener, OnGroupStateListener groupStateListener, OnGroupChatListener groupChatListener) {
         this.groupComeInListener = groupComeInListener;
         this.getGroupMemberListener = getGroupMemberListener;
         this.groupStateListener = groupStateListener;
+        this.groupChatListener = groupChatListener;
         this.groupId = groupID;
         byte[] joinGroup = CmdUtils.getInstance().commonApi((byte) 0x00, (byte) 0x04, groupID);
         TcpSocket.getInstance().addData(joinGroup);

@@ -5,10 +5,13 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.View
 import com.netphone.R
 import com.netphone.adapter.GroupChatAdapter
+import com.netphone.config.EventConfig
 import com.netphone.databinding.ActivityChatGroupBinding
 import com.netphone.netsdk.LTApi
 import com.netphone.netsdk.base.AppBean
+import com.netphone.netsdk.bean.GroupChatMsgBean
 import com.netphone.netsdk.bean.GroupInfoBean
+import com.netphone.utils.GroupUtil
 import com.netphone.utils.LTListener
 import com.storm.tool.base.BaseActivity
 
@@ -17,6 +20,7 @@ import com.storm.tool.base.BaseActivity
  */
 open class GroupChatActivity : BaseActivity<ActivityChatGroupBinding>() {
     private lateinit var groupInfo: GroupInfoBean
+    private lateinit var adapter: GroupChatAdapter;
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initBinding(R.layout.activity_chat_group)
@@ -30,8 +34,10 @@ open class GroupChatActivity : BaseActivity<ActivityChatGroupBinding>() {
 
 
         var groupChatMessage = LTApi.newInstance().getGroupChatMessage(groupInfo.groupID)
-        binding.recycle.adapter = GroupChatAdapter(context, groupChatMessage)
-        binding.recycle.layoutManager = LinearLayoutManager(context)
+        groupChatMessage = GroupUtil.getSortReverseList(groupChatMessage)
+        adapter = GroupChatAdapter(context, groupChatMessage)
+        binding.recycle.adapter = adapter
+        binding.recycle.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, true)
 
         LTListener.newInstance().joinGroupListener(groupInfo.groupID)
     }
@@ -40,9 +46,15 @@ open class GroupChatActivity : BaseActivity<ActivityChatGroupBinding>() {
         binding.title.back.setOnClickListener { finish() }
         binding.title.menuDate.setOnClickListener { jump(GroupInfoActivity::class.java, intent.extras) }
         binding.click = OnClick()
+        registerEventBus()
     }
 
     override fun receiveEvent(appBean: AppBean<Any>) {
+        when (appBean.code) {
+            EventConfig.RECEIVER_WORD_GROUP -> {//文字消息
+                adapter.addMsg(appBean.data as GroupChatMsgBean)
+            }
+        }
     }
 
     override fun receiveStickyEvent(appBean: AppBean<Any>) {

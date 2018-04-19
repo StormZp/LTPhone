@@ -1,4 +1,4 @@
-package com.netphone.netsdk.Tool;
+package com.netphone.config;
 
 /**
  * Created by Storm on 2018/2/23.
@@ -42,4 +42,5 @@ public class EventConfig {
     public static final  int FORCE_COMEIN_GROUP = 33;//强制进入群聊
     public static final  int BEGIN_VOICE_CHAT = 34;//开始通话
     public static final  int CANCEL_VOICE = 35;//取消音频
+    public static final  int RECEIVER_WORD_GROUP = 36;//收到群聊文字消息
 }

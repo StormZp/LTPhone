@@ -1,5 +1,7 @@
 package com.netphone.netsdk.bean;
 
+import android.support.annotation.NonNull;
+
 import com.netphone.gen.DaoSession;
 import com.netphone.gen.GroupChatMsgBeanDao;
 import com.netphone.gen.GroupInfoBeanDao;
@@ -17,7 +19,7 @@ import java.io.Serializable;
  * Created by XYSM on 2018/4/18.
  */
 @Entity
-public class GroupChatMsgBean implements Serializable {
+public class GroupChatMsgBean implements Serializable, Comparable<GroupChatMsgBean> {
 
     /**
      * FromUserId : 17090410015273146616
@@ -71,7 +73,7 @@ public class GroupChatMsgBean implements Serializable {
 
     @Generated(hash = 276494666)
     public GroupChatMsgBean(String FromUserId, String FromUserName, String Msg,
-            String FromGroupId, Long id, String receiveId, Long dateTime) {
+                            String FromGroupId, Long id, String receiveId, Long dateTime) {
         this.FromUserId = FromUserId;
         this.FromUserName = FromUserName;
         this.Msg = Msg;
@@ -255,7 +257,9 @@ public class GroupChatMsgBean implements Serializable {
         this.receiveId = receiveId;
     }
 
-    /** To-one relationship, resolved on first access. */
+    /**
+     * To-one relationship, resolved on first access.
+     */
     @Generated(hash = 595854603)
     public UserInfoBean getReceiveBean() {
         String __key = this.receiveId;
@@ -274,7 +278,9 @@ public class GroupChatMsgBean implements Serializable {
         return receiveBean;
     }
 
-    /** called by internal mechanisms, do not call yourself. */
+    /**
+     * called by internal mechanisms, do not call yourself.
+     */
     @Generated(hash = 745371903)
     public void setReceiveBean(UserInfoBean receiveBean) {
         synchronized (this) {
@@ -282,5 +288,10 @@ public class GroupChatMsgBean implements Serializable {
             receiveId = receiveBean == null ? null : receiveBean.getUserId();
             receiveBean__resolvedKey = receiveId;
         }
+    }
+
+    @Override
+    public int compareTo(@NonNull GroupChatMsgBean msgBean) {
+        return dateTime.compareTo(msgBean.dateTime);
     }
 }

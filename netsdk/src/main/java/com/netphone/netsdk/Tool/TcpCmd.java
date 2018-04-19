@@ -365,6 +365,10 @@ public class TcpCmd {
 
                         GroupChatMsgBeanDao groupInfoBeanDao = LTConfigure.getInstance().getDaoSession().getGroupChatMsgBeanDao();
                         groupInfoBeanDao.insertOrReplace(msg);
+
+                        if (LTApi.newInstance().groupChatListener != null) {
+                            LTApi.newInstance().groupChatListener.onReceiverListener(msg);
+                        }
                         break;
                 }
                 break;
