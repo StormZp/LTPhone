@@ -62,6 +62,12 @@ public class LTApi {
         TcpSocket.getInstance().addData(temp);
     }
 
+    @Deprecated
+    public void exitGroup(String groupID){
+        byte[] joinGroup = CmdUtils.getInstance().commonApi2((byte)0x00, (byte)0x0A);
+        TcpSocket.getInstance().addData(joinGroup);
+    }
+
 
     private GroupChatMsgBeanDao groupChatMsgBeanDao;
     private UserInfoBeanDao userInfoBeanDao;

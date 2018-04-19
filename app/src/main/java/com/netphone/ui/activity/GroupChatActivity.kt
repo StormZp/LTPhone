@@ -11,6 +11,7 @@ import com.netphone.netsdk.LTApi
 import com.netphone.netsdk.base.AppBean
 import com.netphone.netsdk.bean.GroupChatMsgBean
 import com.netphone.netsdk.bean.GroupInfoBean
+import com.netphone.netsdk.bean.UserInfoBean
 import com.netphone.utils.AppUtil
 import com.netphone.utils.GroupUtil
 import com.netphone.utils.LTListener
@@ -24,10 +25,13 @@ open class GroupChatActivity : BaseActivity<ActivityChatGroupBinding>() {
     private lateinit var groupInfo: GroupInfoBean
     private lateinit var adapter: GroupChatAdapter;
     private var isShowKeyBoard = false
+
+    private var userInfoBean = LTApi.newInstance().currentInfo
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initBinding(R.layout.activity_chat_group)
     }
+
 
     override fun initData() {
         groupInfo = intent.extras.getSerializable("bean") as GroupInfoBean
@@ -70,6 +74,53 @@ open class GroupChatActivity : BaseActivity<ActivityChatGroupBinding>() {
         when (appBean.code) {
             EventConfig.RECEIVER_WORD_GROUP -> {//文字消息
                 adapter.addMsg(appBean.data as GroupChatMsgBean)
+            }
+            EventConfig.COME_IN_SUCCESS -> {
+                var groupChatMsgBean = GroupChatMsgBean()
+                groupChatMsgBean.fromUserName = context.resources.getString(R.string.add_seccess)
+                adapter.addMsg(groupChatMsgBean)
+            }
+            EventConfig.COME_IN_FAIL -> {
+                toasts(context.resources.getString(R.string.add_fail))
+                finish()
+            }
+            EventConfig.GET_MEMBER_FAIL -> {
+            }
+            EventConfig.GET_MEMBER_SUCCESS -> {
+
+            }
+            EventConfig.MENBER_EXIT -> {
+                var groupChatMsgBean = GroupChatMsgBean()
+                groupChatMsgBean.fromUserName = (appBean.data as UserInfoBean).realName + context.resources.getString(R.string.exit_group)
+                adapter.addMsg(groupChatMsgBean)
+            }
+            EventConfig.MENBER_JOIN -> {
+                var userInfoBean1 = appBean.data as UserInfoBean
+                if (!userInfoBean.userId.equals(userInfoBean1.userId)){
+                    var groupChatMsgBean = GroupChatMsgBean()
+                    groupChatMsgBean.fromUserName = userInfoBean1.realName + context.resources.getString(R.string.add_group)
+                    adapter.addMsg(groupChatMsgBean)
+                }
+            }
+            EventConfig.MENBER_HAVE_MAC -> {
+                var groupChatMsgBean = GroupChatMsgBean()
+                groupChatMsgBean.fromUserName = (appBean.data as UserInfoBean).realName + context.resources.getString(R.string.have_mic)
+                adapter.addMsg(groupChatMsgBean)
+            }
+            EventConfig.MEMBER_RELAXE_DMAC -> {
+                var groupChatMsgBean = GroupChatMsgBean()
+                groupChatMsgBean.fromUserName = (appBean.data as UserInfoBean).realName + context.resources.getString(R.string.have_relase_mic)
+                adapter.addMsg(groupChatMsgBean)
+            }
+            EventConfig.SYSTEM_RELAXED_MAC -> {
+                var groupChatMsgBean = GroupChatMsgBean()
+                groupChatMsgBean.fromUserName =  context.resources.getString(R.string.system_relase_mic)
+                adapter.addMsg(groupChatMsgBean)
+            }
+            EventConfig.GRAB_WHEAT_SUCCESS -> {
+                var groupChatMsgBean = GroupChatMsgBean()
+                groupChatMsgBean.fromUserName =  context.resources.getString(R.string.preemption)+  context.resources.getString(R.string.success)
+                adapter.addMsg(groupChatMsgBean)
             }
         }
     }

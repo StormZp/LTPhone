@@ -35,6 +35,7 @@ public class UserInfoBean implements Serializable, Comparable<UserInfoBean> {
     private String Description;
     private String Gender;
     private String ExpiredDate;
+    private String Py;
     @Transient
     private LastPositionBean LastPosition;
 
@@ -44,9 +45,9 @@ public class UserInfoBean implements Serializable, Comparable<UserInfoBean> {
 
 
 
-    @Generated(hash = 946396616)
+    @Generated(hash = 1883831911)
     public UserInfoBean(String RealName, String UserId, String IsDizzy, String IsOnLine,
-            String HeadIcon, String Description, String Gender, String ExpiredDate,
+            String HeadIcon, String Description, String Gender, String ExpiredDate, String Py,
             String pinyin, String firstLetter) {
         this.RealName = RealName;
         this.UserId = UserId;
@@ -56,6 +57,7 @@ public class UserInfoBean implements Serializable, Comparable<UserInfoBean> {
         this.Description = Description;
         this.Gender = Gender;
         this.ExpiredDate = ExpiredDate;
+        this.Py = Py;
         this.pinyin = pinyin;
         this.firstLetter = firstLetter;
     }
@@ -177,5 +179,13 @@ public class UserInfoBean implements Serializable, Comparable<UserInfoBean> {
         } else {
             return getPinyin().compareToIgnoreCase(another.getPinyin());
         }
+    }
+
+    public String getPy() {
+        return this.Py;
+    }
+
+    public void setPy(String Py) {
+        this.Py = Py;
     }
 }

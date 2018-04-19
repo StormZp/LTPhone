@@ -256,7 +256,10 @@ public class TcpCmd {
                                 UserListBean userListBean = gson.fromJson(body, UserListBean.class);
                                 mUserInfoBeanDao.insertOrReplaceInTx(userListBean.getUserInfo());
                                 mGroupInfoBeanDao.insertOrReplaceInTx(userListBean.getGroupInfo());
-                                LTConfigure.getInstance().getLtApi().mOnLoginListener.onComplete(userListBean);
+                                if ( LTConfigure.getInstance().getLtApi().mOnLoginListener!=null){
+                                    LTConfigure.getInstance().getLtApi().mOnLoginListener.onComplete(userListBean);
+                                    LTConfigure.getInstance().getLtApi().mOnLoginListener = null;
+                                }
                             } catch (Exception e) {
 
                             }

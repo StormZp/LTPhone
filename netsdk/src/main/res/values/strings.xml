@@ -174,4 +174,5 @@
     <string name="user_list_fail">获取用户列表失败</string>
     <string name="look_version">查看版本号</string>
     <string name="app_versioin">app版本号</string>
+    <string name="you">你</string>
 </resources>

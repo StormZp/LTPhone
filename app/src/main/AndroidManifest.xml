@@ -45,6 +45,7 @@
         <activity
             android:name=".ui.activity.MainActivity"
             android:screenOrientation="portrait"
+            android:launchMode="singleTask"
             android:windowSoftInputMode="stateHidden|stateUnchanged"></activity>
         <activity
             android:name=".ui.activity.FriendChatActivity"

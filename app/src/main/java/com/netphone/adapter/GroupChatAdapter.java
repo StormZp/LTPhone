@@ -27,7 +27,7 @@ import java.util.ArrayList;
  */
 
 public class GroupChatAdapter extends RecyclerView.Adapter<GroupChatAdapter.ViewHolder> {
-    private Context mContext;
+    private Context                     mContext;
     private ArrayList<GroupChatMsgBean> mDatas;
     private LayoutInflater mLayoutInflater = null;
     private GlideCircleTransform mGlideCircleTransform;
@@ -56,23 +56,30 @@ public class GroupChatAdapter extends RecyclerView.Adapter<GroupChatAdapter.View
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         GroupChatMsgBean bean = mDatas.get(position);
-        holder.time.setText(ChatTimeUtil.getInterval(bean.getDateTime()));
 
-        if (bean.getFromUserId().equals(mUserInfoBean.getUserId())) {//此时为当前用户发送的信息
+        if (bean.getDateTime() != null) {
+            holder.time.setText(ChatTimeUtil.getInterval(bean.getDateTime()));
+
+            if (bean.getFromUserId().equals(mUserInfoBean.getUserId())) {//此时为当前用户发送的信息
+                holder.layLeft.setVisibility(View.GONE);
+                holder.layRight.setVisibility(View.VISIBLE);
+                if (bean.getUserInfoBean() != null) {
+                    holder.RightContent.setText(bean.getMsg());
+                    Glide.with(mContext).load(TcpConfig.URL + bean.getUserInfoBean().getHeadIcon()).placeholder(R.mipmap.icon_defult_detail).error(R.mipmap.icon_defult_detail).transform(mGlideCircleTransform).into(holder.RightHead);
+                }
+            } else {//此时为其他用户发送的信息
+                holder.layLeft.setVisibility(View.VISIBLE);
+                holder.layRight.setVisibility(View.GONE);
+                if (bean.getUserInfoBean() != null) {
+                    holder.leftName.setText(bean.getUserInfoBean().getRealName());
+                    holder.leftContent.setText(bean.getMsg());
+                    Glide.with(mContext).load(TcpConfig.URL + bean.getUserInfoBean().getHeadIcon()).placeholder(R.mipmap.icon_defult_detail).error(R.mipmap.icon_defult_detail).transform(mGlideCircleTransform).into(holder.leftHead);
+                }
+            }
+        }else {
             holder.layLeft.setVisibility(View.GONE);
-            holder.layRight.setVisibility(View.VISIBLE);
-            if (bean.getUserInfoBean() != null) {
-                holder.RightContent.setText(bean.getMsg());
-                Glide.with(mContext).load(TcpConfig.URL + bean.getUserInfoBean().getHeadIcon()).placeholder(R.mipmap.icon_defult_detail).error(R.mipmap.icon_defult_detail).transform(mGlideCircleTransform).into(holder.RightHead);
-            }
-        } else {//此时为其他用户发送的信息
-            holder.layLeft.setVisibility(View.VISIBLE);
             holder.layRight.setVisibility(View.GONE);
-            if (bean.getUserInfoBean() != null) {
-                holder.leftName.setText(bean.getUserInfoBean().getRealName());
-                holder.leftContent.setText(bean.getMsg());
-                Glide.with(mContext).load(TcpConfig.URL + bean.getUserInfoBean().getHeadIcon()).placeholder(R.mipmap.icon_defult_detail).error(R.mipmap.icon_defult_detail).transform(mGlideCircleTransform).into(holder.leftHead);
-            }
+            holder.time.setText(bean.getFromUserName());
         }
 
 
@@ -90,11 +97,11 @@ public class GroupChatAdapter extends RecyclerView.Adapter<GroupChatAdapter.View
         private RelativeLayout layRight;
         private RelativeLayout layLeft;
 
-        private TextView leftName;
-        private TextView leftContent;
+        private TextView  leftName;
+        private TextView  leftContent;
         private ImageView leftHead;
 
-        private TextView RightContent;
+        private TextView  RightContent;
         private ImageView RightHead;
 
         private View mView;

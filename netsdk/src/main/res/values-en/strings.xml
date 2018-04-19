@@ -3,25 +3,25 @@
     <string name="app_name">LiTong</string>
     <!--<string name="app_name">和智物联音视频系统</string>-->
     <string name="text_password">password</string>
-    <string name="text_login">login</string>
-    <string name="text_register">register</string>
-    <string name="text_commit">commit</string>
-    <string name="text_sure">submit</string>
-    <string name="text_reply">reply</string>
-    <string name="text_cancel">cancel</string>
-    <string name="other_device_login">Your account is logged in on another device</string>
-    <string name="account_shake_off">The terminal has been swagging</string>
-    <string name="network_not_well">Poor network check network settings</string>
-    <string name="text_network">Poor network check network settings</string>
-    <string name="current_group">Current group:</string>
-    <string name="account_not_null">Account number cannot be null</string>
+    <string name="text_login"> login</string>
+    <string name="text_register"> register</string>
+    <string name="text_commit"> commit</string>
+    <string name="text_sure"> submit</string>
+    <string name="text_reply"> reply</string>
+    <string name="text_cancel"> cancel</string>
+    <string name="other_device_login"> Your account is logged in on another device</string>
+    <string name="account_shake_off"> The terminal has been swagging</string>
+    <string name="network_not_well"> Poor network check network settings</string>
+    <string name="text_network"> Poor network check network settings</string>
+    <string name="current_group"> Current group:</string>
+    <string name="account_not_null"> Account number cannot be null</string>
 
-    <string name="text_network_time_out">Connection timeout, please detect network configuration</string>
-    <string name="net_exception">network anomaly</string>
-    <string name="start_voice">Starting speech</string>
-    <string name="text_send">send</string>
-    <string name="al_send">already send</string>
-    <string name="text_account">account:</string>
+    <string name="text_network_time_out"> Connection timeout, please detect network configuration</string>
+    <string name="net_exception"> network anomaly</string>
+    <string name="start_voice"> Starting speech</string>
+    <string name="text_send"> send</string>
+    <string name="al_send"> already send</string>
+    <string name="text_account"> account:</string>
     <string name="text_name">name:</string>
     <string name="text_sex">sex:</string>
     <string name="text_remark">remark:</string>
@@ -145,10 +145,10 @@
     <string name="preemption"> Seize</string>
     <string name="success"> success</string>
     <string name="fail"> fail</string>
-    <string name="close">close</string>
+    <string name="close"> close</string>
     <string name="not_in_group"> Not in the group chat</string>
     <string name="using_mic"> You are using a microphone</string>
-    <string name="release">release</string>
+    <string name="release"> release</string>
     <string name="not_mic_premission"> You don\'t have the right to use the microphone at the moment</string>
     <string name="have_mic"> Have the right of Wheat</string>
     <string name="have_relase_mic">The release of wheat rights</string>
@@ -184,5 +184,6 @@
     <string name="app_versioin">App version number</string>
     <string name="Please_fill_in_the_reply">Please fill in the reply</string>
     <string name="You_receive_a_text_broadcast">You receive a text broadcast</string>
+    <string name="you"> You</string>
 
 </resources>
