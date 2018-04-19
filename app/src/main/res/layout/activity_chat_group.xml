@@ -94,6 +94,7 @@
                 android:layout_weight="1" />
 
             <LinearLayout
+                android:id="@+id/lay_edit"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp48"
                 android:gravity="center_vertical">

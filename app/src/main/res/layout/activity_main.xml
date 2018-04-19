@@ -59,6 +59,7 @@
                         android:text="" />
 
                     <RadioButton
+                        android:id="@+id/tab_group"
                         style="@style/tab_menu_item"
                         android:drawableTop="@drawable/tab_menu_groups"
                         android:onClick="@{click.groups}"
@@ -86,7 +87,7 @@
             <ImageView
                 android:layout_width="@dimen/dp65"
                 android:layout_height="@dimen/dp65"
-                android:src="@drawable/tab_menu_huatong"
+                android:src="@mipmap/icon_huatong"
                 android:onClick="@{click.call}"
                 android:clickable="true"
                 />

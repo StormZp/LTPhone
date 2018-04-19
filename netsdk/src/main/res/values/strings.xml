@@ -175,4 +175,5 @@
     <string name="look_version">查看版本号</string>
     <string name="app_versioin">app版本号</string>
     <string name="you">你</string>
+    <string name="You_re_not_in_the_group_yet">您还没进群</string>
 </resources>

@@ -8,6 +8,7 @@ import android.view.View
 import android.widget.Toast
 import com.netphone.R
 import com.netphone.databinding.ActivityMainBinding
+import com.netphone.netsdk.LTApi
 import com.netphone.netsdk.base.AppBean
 import com.netphone.ui.fragment.FriendsFragment
 import com.netphone.ui.fragment.GroupsFragment
@@ -91,7 +92,16 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         }
 
         open fun call(view: View) {
-
+            var currentGroupInfo = LTApi.newInstance().currentGroupInfo
+            if (currentGroupInfo != null) {
+                val bundle = Bundle()
+                bundle.putSerializable("bean", currentGroupInfo)
+                jump(GroupChatActivity::class.java, bundle)
+            } else {
+                toasts(context.resources.getString(R.string.You_re_not_in_the_group_yet))
+                binding.viewpage.setCurrentItem(3, false)
+                binding.tabGroup.isClickable = true
+            }
         }
 
         open fun groups(view: View) {
