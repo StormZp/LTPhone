@@ -1,12 +1,14 @@
 package com.netphone.ui.activity
 
 import android.os.Bundle
-import android.text.TextUtils
 import android.view.View
+import com.bumptech.glide.Glide
 import com.netphone.R
 import com.netphone.databinding.ActivityUserInfoBinding
-import com.netphone.netsdk.Tool.Constant
+import com.netphone.netsdk.LTApi
+import com.netphone.netsdk.Tool.TcpConfig
 import com.netphone.netsdk.base.AppBean
+import com.netphone.utils.GlideCircleTransform
 import com.storm.tool.base.BaseActivity
 
 /**
@@ -20,17 +22,14 @@ open class UserInfoActivity : BaseActivity<ActivityUserInfoBinding>() {
     }
 
     override fun initData() {
-        binding.title.title.text =context.resources.getString(R.string.user_info)
+        binding.title.title.text = context.resources.getString(R.string.user_info)
 
-        if (Constant.info!=null){
-            if (TextUtils.isEmpty(Constant.info.realName)){
-                binding.account.setText( Constant.info.realName)
-                binding.sex.setText( Constant.info.gender)
-//                binding.phone.setText(SharedPreferenceUtil.read())
+        var currentInfo = LTApi.newInstance().currentInfo
+        binding.account.setText(currentInfo.realName)
+        binding.sex.setText(currentInfo.gender)
+        Glide.with(context).load(TcpConfig.URL + currentInfo!!.headIcon).placeholder(R.mipmap.icon_defult_detail).error(R.mipmap.icon_defult_detail).transform(GlideCircleTransform(context)).into(binding.ivHead)
 
 
-             }
-        }
     }
 
     override fun initListener() {

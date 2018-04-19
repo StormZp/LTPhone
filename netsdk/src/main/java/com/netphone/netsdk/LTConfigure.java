@@ -109,6 +109,9 @@ public class LTConfigure {
      * @return
      */
     public static LTConfigure getInstance() {
+        if (mlt == null) {
+            mlt = new LTConfigure();
+        }
         return mlt;
     }
 

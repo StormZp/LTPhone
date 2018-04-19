@@ -186,5 +186,7 @@
     <string name="You_receive_a_text_broadcast">You receive a text broadcast</string>
     <string name="you"> You</string>
     <string name="You_re_not_in_the_group_yet">You are not in the group yet.</string>
+    <string name="warn">warn</string>
+    <string name="permissions_hint">You need to agree to some permissions to use app properly</string>
 
 </resources>

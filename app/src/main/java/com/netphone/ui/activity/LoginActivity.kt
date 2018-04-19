@@ -48,6 +48,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>() {
     override fun initListener() {
         myNetListener = MyNetListener()
         muLoginListener = MuLoginListener(this)
+        LogUtil.error("LoginActivity.kt","51\tinitListener()\n"+ LTConfigure.getInstance()+"\t"+myNetListener);
         LTConfigure.getInstance().setOnNetworkListener(myNetListener)
     }
 

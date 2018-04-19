@@ -52,6 +52,7 @@ dependencies {
     compile 'com.google.code.gson:gson:2.6.2'
     compile 'com.google.guava:guava:23.0-android'
     compile 'com.belerweb:pinyin4j:2.5.1'
+    compile 'com.bigkoo:alertview:1.0.3'
 
 }
 repositories {
