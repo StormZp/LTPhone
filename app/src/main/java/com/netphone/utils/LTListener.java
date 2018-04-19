@@ -2,6 +2,7 @@ package com.netphone.utils;
 
 import com.netphone.config.Constant;
 import com.netphone.config.EventConfig;
+import com.netphone.netsdk.LTApi;
 import com.netphone.netsdk.LTConfigure;
 import com.netphone.netsdk.base.AppBean;
 import com.netphone.netsdk.bean.GroupChatMsgBean;
@@ -10,6 +11,7 @@ import com.netphone.netsdk.listener.OnGetGroupMemberListener;
 import com.netphone.netsdk.listener.OnGroupChatListener;
 import com.netphone.netsdk.listener.OnGroupComeInListener;
 import com.netphone.netsdk.listener.OnGroupStateListener;
+import com.netphone.netsdk.listener.OnLocationListener;
 import com.netphone.netsdk.listener.OnNetworkListener;
 import com.netphone.netsdk.utils.EventBusUtil;
 
@@ -131,5 +133,15 @@ public class LTListener {
                 EventBusUtil.sendEvent(new AppBean(EventConfig.RECEIVER_WORD_GROUP, bean));
             }
         });
+    }
+
+    public void sendLocation(int type, OnLocationListener onLocationListener) {
+        if (type == 0) {
+
+            LTApi.newInstance().sendLocation(onLocationListener);
+        } else {
+
+            LTApi.newInstance().help(onLocationListener);
+        }
     }
 }

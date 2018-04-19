@@ -37,16 +37,16 @@ import java.util.List;
 public class TcpCmd {
 
     private InetAddress addr = null;
-    private int port;
-    private UserInfoBeanDao mUserInfoBeanDao;
+    private int              port;
+    private UserInfoBeanDao  mUserInfoBeanDao;
     private GroupInfoBeanDao mGroupInfoBeanDao;
 
 
     public void cmdData(byte[] pagBytes) {
         byte[] tempBytes = new byte[2];
         System.arraycopy(pagBytes, 9, tempBytes, 0, 2);
-        int bodyLength = DataTypeChangeHelper.byte2int(tempBytes);
-        byte[] bodyBytes = null;
+        int    bodyLength = DataTypeChangeHelper.byte2int(tempBytes);
+        byte[] bodyBytes  = null;
         if (bodyLength > 0) {
             //对指令内容进行拷贝
             bodyBytes = new byte[bodyLength];
@@ -74,7 +74,7 @@ public class TcpCmd {
                                     byte[] jsonBytes = new byte[bodyBytes.length - 1];
                                     System.arraycopy(bodyBytes, 1, jsonBytes, 0, bodyBytes.length - 1);
                                     String body = ByteIntUtils.utfToString(jsonBytes);
-                                 
+
                                     Gson gson = new Gson();
                                     UserInfoBean user = gson.fromJson(body, UserInfoBean.class);
                                     if (user == null) {
@@ -105,6 +105,14 @@ public class TcpCmd {
                             }
                         break;
                     case 0x01://上传GPS的回复
+                        if (LTConfigure.getInstance().getLtApi().onLocationListener != null) {
+                            if (bodyBytes[0] == 0x00) {
+                                LTConfigure.getInstance().getLtApi().onLocationListener.onSendSuccess();
+                            } else {
+                                LTConfigure.getInstance().getLtApi().onLocationListener.onSendFail();
+                            }
+                            LTConfigure.getInstance().getLtApi().onLocationListener = null;
+                        }
                         break;
                     case 0x02://主动发起语音通话的回复
                         break;
@@ -217,6 +225,14 @@ public class TcpCmd {
                     case 0x17://更新终端用户信息
                         break;
                     case 0x18://一键呼救回复
+                        if (LTConfigure.getInstance().getLtApi().onLocationListener != null) {
+                            if (bodyBytes[0] == 0x00) {
+                                LTConfigure.getInstance().getLtApi().onLocationListener.onHelpSuccess();
+                            } else {
+                                LTConfigure.getInstance().getLtApi().onLocationListener.onHelpFail();
+                            }
+                            LTConfigure.getInstance().getLtApi().onLocationListener = null;
+                        }
                         break;
                     case 0x19://停止发送广播
                         break;
@@ -249,14 +265,14 @@ public class TcpCmd {
                     case 0x00://推送用户列表信息,由于socket写在服务里原因，在主页没能正常停止服务，会导致服务一直开启，socket写入数据
                         if (LTConfigure.getInstance().getLtApi().mOnLoginListener != null) {
                             String body = ByteIntUtils.utfToString(bodyBytes);
-                            Gson gson = new Gson();
+                            Gson   gson = new Gson();
 //                        LogUtil.saveLog(LTConfigure.getInstance().getContext(), "127\tcmdExplore()\n" +body);
                             try {
                                 LogUtil.error("TcpCmd", "255\tcmdExplore()\n" + body);
                                 UserListBean userListBean = gson.fromJson(body, UserListBean.class);
                                 mUserInfoBeanDao.insertOrReplaceInTx(userListBean.getUserInfo());
                                 mGroupInfoBeanDao.insertOrReplaceInTx(userListBean.getGroupInfo());
-                                if ( LTConfigure.getInstance().getLtApi().mOnLoginListener!=null){
+                                if (LTConfigure.getInstance().getLtApi().mOnLoginListener != null) {
                                     LTConfigure.getInstance().getLtApi().mOnLoginListener.onComplete(userListBean);
                                     LTConfigure.getInstance().getLtApi().mOnLoginListener = null;
                                 }
@@ -284,8 +300,8 @@ public class TcpCmd {
                         break;
                     case 0x09://当有新的终端加入到当前的活动群聊中时
                         if (LTConfigure.getInstance().getLtApi().groupStateListener != null) {
-                            String body = ByteIntUtils.utfToString(bodyBytes);
-                            Gson gson = new Gson();
+                            String       body = ByteIntUtils.utfToString(bodyBytes);
+                            Gson         gson = new Gson();
                             UserInfoBean user = gson.fromJson(body, UserInfoBean.class);
                             LTConfigure.getInstance().getLtApi().groupStateListener.onMenberJoin(user);
                         }
@@ -293,24 +309,24 @@ public class TcpCmd {
                         break;
                     case 0x0A://当现有终端退出了当前的活动群聊中时
                         if (LTConfigure.getInstance().getLtApi().groupStateListener != null) {
-                            String body = ByteIntUtils.utfToString(bodyBytes);
-                            Gson gson = new Gson();
+                            String       body = ByteIntUtils.utfToString(bodyBytes);
+                            Gson         gson = new Gson();
                             UserInfoBean user = gson.fromJson(body, UserInfoBean.class);
                             LTConfigure.getInstance().getLtApi().groupStateListener.onMenberExit(user);
                         }
                         break;
                     case 0x0B://在群聊中时,麦权被抢占
                         if (LTConfigure.getInstance().getLtApi().groupStateListener != null) {
-                            String body = ByteIntUtils.utfToString(bodyBytes);
-                            Gson gson = new Gson();
+                            String       body = ByteIntUtils.utfToString(bodyBytes);
+                            Gson         gson = new Gson();
                             UserInfoBean user = gson.fromJson(body, UserInfoBean.class);
                             LTConfigure.getInstance().getLtApi().groupStateListener.onMenberhaveMac(user);
                         }
                         break;
                     case 0x0C://麦权被释放
                         if (LTConfigure.getInstance().getLtApi().groupStateListener != null) {
-                            String body = ByteIntUtils.utfToString(bodyBytes);
-                            Gson gson = new Gson();
+                            String       body = ByteIntUtils.utfToString(bodyBytes);
+                            Gson         gson = new Gson();
                             UserInfoBean user = gson.fromJson(body, UserInfoBean.class);
                             LTConfigure.getInstance().getLtApi().groupStateListener.onMemberRelaxedMac(user);
                         }
@@ -407,7 +423,7 @@ public class TcpCmd {
         }
     }
 
-    public static boolean isGroupBeat = false;//群聊心跳包
+    public static boolean isGroupBeat   = false;//群聊心跳包
     public static boolean isConnectBeat = false;//联网心跳包
 
     private int conncetBeatCount;//联网心跳包发送次数,超过3次不归0,即认定socket断了，需要重连。
@@ -423,7 +439,7 @@ public class TcpCmd {
             }
             while (isConnectBeat || isGroupBeat) {
                 if (isGroupBeat) {
-                    byte[] enmy = CmdUtils.getInstance().sendGroupBeat();
+                    byte[]         enmy   = CmdUtils.getInstance().sendGroupBeat();
                     DatagramPacket packet = new DatagramPacket(enmy, 0, enmy.length, addr, port);
                     try {
                         TcpSocket.getInstance().getClient().send(packet);

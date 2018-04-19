@@ -10,7 +10,9 @@ import com.netphone.netsdk.listener.OnGetGroupMemberListener;
 import com.netphone.netsdk.listener.OnGroupChatListener;
 import com.netphone.netsdk.listener.OnGroupComeInListener;
 import com.netphone.netsdk.listener.OnGroupStateListener;
+import com.netphone.netsdk.listener.OnLocationListener;
 import com.netphone.netsdk.listener.OnLoginListener;
+import com.netphone.netsdk.service.LocationService;
 import com.netphone.netsdk.socket.TcpSocket;
 import com.netphone.netsdk.utils.CmdUtils;
 import com.netphone.netsdk.utils.SharedPreferenceUtil;
@@ -42,11 +44,12 @@ public class LTApi {
         TcpSocket.getInstance().addData(login);
     }
 
-    public OnGroupComeInListener groupComeInListener;
+    public OnGroupComeInListener    groupComeInListener;
     public OnGetGroupMemberListener getGroupMemberListener;
-    public OnGroupStateListener groupStateListener;
-    public OnGroupChatListener groupChatListener;
-    public String groupId;
+    public OnGroupStateListener     groupStateListener;
+    public OnGroupChatListener      groupChatListener;
+    public OnLocationListener       onLocationListener;
+    public String                   groupId;
 
     public void joinGroup(String groupID, OnGroupComeInListener groupComeInListener, OnGetGroupMemberListener getGroupMemberListener, OnGroupStateListener groupStateListener, OnGroupChatListener groupChatListener) {
         this.groupComeInListener = groupComeInListener;
@@ -63,14 +66,14 @@ public class LTApi {
     }
 
     @Deprecated
-    public void exitGroup(String groupID){
-        byte[] joinGroup = CmdUtils.getInstance().commonApi2((byte)0x00, (byte)0x0A);
+    public void exitGroup(String groupID) {
+        byte[] joinGroup = CmdUtils.getInstance().commonApi2((byte) 0x00, (byte) 0x0A);
         TcpSocket.getInstance().addData(joinGroup);
     }
 
 
     private GroupChatMsgBeanDao groupChatMsgBeanDao;
-    private UserInfoBeanDao userInfoBeanDao;
+    private UserInfoBeanDao     userInfoBeanDao;
 
     public void sendGroupMessage(String id, String content) {
         byte[] words = CmdUtils.getInstance().sendGroupCommonBeanApi(id, content, (byte) 0x00, (byte) 0x1C);
@@ -81,7 +84,7 @@ public class LTApi {
     public ArrayList<GroupChatMsgBean> getGroupChatMessage(String groupId) {
         if (groupChatMsgBeanDao == null)
             groupChatMsgBeanDao = LTConfigure.getInstance().getDaoSession().getGroupChatMsgBeanDao();
-        List<GroupChatMsgBean> list = groupChatMsgBeanDao.queryBuilder().where(GroupChatMsgBeanDao.Properties.FromGroupId.eq(groupId)).list();
+        List<GroupChatMsgBean>      list              = groupChatMsgBeanDao.queryBuilder().where(GroupChatMsgBeanDao.Properties.FromGroupId.eq(groupId)).list();
         ArrayList<GroupChatMsgBean> groupChatMsgBeans = new ArrayList<>();
         groupChatMsgBeans.addAll(list);
         return groupChatMsgBeans;
@@ -91,6 +94,27 @@ public class LTApi {
         if (userInfoBeanDao == null)
             userInfoBeanDao = LTConfigure.getInstance().getDaoSession().getUserInfoBeanDao();
         return userInfoBeanDao.queryBuilder().where(UserInfoBeanDao.Properties.UserId.eq(SharedPreferenceUtil.Companion.read(Constant.UserId, ""))).unique();
+    }
+
+
+    public void sendLocation(OnLocationListener onLocationListener) {
+        this.onLocationListener = onLocationListener;
+        if (LocationService.longitude == 0.0 && LocationService.latitude == 0.0) {
+            this.onLocationListener.onSendFail();
+            this.onLocationListener = null;
+        }
+        byte[] words = CmdUtils.getInstance().uploadGPS(String.valueOf(LocationService.longitude), String.valueOf(LocationService.latitude));
+        TcpSocket.getInstance().addData(words);
+    }
+
+    public void help(OnLocationListener onLocationListener) {
+        this.onLocationListener = onLocationListener;
+        if (LocationService.longitude == 0.0 && LocationService.latitude == 0.0) {
+            this.onLocationListener.onHelpFail();
+            this.onLocationListener = null;
+        }
+        byte[] words = CmdUtils.getInstance().uploadhelp(String.valueOf(LocationService.longitude), String.valueOf(LocationService.latitude));
+        TcpSocket.getInstance().addData(words);
     }
 
     public GroupInfoBean getCurrentGroupInfo() {

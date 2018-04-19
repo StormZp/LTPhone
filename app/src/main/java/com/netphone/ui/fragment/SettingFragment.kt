@@ -10,10 +10,12 @@ import com.netphone.databinding.FragmentSettingBinding
 import com.netphone.netsdk.Tool.Constant
 import com.netphone.netsdk.Tool.TcpConfig
 import com.netphone.netsdk.base.AppBean
+import com.netphone.netsdk.listener.OnLocationListener
 import com.netphone.ui.activity.ChangePWActivity
 import com.netphone.ui.activity.LoginActivity
 import com.netphone.ui.activity.UserInfoActivity
 import com.netphone.utils.GlideCircleTransform
+import com.netphone.utils.LTListener
 import com.storm.developapp.tools.AppManager
 import com.storm.tool.base.BaseFragment
 
@@ -63,6 +65,50 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>() {
         open fun exit(view: View) {
             AppManager.appManager.finishAllActivity()
             jump(LoginActivity::class.java)
+        }
+
+        open fun help(view: View) {
+            LTListener.newInstance().sendLocation(1, object : OnLocationListener {
+                override fun onError() {
+                }
+
+                override fun onSendSuccess() {
+                }
+
+                override fun onSendFail() {
+                }
+
+                override fun onHelpSuccess() {
+                    toasts(context.resources.getString(R.string.send_help_success))
+                }
+
+                override fun onHelpFail() {
+                    toasts(context.resources.getString(R.string.help_fail))
+                }
+            })
+        }
+
+        open fun sendLocation(view: View) {
+            LTListener.newInstance().sendLocation(0, object : OnLocationListener {
+                override fun onError() {
+                }
+
+                override fun onSendSuccess() {
+                    toasts(context.resources.getString(R.string.send_address_success))
+                }
+
+                override fun onSendFail() {
+                    toasts(context.resources.getString(R.string.send_help_fail))
+                }
+
+                override fun onHelpSuccess() {
+
+                }
+
+                override fun onHelpFail() {
+
+                }
+            })
         }
     }
 

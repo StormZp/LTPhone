@@ -1,5 +1,6 @@
 package com.netphone.ui.activity
 
+import android.Manifest
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentPagerAdapter
@@ -9,6 +10,7 @@ import android.widget.Toast
 import com.netphone.R
 import com.netphone.databinding.ActivityMainBinding
 import com.netphone.netsdk.LTApi
+import com.netphone.netsdk.LTConfigure
 import com.netphone.netsdk.base.AppBean
 import com.netphone.ui.fragment.FriendsFragment
 import com.netphone.ui.fragment.GroupsFragment
@@ -17,6 +19,8 @@ import com.netphone.ui.fragment.SettingFragment
 import com.netphone.utils.LightStatusBarUtils
 import com.storm.developapp.tools.AppManager
 import com.storm.tool.base.BaseActivity
+import com.tbruyelle.rxpermissions2.Permission
+import io.reactivex.functions.Consumer
 
 class MainActivity : BaseActivity<ActivityMainBinding>() {
 
@@ -24,6 +28,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initBinding(R.layout.activity_main)
+
     }
 
     override fun onStart() {
@@ -34,6 +39,11 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     override fun onResume() {
         super.onResume()
         LightStatusBarUtils.setLightStatusBar(activity, true)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        LTConfigure.getInstance().onDestory()
     }
 
 
@@ -69,6 +79,22 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
                 return 5
             }
         }
+
+        getRxPermissions().requestEach(Manifest.permission.ACCESS_FINE_LOCATION).subscribe(object : Consumer<Permission> {
+            override fun accept(t: Permission?) {
+                if (t!!.granted) {
+                    // 用户已经同意该权限
+//                    Log.d(TAG, permission.name + " is granted.");
+                    LTConfigure.getInstance().startLocationService()
+                } else if (t.shouldShowRequestPermissionRationale) {
+                    // 用户拒绝了该权限，没有选中『不再询问』（Never ask again）,那么下次再次启动时，还会提示请求权限的对话框
+//                    Log.d(TAG, permission.name + " is denied. More info should be provided.");
+                } else {
+                    // 用户拒绝了该权限，并且选中『不再询问』
+//                    Log.d(TAG, permission.name + " is denied.");
+                }
+            }
+        })
     }
 
     override fun initListener() {

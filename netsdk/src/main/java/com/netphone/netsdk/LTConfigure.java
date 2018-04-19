@@ -13,6 +13,7 @@ import com.netphone.netsdk.Tool.TcpCmd;
 import com.netphone.netsdk.bean.GroupInfoBean;
 import com.netphone.netsdk.listener.OnErrorListener;
 import com.netphone.netsdk.listener.OnNetworkListener;
+import com.netphone.netsdk.service.LocationService;
 import com.netphone.netsdk.service.NetworkConnectChangedReceiver;
 import com.netphone.netsdk.service.SocketManageService;
 import com.netphone.netsdk.utils.LogUtil;
@@ -26,6 +27,8 @@ import com.netphone.netsdk.utils.SharedPreferenceUtil;
  */
 public class LTConfigure {
     private static LTApi ltApi;
+    private static Intent socketService;
+    private static Intent locationService;
     public OnNetworkListener mOnNetworkListener;
     public OnErrorListener mOnErrorListener;
 
@@ -52,7 +55,10 @@ public class LTConfigure {
 
 
     private static void initSocket() {
-        mContext.startService(new Intent(mContext, SocketManageService.class));
+        socketService = new Intent(mContext, SocketManageService.class);
+        locationService = new Intent(mContext, LocationService.class);
+        mContext.startService(socketService);
+        mContext.startService(locationService);
     }
 
     /**
@@ -83,6 +89,13 @@ public class LTConfigure {
         mlt = null;
         TcpCmd.isConnectBeat = false;
         TcpCmd.isGroupBeat = false;
+
+        mContext.stopService(socketService);
+//        mContext.stopService(locationService);
+    }
+
+    public void startLocationService(){
+        mContext.startService(locationService);
     }
 
 
