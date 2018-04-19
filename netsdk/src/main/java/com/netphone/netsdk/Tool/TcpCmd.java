@@ -74,7 +74,7 @@ public class TcpCmd {
                                     byte[] jsonBytes = new byte[bodyBytes.length - 1];
                                     System.arraycopy(bodyBytes, 1, jsonBytes, 0, bodyBytes.length - 1);
                                     String body = ByteIntUtils.utfToString(jsonBytes);
-                                    LogUtil.error("TAG\n" + body.length());
+                                 
                                     Gson gson = new Gson();
                                     UserInfoBean user = gson.fromJson(body, UserInfoBean.class);
                                     if (user == null) {
@@ -252,7 +252,7 @@ public class TcpCmd {
                             Gson gson = new Gson();
 //                        LogUtil.saveLog(LTConfigure.getInstance().getContext(), "127\tcmdExplore()\n" +body);
                             try {
-                                LogUtil.error("TcpCmd", "130\tcmdExplore()\n" + body.length());
+                                LogUtil.error("TcpCmd", "255\tcmdExplore()\n" + body);
                                 UserListBean userListBean = gson.fromJson(body, UserListBean.class);
                                 mUserInfoBeanDao.insertOrReplaceInTx(userListBean.getUserInfo());
                                 mGroupInfoBeanDao.insertOrReplaceInTx(userListBean.getGroupInfo());

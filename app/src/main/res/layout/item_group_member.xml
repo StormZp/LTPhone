@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/dp65"
+
+    android:orientation="vertical">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/px1"
+        android:layout_alignParentBottom="true"
+        android:src="@color/line_view" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical">
+
+        <RelativeLayout
+            android:layout_width="@dimen/dp36"
+            android:layout_height="@dimen/dp36"
+            android:layout_marginLeft="@dimen/dp16">
+
+            <ImageView
+                android:id="@+id/head"
+                android:layout_width="@dimen/dp36"
+                android:layout_height="@dimen/dp36"
+                android:src="@mipmap/icon_defult_detail" />
+
+            <ImageView
+                android:id="@+id/on_line"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginLeft="@dimen/dp16"
+                android:src="@drawable/shape_green_point_on" />
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/dp12"
+            android:text="123"
+            android:textColor="@color/textcolor_black"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/off_line"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/dp12"
+            android:background="@drawable/shape_btn_white_line"
+            android:gravity="center_vertical"
+            android:paddingBottom="@dimen/dp3"
+            android:paddingLeft="@dimen/dp8"
+            android:paddingRight="@dimen/dp8"
+            android:paddingTop="@dimen/dp3"
+            android:text="@string/off_line"
+            android:textColor="@color/textcolor_gray"
+            android:textSize="@dimen/dp12" />
+    </LinearLayout>
+
+</LinearLayout>

@@ -164,6 +164,7 @@
     <string name="message">消息</string>
     <string name="fridends">好友</string>
     <string name="groups">群组</string>
+    <string name="group_info">群组资料</string>
     <string name="groups_name">群组名称</string>
     <string name="groups_head">群组头像</string>
     <string name="mine">我的</string>

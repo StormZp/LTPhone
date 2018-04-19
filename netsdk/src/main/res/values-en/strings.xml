@@ -172,6 +172,7 @@
     <string name="message">message</string>
     <string name="fridends">fridends</string>
     <string name="groups">groups</string>
+    <string name="group_info">group info</string>
     <string name="groups_name">group name</string>
     <string name="groups_head">group head</string>
     <string name="mine">mine</string>
