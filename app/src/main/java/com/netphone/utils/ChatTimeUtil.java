@@ -42,35 +42,37 @@ public class ChatTimeUtil {
 
             long time = new Date().getTime() - d1.getTime();// 得出的时间间隔是毫秒
 
-            if (time / 1000 <= 0 ) {
-
-                // 如果时间间隔小于等于0秒则显示“刚刚”time/10得出的时间间隔的单位是秒
-
+            if (time / 1000 < 60 ) {
                 result= "刚刚";
+//                // 如果时间间隔小于等于0秒则显示“刚刚”time/10得出的时间间隔的单位是秒
+//
+//                result= "刚刚";
+//
+//            } else if (time / 1000 < 60 ) {
+//
+//                // 如果时间间隔小于60秒则显示多少秒前
+//
+//                int se = (int) ((time % 60000) / 1000);
+//
+//                result= se + "秒前";
 
-            } else if (time / 1000 < 60 ) {
+            } else if (time / 3600000 < 24  ) {
+                SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
 
-                // 如果时间间隔小于60秒则显示多少秒前
-
-                int se = (int) ((time % 60000) / 1000);
-
-                result= se + "秒前";
-
-            } else if (time / 60000 < 60 ) {
-
-                // 如果时间间隔小于60分钟则显示多少分钟前
-
-                int m = (int) ((time % 3600000) / 60000);// 得出的时间间隔的单位是分钟
-
-                result= m + "分钟前";
-
-            } else if (time / 3600000 < 24 ) {
-
-                // 如果时间间隔小于24小时则显示多少小时前
-
-                int h = (int) (time / 3600000);// 得出的时间间隔的单位是小时
-
-                result= h + "小时前";
+                result= sdf.format(d1.getTime());
+//                // 如果时间间隔小于60分钟则显示多少分钟前
+//
+//                int m = (int) ((time % 3600000) / 60000);// 得出的时间间隔的单位是分钟
+//
+//                result= m + "分钟前";
+//
+//            } else if (time / 3600000 < 24 ) {
+//
+//                // 如果时间间隔小于24小时则显示多少小时前
+//
+//                int h = (int) (time / 3600000);// 得出的时间间隔的单位是小时
+//
+//                result= h + "小时前";
 
             }else if (time / 86400000 < 2 ) {
 
@@ -109,8 +111,6 @@ public class ChatTimeUtil {
                 SimpleDateFormat sdf = new SimpleDateFormat("MM月dd日");
 
                 result= sdf.format(d1.getTime());
-
-
 
             }else {
 

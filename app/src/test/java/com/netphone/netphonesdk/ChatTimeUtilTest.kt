@@ -17,7 +17,7 @@ class ChatTimeUtilTest{
         System.out.println(ChatTimeUtil.getInterval(System.currentTimeMillis()-1000*60*60))
         System.out.println(ChatTimeUtil.getInterval(System.currentTimeMillis()-1000*60*60*24))
         System.out.println(ChatTimeUtil.getInterval(System.currentTimeMillis()-1000*60*60*24*7))
-        System.out.println(ChatTimeUtil.getInterval(System.currentTimeMillis()-1000*60*60*24*365))
+        System.out.println(ChatTimeUtil.getInterval(System.currentTimeMillis()-1000*60*60*24*366))
 //        LogUtil.error("ChatTimeUtilTest.kt","15\tgetInterval_text()\n"+interval);
     }
 }

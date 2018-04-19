@@ -17,9 +17,9 @@ import com.netphone.netsdk.Tool.TcpConfig;
 import com.netphone.netsdk.bean.GroupChatMsgBean;
 import com.netphone.netsdk.bean.UserInfoBean;
 import com.netphone.netsdk.utils.LogUtil;
+import com.netphone.utils.ChatTimeUtil;
 import com.netphone.utils.GlideCircleTransform;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 /**
@@ -31,7 +31,6 @@ public class GroupChatAdapter extends RecyclerView.Adapter<GroupChatAdapter.View
     private ArrayList<GroupChatMsgBean> mDatas;
     private LayoutInflater mLayoutInflater = null;
     private GlideCircleTransform mGlideCircleTransform;
-    private SimpleDateFormat dateformat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     private UserInfoBean mUserInfoBean;
 
@@ -57,7 +56,7 @@ public class GroupChatAdapter extends RecyclerView.Adapter<GroupChatAdapter.View
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         GroupChatMsgBean bean = mDatas.get(position);
-        holder.time.setText(dateformat.format(bean.getDateTime()));
+        holder.time.setText(ChatTimeUtil.getInterval(bean.getDateTime()));
 
         if (bean.getFromUserId().equals(mUserInfoBean.getUserId())) {//此时为当前用户发送的信息
             holder.layLeft.setVisibility(View.GONE);
