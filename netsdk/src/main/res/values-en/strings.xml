@@ -172,6 +172,8 @@
     <string name="message">message</string>
     <string name="fridends">fridends</string>
     <string name="groups">groups</string>
+    <string name="groups_name">group name</string>
+    <string name="groups_head">group head</string>
     <string name="mine">mine</string>
     <string name="again_exit">Then exit the program by one return key</string>
     <string name="colleague">colleagues</string>

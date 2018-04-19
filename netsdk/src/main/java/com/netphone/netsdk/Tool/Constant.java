@@ -1,5 +1,6 @@
 package com.netphone.netsdk.Tool;
 
+import com.netphone.netsdk.bean.GroupInfoBean;
 import com.netphone.netsdk.bean.UserInfoBean;
 import com.netphone.netsdk.bean.UserListBean;
 
@@ -28,4 +29,5 @@ public class Constant {
 
     public static UserInfoBean info;
     public static UserListBean listBean;
+    public static GroupInfoBean currentGroupInfo;
 }

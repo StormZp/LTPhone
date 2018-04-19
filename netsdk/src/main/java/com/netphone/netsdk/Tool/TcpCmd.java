@@ -12,6 +12,7 @@ import com.netphone.netsdk.LTApi;
 import com.netphone.netsdk.LTConfigure;
 import com.netphone.netsdk.R;
 import com.netphone.netsdk.bean.GroupChatMsgBean;
+import com.netphone.netsdk.bean.GroupInfoBean;
 import com.netphone.netsdk.bean.UserInfoBean;
 import com.netphone.netsdk.bean.UserListBean;
 import com.netphone.netsdk.socket.TcpSocket;
@@ -120,6 +121,10 @@ public class TcpCmd {
                                     isGroupBeat = true;
                                     if (!TextUtils.isEmpty(LTApi.newInstance().groupId)) {
                                         SharedPreferenceUtil.Companion.put(Constant.currentGroupId, LTApi.newInstance().groupId);
+                                        GroupInfoBean unique = mGroupInfoBeanDao.queryBuilder().where(GroupInfoBeanDao.Properties.GroupID.eq(LTApi.newInstance().groupId)).unique();
+                                        if (unique != null) {
+                                            Constant.currentGroupInfo = unique;
+                                        }
                                         LTConfigure.getInstance().getLtApi().groupComeInListener.onComeInSuccess();
                                     }
                                     break;

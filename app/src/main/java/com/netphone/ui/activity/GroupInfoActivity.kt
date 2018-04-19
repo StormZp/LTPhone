@@ -21,6 +21,8 @@ open class GroupInfoActivity : BaseActivity<ActivityInfoGroupBinding>() {
     override fun initData() {
         var userInfoBean = intent.extras.getSerializable("bean") as GroupInfoBean
         binding.title.title.text = userInfoBean.groupName
+
+
     }
 
     override fun initListener() {

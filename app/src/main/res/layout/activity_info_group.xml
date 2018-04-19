@@ -1,25 +1,110 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
+
     <data>
 
         <variable
             name="click"
-            type="com.netphone.ui.activity.GroupInfoActivity.OnClick"/>
+            type="com.netphone.ui.activity.GroupInfoActivity.OnClick" />
     </data>
+
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:orientation="vertical"
-           android:focusableInTouchMode="true"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:focusableInTouchMode="true"
+        android:orientation="vertical">
 
         <include
             android:id="@+id/title"
-            layout="@layout/titlebar"/>
-        <TextView
+            layout="@layout/titlebar" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp65"
+            android:layout_marginTop="@dimen/dp1"
+            android:background="@color/white"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp32"
+                android:layout_weight="1"
+                android:text="@string/groups_name"
+                android:textColor="@color/textcolor_black"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/name"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/dp24"
+                android:layout_marginRight="8dp"
+                android:text="123"
+                android:textColor="@color/textcolor_gray" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp65"
+            android:layout_marginTop="@dimen/dp1"
+            android:background="@color/white"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp32"
+                android:layout_weight="1"
+                android:text="@string/groups_head"
+                android:textColor="@color/textcolor_black"
+                android:textSize="15sp" />
+
+            <ImageView
+                android:id="@+id/head"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/dp48"
+                android:layout_marginRight="8dp"
+                android:src="@mipmap/icon_defult_detail" />
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/px1"
+            android:layout_alignParentBottom="true"
+            android:src="@color/line_view" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp24"
+            android:layout_marginLeft="@dimen/dp14"
+            android:gravity="center_vertical">
+
+            <ImageView
+                android:layout_width="@dimen/dp20"
+                android:layout_height="@dimen/dp20"
+                android:src="@mipmap/icon_qunzu2" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="123" />
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/px1"
+            android:layout_alignParentBottom="true"
+            android:src="@color/line_view" />
+
+        <android.support.v7.widget.RecyclerView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="群资料"
-            />
+            android:background="@color/white"></android.support.v7.widget.RecyclerView>
+
     </LinearLayout>
 </layout>

@@ -4,6 +4,7 @@ import com.netphone.gen.GroupChatMsgBeanDao;
 import com.netphone.gen.UserInfoBeanDao;
 import com.netphone.netsdk.Tool.Constant;
 import com.netphone.netsdk.bean.GroupChatMsgBean;
+import com.netphone.netsdk.bean.GroupInfoBean;
 import com.netphone.netsdk.bean.UserInfoBean;
 import com.netphone.netsdk.listener.OnGetGroupMemberListener;
 import com.netphone.netsdk.listener.OnGroupChatListener;
@@ -84,5 +85,9 @@ public class LTApi {
         if (userInfoBeanDao == null)
             userInfoBeanDao = LTConfigure.getInstance().getDaoSession().getUserInfoBeanDao();
         return userInfoBeanDao.queryBuilder().where(UserInfoBeanDao.Properties.UserId.eq(SharedPreferenceUtil.Companion.read(Constant.UserId, ""))).unique();
+    }
+
+    public GroupInfoBean getCurrentGroupInfo() {
+        return Constant.currentGroupInfo;
     }
 }

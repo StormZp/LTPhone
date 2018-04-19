@@ -1,5 +1,6 @@
 package com.netphone.utils;
 
+import com.netphone.config.Constant;
 import com.netphone.config.EventConfig;
 import com.netphone.netsdk.LTConfigure;
 import com.netphone.netsdk.base.AppBean;
@@ -76,7 +77,7 @@ public class LTListener {
 
             @Override
             public void onGetMemberSuccess(List<UserInfoBean> members) {
-
+                Constant.groupsMemberInfo = members;
             }
         }, new OnGroupStateListener() {
             @Override
@@ -126,7 +127,7 @@ public class LTListener {
         }, new OnGroupChatListener() {
             @Override
             public void onReceiverListener(GroupChatMsgBean bean) {
-                EventBusUtil.sendEvent(new AppBean(EventConfig.RECEIVER_WORD_GROUP,bean));
+                EventBusUtil.sendEvent(new AppBean(EventConfig.RECEIVER_WORD_GROUP, bean));
             }
         });
     }

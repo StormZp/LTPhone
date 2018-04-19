@@ -25,6 +25,7 @@
     <color name="textcolor_black">#343434</color>
     <color name="textcolor_tab">#BFBFBF</color>
     <color name="textcolor_dhr">#464bd9</color>
+    <color name="textcolor_other">#4232C2</color>
 
     <color name="line_view">#D1DAE2</color>
     <color name="bg_login_color">#efeff4</color>

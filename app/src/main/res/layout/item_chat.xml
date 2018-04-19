@@ -16,6 +16,8 @@
         android:paddingLeft="@dimen/dp8"
         android:paddingRight="@dimen/dp8"
         android:paddingTop="@dimen/dp3"
+        android:layout_marginTop="@dimen/dp8"
+        android:layout_marginBottom="@dimen/dp8"
         android:text="2018年4月18日17:19:56"
         android:textColor="@color/textcolor_gray"
         android:textSize="@dimen/dp14" />
@@ -23,12 +25,13 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
+        android:layout_marginBottom="@dimen/dp8"
         android:layout_height="wrap_content">
 
         <RelativeLayout
             android:id="@+id/lay_left"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dp48"
+            android:layout_height="wrap_content"
             android:background="@color/white"
             android:gravity="center_vertical">
 
@@ -49,26 +52,28 @@
                 android:layout_marginLeft="@dimen/dp8"
                 android:gravity="center_vertical"
                 android:text="123"
-                android:textColor="@color/textcolor_black"
+                android:textColor="@color/textcolor_gray"
                 android:textSize="16sp" />
 
             <TextView
                 android:id="@+id/left_content"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_below="@+id/left_name"
                 android:layout_toRightOf="@+id/left_head"
                 android:gravity="center_vertical"
+                android:layout_marginRight="@dimen/dp120"
                 android:text="在线"
                 android:layout_marginLeft="@dimen/dp8"
-                android:textColor="@color/textcolor_black"
+                android:background="@mipmap/icon_chat_other"
+                android:textColor="@color/textcolor_other"
                 android:textSize="16sp" />
         </RelativeLayout>
 
         <RelativeLayout
             android:id="@+id/lay_right"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dp48"
+            android:layout_height="wrap_content"
             android:background="@color/white"
             android:visibility="gone"
             android:gravity="center_vertical">
@@ -86,12 +91,15 @@
             <TextView
                 android:id="@+id/right_content"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_toLeftOf="@+id/right_head"
                 android:layout_marginRight="@dimen/dp8"
-                android:gravity="center_vertical"
+                android:gravity="center_vertical|right"
+                android:layout_marginLeft="@dimen/dp120"
+
+                android:background="@mipmap/icon_chat_me"
                 android:text="在线"
-                android:textColor="@color/textcolor_black"
+                android:textColor="@color/white"
                 android:textSize="16sp" />
         </RelativeLayout>
     </RelativeLayout>
