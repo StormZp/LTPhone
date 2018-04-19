@@ -61,7 +61,7 @@ public class TcpCmd {
         if (mGroupInfoBeanDao == null) {
             mGroupInfoBeanDao = LTConfigure.getInstance().getDaoSession().getGroupInfoBeanDao();
         }
-        LogUtil.error(String.format("pagBytes[7] == %x && pagBytes[8] == %x", pagBytes[7], pagBytes[8]));
+        LogUtil.error("TcpCmd", "64\tcmdExplore()\n" + String.format("pagBytes[7] == %x && pagBytes[8] == %x", pagBytes[7], pagBytes[8]));
         switch (pagBytes[7]) {
             case 0x00://终端>>服务端指令列表
                 switch (pagBytes[8]) {
@@ -223,6 +223,7 @@ public class TcpCmd {
                                 case 0x00:
                                     byte[] bytes = Arrays.copyOfRange(bodyBytes, 1, bodyBytes.length);
                                     String json = ByteIntUtils.utfToString(bytes);
+                                    LogUtil.error("TcpCmd", "226\tcmdExplore()\n" + json);
                                     List<UserInfoBean> bean = new Gson().fromJson(json, new TypeToken<List<UserInfoBean>>() {
                                     }.getType());
                                     LTConfigure.getInstance().getLtApi().getGroupMemberListener.onGetMemberSuccess(bean);

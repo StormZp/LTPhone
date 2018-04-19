@@ -11,8 +11,10 @@ import com.netphone.netsdk.LTApi
 import com.netphone.netsdk.base.AppBean
 import com.netphone.netsdk.bean.GroupChatMsgBean
 import com.netphone.netsdk.bean.GroupInfoBean
+import com.netphone.utils.AppUtil
 import com.netphone.utils.GroupUtil
 import com.netphone.utils.LTListener
+import com.netphone.view.InputMethodLayout
 import com.storm.tool.base.BaseActivity
 
 /**
@@ -21,6 +23,7 @@ import com.storm.tool.base.BaseActivity
 open class GroupChatActivity : BaseActivity<ActivityChatGroupBinding>() {
     private lateinit var groupInfo: GroupInfoBean
     private lateinit var adapter: GroupChatAdapter;
+    private var isShowKeyBoard = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initBinding(R.layout.activity_chat_group)
@@ -47,6 +50,20 @@ open class GroupChatActivity : BaseActivity<ActivityChatGroupBinding>() {
         binding.title.menuDate.setOnClickListener { jump(GroupInfoActivity::class.java, intent.extras) }
         binding.click = OnClick()
         registerEventBus()
+        binding.inputLay.setOnkeyboarddStateListener {
+            when (it.toByte()) {
+                InputMethodLayout.KEYBOARD_STATE_SHOW -> {
+                    binding.keyboard.setImageResource(R.mipmap.icon_jp2)
+                    isShowKeyBoard = true
+                    AppUtil.openKeyboard(binding.etContent, context)
+                }
+                InputMethodLayout.KEYBOARD_STATE_HIDE -> {
+                    AppUtil.closeKeyboard(context)
+                    isShowKeyBoard = false
+                    binding.keyboard.setImageResource(R.mipmap.icon_jp)
+                }
+            }
+        }
     }
 
     override fun receiveEvent(appBean: AppBean<Any>) {
@@ -67,8 +84,21 @@ open class GroupChatActivity : BaseActivity<ActivityChatGroupBinding>() {
 
         open fun submit(view: View) {
             var toString = binding.etContent.text.toString()
-            LTApi.newInstance().sendGroupMessage(groupInfo.groupID, groupInfo.groupName, toString)
+            LTApi.newInstance().sendGroupMessage(groupInfo.groupID, toString)
             binding.etContent.setText("")
         }
+
+        open fun keyboardShow(view: View) {
+            if (isShowKeyBoard) {
+                AppUtil.closeKeyboard(context)
+                isShowKeyBoard = false
+                binding.keyboard.setImageResource(R.mipmap.icon_jp)
+            } else {
+                binding.keyboard.setImageResource(R.mipmap.icon_jp2)
+                isShowKeyBoard = true
+                AppUtil.openKeyboard(binding.etContent, context)
+            }
+        }
+
     }
 }

@@ -29,8 +29,8 @@ public class UserInfoBean implements Serializable, Comparable<UserInfoBean> {
     private String RealName;//用户姓名
     @Id
     private String UserId;//用户ID
-    private int IsDizzy;//是否遥晕 1:是,0:否
-    private int IsOnLine;
+    private String IsDizzy;//是否遥晕 1:是,0:否
+    private String IsOnLine;
     private String HeadIcon;
     private String Description;
     private String Gender;
@@ -42,8 +42,10 @@ public class UserInfoBean implements Serializable, Comparable<UserInfoBean> {
     private String pinyin; // 姓名对应的拼音
     private String firstLetter; // 拼音的首字母
 
-    @Generated(hash = 855395406)
-    public UserInfoBean(String RealName, String UserId, int IsDizzy, int IsOnLine,
+
+
+    @Generated(hash = 946396616)
+    public UserInfoBean(String RealName, String UserId, String IsDizzy, String IsOnLine,
             String HeadIcon, String Description, String Gender, String ExpiredDate,
             String pinyin, String firstLetter) {
         this.RealName = RealName;
@@ -63,6 +65,7 @@ public class UserInfoBean implements Serializable, Comparable<UserInfoBean> {
     }
 
 
+
     public String getExpiredDate() {
         return ExpiredDate;
     }
@@ -80,11 +83,11 @@ public class UserInfoBean implements Serializable, Comparable<UserInfoBean> {
         HeadIcon = headIcon;
     }
 
-    public int getIsOnLine() {
+    public String getIsOnLine() {
         return IsOnLine;
     }
 
-    public void setIsOnLine(int IsOnLine) {
+    public void setIsOnLine(String IsOnLine) {
         this.IsOnLine = IsOnLine;
     }
 
@@ -104,11 +107,11 @@ public class UserInfoBean implements Serializable, Comparable<UserInfoBean> {
         this.UserId = UserId;
     }
 
-    public int getIsDizzy() {
+    public String getIsDizzy() {
         return IsDizzy;
     }
 
-    public void setIsDizzy(int isDizzy) {
+    public void setIsDizzy(String isDizzy) {
         IsDizzy = isDizzy;
     }
 

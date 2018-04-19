@@ -46,6 +46,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_toRightOf="@+id/left_head"
+                android:layout_marginLeft="@dimen/dp8"
                 android:gravity="center_vertical"
                 android:text="123"
                 android:textColor="@color/textcolor_black"
@@ -59,6 +60,7 @@
                 android:layout_toRightOf="@+id/left_head"
                 android:gravity="center_vertical"
                 android:text="在线"
+                android:layout_marginLeft="@dimen/dp8"
                 android:textColor="@color/textcolor_black"
                 android:textSize="16sp" />
         </RelativeLayout>
@@ -85,8 +87,8 @@
                 android:id="@+id/right_content"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_below="@+id/right_name"
                 android:layout_toLeftOf="@+id/right_head"
+                android:layout_marginRight="@dimen/dp8"
                 android:gravity="center_vertical"
                 android:text="在线"
                 android:textColor="@color/textcolor_black"

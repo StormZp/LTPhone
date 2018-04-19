@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -62,7 +63,8 @@ public class Friend2Adapter extends RecyclerView.Adapter<Friend2Adapter.ViewHold
 
         viewHolder.name.setText(this.list.get(position).getRealName());
         viewHolder.catalog.setText(user.getFirstLetter().toUpperCase());
-        viewHolder.online.setText(user.getIsOnLine() == 0 ? mContext.getResources().getString(R.string.off_line) : mContext.getResources().getString(R.string.onLine));
+        boolean aTrue = !TextUtils.isEmpty(user.getIsOnLine()) && (user.getIsOnLine().equals("1") || user.getIsOnLine().equals("true"));
+        viewHolder.online.setText(aTrue ? mContext.getResources().getString(R.string.off_line) : mContext.getResources().getString(R.string.onLine));
 //        LogUtil.error("FriendAdapter", "62\tgetView()\n" + user.getHeadIcon());
         Glide.with(mContext).load(TcpConfig.URL + user.getHeadIcon()).placeholder(R.mipmap.icon_defult_detail).error(R.mipmap.icon_defult_detail).transform(mGlideCircleTransform).into(viewHolder.head);
 

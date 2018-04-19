@@ -2,18 +2,20 @@ package com.netphone.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.netphone.R;
+import com.netphone.netsdk.LTApi;
 import com.netphone.netsdk.Tool.TcpConfig;
 import com.netphone.netsdk.bean.GroupChatMsgBean;
+import com.netphone.netsdk.bean.UserInfoBean;
 import com.netphone.netsdk.utils.LogUtil;
 import com.netphone.utils.GlideCircleTransform;
 
@@ -31,11 +33,14 @@ public class GroupChatAdapter extends RecyclerView.Adapter<GroupChatAdapter.View
     private GlideCircleTransform mGlideCircleTransform;
     private SimpleDateFormat dateformat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
+    private UserInfoBean mUserInfoBean;
+
     public GroupChatAdapter(Context context, ArrayList<GroupChatMsgBean> datas) {
         mDatas = datas;
         mContext = context;
         mLayoutInflater = LayoutInflater.from(mContext);
         mGlideCircleTransform = new GlideCircleTransform(mContext);
+        mUserInfoBean = LTApi.newInstance().getCurrentInfo();
     }
 
     public void addMsg(GroupChatMsgBean msgBean) {
@@ -52,13 +57,25 @@ public class GroupChatAdapter extends RecyclerView.Adapter<GroupChatAdapter.View
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         GroupChatMsgBean bean = mDatas.get(position);
-        if (!TextUtils.isEmpty(bean.getMsg()))
-            holder.leftContent.setText(bean.getMsg());
         holder.time.setText(dateformat.format(bean.getDateTime()));
-        if (bean.getUserInfoBean() != null) {
-            holder.leftName.setText(bean.getUserInfoBean().getRealName());
-            Glide.with(mContext).load(TcpConfig.URL + bean.getUserInfoBean().getHeadIcon()).placeholder(R.mipmap.icon_defult_detail).error(R.mipmap.icon_defult_detail).transform(mGlideCircleTransform).into(holder.leftHead);
+
+        if (bean.getFromUserId().equals(mUserInfoBean.getUserId())) {//此时为当前用户发送的信息
+            holder.layLeft.setVisibility(View.GONE);
+            holder.layRight.setVisibility(View.VISIBLE);
+            if (bean.getUserInfoBean() != null) {
+                holder.RightContent.setText(bean.getMsg());
+                Glide.with(mContext).load(TcpConfig.URL + bean.getUserInfoBean().getHeadIcon()).placeholder(R.mipmap.icon_defult_detail).error(R.mipmap.icon_defult_detail).transform(mGlideCircleTransform).into(holder.RightHead);
+            }
+        } else {//此时为其他用户发送的信息
+            holder.layLeft.setVisibility(View.VISIBLE);
+            holder.layRight.setVisibility(View.GONE);
+            if (bean.getUserInfoBean() != null) {
+                holder.leftName.setText(bean.getUserInfoBean().getRealName());
+                holder.leftContent.setText(bean.getMsg());
+                Glide.with(mContext).load(TcpConfig.URL + bean.getUserInfoBean().getHeadIcon()).placeholder(R.mipmap.icon_defult_detail).error(R.mipmap.icon_defult_detail).transform(mGlideCircleTransform).into(holder.leftHead);
+            }
         }
+
 
         LogUtil.error("GroupChatAdapter", "57\tonBindViewHolder()\n" + new Gson().toJson(bean));
     }
@@ -70,6 +87,10 @@ public class GroupChatAdapter extends RecyclerView.Adapter<GroupChatAdapter.View
 
     class ViewHolder extends RecyclerView.ViewHolder {
         private TextView time;
+
+        private RelativeLayout layRight;
+        private RelativeLayout layLeft;
+
         private TextView leftName;
         private TextView leftContent;
         private ImageView leftHead;
@@ -87,6 +108,11 @@ public class GroupChatAdapter extends RecyclerView.Adapter<GroupChatAdapter.View
             leftContent = itemView.findViewById(R.id.left_content);
             leftHead = itemView.findViewById(R.id.left_head);
 
+            layLeft = itemView.findViewById(R.id.lay_left);
+            layRight = itemView.findViewById(R.id.lay_right);
+
+            RightContent = itemView.findViewById(R.id.right_content);
+            RightHead = itemView.findViewById(R.id.right_head);
 
         }
     }
