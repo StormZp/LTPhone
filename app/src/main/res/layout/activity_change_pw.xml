@@ -42,6 +42,7 @@
                 android:textSize="14dp" />
 
             <EditText
+                android:id="@+id/et_old"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="8dp"
@@ -54,6 +55,7 @@
                 android:textSize="14dp" />
 
         </LinearLayout>
+
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="@dimen/px1"
@@ -84,6 +86,7 @@
                 android:textSize="14dp" />
 
             <EditText
+                android:id="@+id/et_new"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="8dp"
@@ -119,6 +122,7 @@
                 android:textSize="14dp" />
 
             <EditText
+                android:id="@+id/et_sure"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="8dp"
@@ -147,6 +151,7 @@
             android:layout_marginRight="20dp"
             android:layout_marginTop="20dp"
             android:background="@drawable/shape_btn_blue_bg"
+            android:onClick="@{click.submit}"
             android:text="@string/text_sure"
             android:textColor="@color/white"
             android:textSize="18sp" />

@@ -2,6 +2,7 @@ package com.netphone.ui.activity
 
 import android.os.Bundle
 import android.text.TextUtils
+import android.view.KeyEvent
 import android.view.View
 import com.githang.statusbar.StatusBarCompat
 import com.netphone.BuildConfig
@@ -16,6 +17,7 @@ import com.netphone.netsdk.listener.OnLoginListener
 import com.netphone.netsdk.listener.OnNetworkListener
 import com.netphone.netsdk.utils.LogUtil
 import com.netphone.utils.ToastUtil
+import com.storm.developapp.tools.AppManager
 import com.storm.tool.base.BaseActivity
 
 /**
@@ -87,7 +89,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>() {
             if (TextUtils.isEmpty(account)) {
                 toasts(context.resources.getString(R.string.account_not_null))
             }
-            LTConfigure.getInstance().ltApi.login(account, password, object : OnLoginListener{
+            LTConfigure.getInstance().ltApi.login(account, password, object : OnLoginListener {
                 override fun onSuccess(bean: UserInfoBean?) {
                     Constant.info = bean;
                     activity.runOnUiThread {
@@ -109,6 +111,14 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>() {
                 }
             })
         }
+    }
+
+    override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            AppManager.appManager.finishAllActivity()
+            return false
+        }
+        return super.onKeyDown(keyCode, event)
     }
 }
 

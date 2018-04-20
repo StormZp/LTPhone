@@ -13,15 +13,16 @@ import com.netphone.listener.PermissionListener
 import com.netphone.netsdk.LTApi
 import com.netphone.netsdk.LTConfigure
 import com.netphone.netsdk.base.AppBean
+import com.netphone.netsdk.listener.OnErrorListener
 import com.netphone.ui.fragment.FriendsFragment
 import com.netphone.ui.fragment.GroupsFragment
 import com.netphone.ui.fragment.SessionFragment
 import com.netphone.ui.fragment.SettingFragment
 import com.netphone.utils.LTListener
 import com.netphone.utils.PermissionUtil
+import com.netphone.utils.ToastUtil
 import com.storm.developapp.tools.AppManager
 import com.storm.tool.base.BaseActivity
-
 
 
 class MainActivity : BaseActivity<ActivityMainBinding>() {
@@ -81,7 +82,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
                 return 5
             }
         }
-        PermissionUtil.requiestPermission(activity,context,object : PermissionListener{
+        PermissionUtil.requiestPermission(activity, context, object : PermissionListener {
             override fun PermissionFail() {
             }
 
@@ -97,7 +98,23 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     }
 
     override fun initListener() {
+        LTConfigure.getInstance().mOnErrorListener = object : OnErrorListener {
+            override fun onOrderError() {
 
+            }
+
+            override fun onNotLogin() {
+                ToastUtil.toasts(context.getResources().getString(R.string.not_login))
+            }
+
+            override fun onCRCError() {
+
+            }
+
+            override fun onError() {
+
+            }
+        }
     }
 
     override fun receiveEvent(appBean: AppBean<Any>) {

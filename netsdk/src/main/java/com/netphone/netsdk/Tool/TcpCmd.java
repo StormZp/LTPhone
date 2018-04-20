@@ -217,6 +217,15 @@ public class TcpCmd {
                         }
                         break;
                     case 0x10://修改密码
+                        if (LTApi.newInstance().onChangePasswordListener!=null){
+                            if (bodyBytes[0] == 0x00) {
+                                LTApi.newInstance().onChangePasswordListener.onSuccess();
+                            } else  if (bodyBytes[0] == 0x01){
+                                LTApi.newInstance().onChangePasswordListener.onFail(0x01,LTConfigure.getInstance().getContext().getResources().getString(R.string.old_password_fail));
+                            }else  if (bodyBytes[0] == 0x07){
+                                LTApi.newInstance().onChangePasswordListener.onFail(0x07,LTConfigure.getInstance().getContext().getResources().getString(R.string.not_login));
+                            }
+                        }
                         break;
                     case 0x11://遥晕
                         break;

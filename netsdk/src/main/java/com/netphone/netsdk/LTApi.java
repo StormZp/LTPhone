@@ -8,6 +8,7 @@ import com.netphone.netsdk.Tool.Constant;
 import com.netphone.netsdk.bean.GroupChatMsgBean;
 import com.netphone.netsdk.bean.GroupInfoBean;
 import com.netphone.netsdk.bean.UserInfoBean;
+import com.netphone.netsdk.listener.OnChangePasswordListener;
 import com.netphone.netsdk.listener.OnGetGroupMemberListener;
 import com.netphone.netsdk.listener.OnGroupChatListener;
 import com.netphone.netsdk.listener.OnGroupComeInListener;
@@ -74,6 +75,7 @@ public class LTApi {
     public OnGetGroupMemberListener getGroupMemberListener;
     public OnGroupStateListener     groupStateListener;
     public OnGroupChatListener      groupChatListener;
+    public OnChangePasswordListener onChangePasswordListener;
     public OnLocationListener       onLocationListener;
     public OnUpFileListener         onUpFileListener;
     public OnReFreshListener        onReFreshListener;
@@ -295,7 +297,24 @@ public class LTApi {
         }
     }
 
+    /**
+     * 设置刷新好友列表监听
+     *
+     * @param onReFreshListener
+     */
     public void setOnReFreshListener(OnReFreshListener onReFreshListener) {
         this.onReFreshListener = onReFreshListener;
+    }
+
+    /**
+     * 修改密码
+     * @param oldPassword 旧密码
+     * @param newPassword 新密码
+     * @param onChangePasswordListener
+     */
+    public void changePassword(String oldPassword, String newPassword, OnChangePasswordListener onChangePasswordListener) {
+        this.onChangePasswordListener = onChangePasswordListener;
+        byte[] datas = CmdUtils.getInstance().editPW(oldPassword, newPassword);
+        TcpSocket.getInstance().addData(datas);
     }
 }
