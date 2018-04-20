@@ -191,6 +191,12 @@
     <string name="you"> You</string>
     <string name="You_re_not_in_the_group_yet">You are not in the group yet.</string>
     <string name="warn">warn</string>
-    <string name="permissions_hint">You need to agree to some permissions to use app properly</string>
+    <string name="permissions_hint">The right to open is required for normal use</string>
+    <string name="permissions_location">Position authority</string>
+    <string name="permissions_location_hint">Pinpoint your location</string>
+    <string name="permissions_mic">Microphone permission</string>
+    <string name="permissions_mic_hint">Start connecting the microphone</string>
+    <string name="permissions_sd">SD card authority</string>
+    <string name="permissions_sd_hint">Picture file reading</string>
 
 </resources>

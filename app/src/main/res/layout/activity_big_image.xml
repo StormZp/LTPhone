@@ -5,7 +5,7 @@
 
         <variable
             name="click"
-            type="com.netphone.ui.activity.BigImageActiity.OnClick" />
+            type="com.netphone.ui.activity.BigImageActivity.OnClick" />
     </data>
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"

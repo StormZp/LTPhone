@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <data>
+
+        <variable
+            name="click"
+            type="com.netphone.ui.dialog.PermissionDilog.OnClick" />
+    </data>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:focusableInTouchMode="true"
+        android:gravity="center"
+        android:onClick="@{click.finish}"
+        android:orientation="vertical">
+
+
+        <LinearLayout
+            android:layout_width="@dimen/dp360"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+
+            <LinearLayout
+                android:layout_width="@dimen/dp360"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/dp16"
+                android:background="@drawable/shape_btn_white_bg"
+                android:onClick="@{click.nunn}"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/textcolor_dhr"
+                    android:drawableLeft="@mipmap/icon_safe"
+                    android:drawablePadding="@dimen/dp5"
+                    android:gravity="center_vertical"
+                    android:padding="@dimen/dp3"
+                    android:text="@string/permissions_hint"
+                    android:textColor="@color/white" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/dp8">
+
+                    <ImageView
+                        android:id="@+id/iv1"
+                        android:layout_width="@dimen/dp36"
+                        android:layout_height="@dimen/dp36"
+                        android:src="@mipmap/icon_weizhi2" />
+
+                    <TextView
+                        android:id="@+id/tv1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/dp8"
+                        android:layout_toRightOf="@+id/iv1"
+                        android:text="@string/permissions_location"
+                        android:textColor="@color/textcolor_black"
+                        android:textSize="@dimen/dp16" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/tv1"
+                        android:layout_marginLeft="@dimen/dp8"
+                        android:layout_toRightOf="@+id/iv1"
+                        android:text="@string/permissions_location_hint"
+                        android:textColor="@color/textcolor_gray"
+                        android:textSize="@dimen/dp12" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/dp8">
+
+                    <ImageView
+                        android:id="@+id/iv3"
+                        android:layout_width="@dimen/dp36"
+                        android:layout_height="@dimen/dp36"
+                        android:src="@mipmap/icon_mkf" />
+
+                    <TextView
+                        android:id="@+id/tv3"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/dp8"
+                        android:layout_toRightOf="@+id/iv3"
+                        android:text="@string/permissions_mic"
+                        android:textColor="@color/textcolor_black"
+                        android:textSize="@dimen/dp16" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/tv3"
+                        android:layout_marginLeft="@dimen/dp8"
+                        android:layout_toRightOf="@+id/iv3"
+                        android:text="@string/permissions_mic_hint"
+                        android:textColor="@color/textcolor_gray"
+                        android:textSize="@dimen/dp12" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/dp8">
+
+                    <ImageView
+                        android:id="@+id/iv2"
+                        android:layout_width="@dimen/dp36"
+                        android:layout_height="@dimen/dp36"
+                        android:src="@mipmap/icon_tz" />
+
+                    <TextView
+                        android:id="@+id/tv2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/dp8"
+                        android:layout_toRightOf="@+id/iv2"
+                        android:text="@string/permissions_sd"
+                        android:textColor="@color/textcolor_black"
+                        android:textSize="@dimen/dp16" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/tv2"
+                        android:layout_marginLeft="@dimen/dp8"
+                        android:layout_toRightOf="@+id/iv2"
+                        android:text="@string/permissions_sd_hint"
+                        android:textColor="@color/textcolor_gray"
+                        android:textSize="@dimen/dp12" />
+
+                </RelativeLayout>
+
+                <TextView
+                    android:id="@+id/iv_submit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/dp18"
+                    android:layout_marginLeft="@dimen/dp8"
+                    android:layout_marginRight="@dimen/dp8"
+                    android:layout_marginTop="@dimen/dp18"
+                    android:background="@drawable/shape_btn_blue_bg"
+                    android:gravity="center"
+                    android:onClick="@{click.sure}"
+
+                    android:paddingBottom="@dimen/dp6"
+                    android:paddingTop="@dimen/dp6"
+                    android:text="@string/text_sure"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/dp18" />
+
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="@dimen/dp48"
+                android:layout_height="@dimen/dp48"
+                android:layout_marginTop="@dimen/dp18"
+                android:padding="@dimen/dp6"
+                android:onClick="@{click.finish}"
+                android:src="@mipmap/icon_shanchu" />
+        </LinearLayout>
+
+
+    </LinearLayout>
+</layout>

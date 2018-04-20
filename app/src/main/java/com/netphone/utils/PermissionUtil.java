@@ -24,32 +24,33 @@ public class PermissionUtil {
             @Override
             public void accept(Boolean aBoolean) throws Exception {
                 if (!aBoolean)
-                    new AlertView(context.getResources().getString(R.string.warn), context.getResources().getString(R.string.permissions_hint), context.getResources().getString(R.string.text_cancel),
-                            new String[]{context.getResources().getString(R.string.text_sure)}, null, context, AlertView.Style.Alert, new OnItemClickListener() {
-                        @Override
-                        public void onItemClick(Object o, int position) {
-                            if (position == 0) {
-                                rxPermissions.requestEach(permissions).subscribe(new Consumer<Permission>() {
-                                    @Override
-                                    public void accept(Permission permission) throws Exception {
-                                        if (permission.granted) {
-                                            // 用户已经同意该权限
+//                {context.startActivity(new Intent(context, PermissionDilog.class));}
+                new AlertView(context.getResources().getString(R.string.warn), context.getResources().getString(R.string.permissions_hint), context.getResources().getString(R.string.text_cancel),
+                        new String[]{context.getResources().getString(R.string.text_sure)}, null, context, AlertView.Style.Alert, new OnItemClickListener() {
+                    @Override
+                    public void onItemClick(Object o, int position) {
+                        if (position == 0) {
+                            rxPermissions.requestEach(permissions).subscribe(new Consumer<Permission>() {
+                                @Override
+                                public void accept(Permission permission) throws Exception {
+                                    if (permission.granted) {
+                                        // 用户已经同意该权限
 //                                        LTConfigure.getInstance().startLocationService();
-                                            listener.PermissionSuccess();
-                                        } else if (permission.shouldShowRequestPermissionRationale) {
-                                            // 用户拒绝了该权限，没有选中『不再询问』（Never ask again）,那么下次再次启动时，还会提示请求权限的对话框
-                                            listener.PermissionFail();
-                                        } else {
-                                            // 用户拒绝了该权限，并且选中『不再询问』
-                                            listener.PermissionNever();
-                                        }
+                                        listener.PermissionSuccess();
+                                    } else if (permission.shouldShowRequestPermissionRationale) {
+                                        // 用户拒绝了该权限，没有选中『不再询问』（Never ask again）,那么下次再次启动时，还会提示请求权限的对话框
+                                        listener.PermissionFail();
+                                    } else {
+                                        // 用户拒绝了该权限，并且选中『不再询问』
+                                        listener.PermissionNever();
                                     }
-                                });
-                            }
+                                }
+                            });
                         }
-                    }).show();
+                    }
+                }).show();
                 else
-                    listener.PermissionSuccess();
+                listener.PermissionSuccess();
             }
         });
     }

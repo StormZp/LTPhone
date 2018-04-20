@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.bumptech.glide.Glide
+import com.netphone.BuildConfig
 import com.netphone.R
 import com.netphone.databinding.FragmentSettingBinding
 import com.netphone.listener.PermissionListener
@@ -20,6 +21,7 @@ import com.netphone.netsdk.bean.ImageBean
 import com.netphone.netsdk.listener.OnLocationListener
 import com.netphone.netsdk.listener.OnUpFileListener
 import com.netphone.ui.activity.*
+import com.netphone.ui.dialog.PermissionDilog
 import com.netphone.utils.GlideCircleTransform
 import com.netphone.utils.GlideLoader
 import com.netphone.utils.LTListener
@@ -99,6 +101,10 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>() {
 
             Glide.with(context).load(TcpConfig.URL + Constant.info.getHeadIcon()).placeholder(R.mipmap.icon_defult_detail).error(R.mipmap.icon_defult_detail).transform(GlideCircleTransform(context)).into(binding.ivHead)
 
+        }
+
+        if (BuildConfig.DEBUG){
+//            binding.lltex
         }
 
 
@@ -220,7 +226,11 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>() {
             var imageBean = ImageBean()
             imageBean.resourceHref = Constant.info.headIcon
             bundle.putSerializable("bean", imageBean)
-            jump(BigImageActiity::class.java, bundle)
+            jump(BigImageActivity::class.java, bundle)
+        }
+
+        open fun test(view: View) {
+            jump(PermissionDilog::class.java)
         }
     }
 

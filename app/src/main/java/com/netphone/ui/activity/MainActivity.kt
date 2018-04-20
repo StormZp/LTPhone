@@ -9,20 +9,20 @@ import android.view.View
 import android.widget.Toast
 import com.netphone.R
 import com.netphone.databinding.ActivityMainBinding
-import com.netphone.listener.PermissionListener
 import com.netphone.netsdk.LTApi
 import com.netphone.netsdk.LTConfigure
 import com.netphone.netsdk.base.AppBean
 import com.netphone.netsdk.listener.OnErrorListener
+import com.netphone.ui.dialog.PermissionDilog
 import com.netphone.ui.fragment.FriendsFragment
 import com.netphone.ui.fragment.GroupsFragment
 import com.netphone.ui.fragment.SessionFragment
 import com.netphone.ui.fragment.SettingFragment
 import com.netphone.utils.LTListener
-import com.netphone.utils.PermissionUtil
 import com.netphone.utils.ToastUtil
 import com.storm.developapp.tools.AppManager
 import com.storm.tool.base.BaseActivity
+import io.reactivex.functions.Consumer
 
 
 class MainActivity : BaseActivity<ActivityMainBinding>() {
@@ -82,17 +82,16 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
                 return 5
             }
         }
-        PermissionUtil.requiestPermission(activity, context, object : PermissionListener {
-            override fun PermissionFail() {
-            }
 
-            override fun PermissionNever() {
+        getRxPermissions().shouldShowRequestPermissionRationale(activity, Manifest.permission.RECORD_AUDIO, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.READ_EXTERNAL_STORAGE).subscribe(object : Consumer<Boolean> {
+            override fun accept(t: Boolean?) {
+                if (!t!!) {
+                    jump(PermissionDilog::class.java)
+                }else{
+                    LTConfigure.getInstance().startLocationService()
+                }
             }
-
-            override fun PermissionSuccess() {
-                LTConfigure.getInstance().startLocationService()
-            }
-        }, Manifest.permission.RECORD_AUDIO, Manifest.permission.ACCESS_FINE_LOCATION)
+        })
 
         LTListener.newInstance().setOnReFreshListener()
     }

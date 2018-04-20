@@ -337,6 +337,25 @@
                         android:textColor="@color/textcolor_tab"
                         android:textSize="18dp" />
                 </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/ll_test"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp48"
+                    android:layout_marginTop="@dimen/dp8"
+                    android:background="@color/white"
+                    android:gravity="center"
+                    android:onClick="@{click.test}"
+                    android:orientation="vertical">
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/test"
+                        android:textColor="@color/textcolor_tab"
+                        android:textSize="18dp" />
+                </LinearLayout>
             </LinearLayout>
         </ScrollView>
 
