@@ -53,6 +53,8 @@ dependencies {
     compile 'com.google.guava:guava:23.0-android'
     compile 'com.belerweb:pinyin4j:2.5.1'
     compile 'com.bigkoo:alertview:1.0.3'
+    //图片压缩框架
+    compile 'com.zxy.android:tiny:0.0.6'
 
 }
 repositories {

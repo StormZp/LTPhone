@@ -207,6 +207,14 @@ public class TcpCmd {
                     case 0x0E://删除某条通话记录
                         break;
                     case 0x0F://上传多媒体内容(图片,视频,文件等)
+                        if (LTConfigure.getInstance().getLtApi().onUpFileListener != null) {
+                            if (bodyBytes[0] == 0x00) {
+                                LTConfigure.getInstance().getLtApi().onUpFileListener.upSuccess();
+                            } else {
+                                LTConfigure.getInstance().getLtApi().onUpFileListener.upFail();
+                            }
+                            LTConfigure.getInstance().getLtApi().onUpFileListener = null;
+                        }
                         break;
                     case 0x10://修改密码
                         break;

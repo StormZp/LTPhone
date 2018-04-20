@@ -31,6 +31,7 @@ public class MyApp extends Application {
         ToastUtil.Companion.init(mContext);
     }
 
+
     public Context getContext() {
         return mContext;
     }

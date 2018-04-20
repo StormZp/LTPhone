@@ -7,11 +7,11 @@ package com.netphone.netsdk.Tool;
 
 public class TcpConfig {
 //    public static final String HOST = "120.77.216.2";//服务器
-//        public static final String HOST = "183.3.210.168";//外网
-//    public static final String URL = "http://"+HOST;//外网
+        public static final String HOST = "183.3.210.168";//外网
+    public static final String URL = "http://"+HOST;//外网
 
-    public static final String HOST = "172.16.1.185";//本地
-    public static final String URL = "http://" + HOST + ":83";//本地
+//    public static final String HOST = "172.16.1.185";//本地
+//    public static final String URL = "http://" + HOST + ":83";//本地
 
     public static final int PORT = 2012;//立同
     //    public static final int PORT = 3012;//菲律宾

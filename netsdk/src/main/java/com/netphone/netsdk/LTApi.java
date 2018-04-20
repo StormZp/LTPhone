@@ -12,14 +12,21 @@ import com.netphone.netsdk.listener.OnGroupComeInListener;
 import com.netphone.netsdk.listener.OnGroupStateListener;
 import com.netphone.netsdk.listener.OnLocationListener;
 import com.netphone.netsdk.listener.OnLoginListener;
+import com.netphone.netsdk.listener.OnUpFileListener;
 import com.netphone.netsdk.service.LocationService;
 import com.netphone.netsdk.socket.TcpSocket;
 import com.netphone.netsdk.utils.CmdUtils;
+import com.netphone.netsdk.utils.FileUtils;
 import com.netphone.netsdk.utils.SharedPreferenceUtil;
+import com.zxy.tiny.Tiny;
+import com.zxy.tiny.callback.FileCallback;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by XYSM on 2018/4/13.
@@ -49,6 +56,7 @@ public class LTApi {
     public OnGroupStateListener     groupStateListener;
     public OnGroupChatListener      groupChatListener;
     public OnLocationListener       onLocationListener;
+    public OnUpFileListener       onUpFileListener;
     public String                   groupId;
 
     public void joinGroup(String groupID, OnGroupComeInListener groupComeInListener, OnGetGroupMemberListener getGroupMemberListener, OnGroupStateListener groupStateListener, OnGroupChatListener groupChatListener) {
@@ -119,5 +127,69 @@ public class LTApi {
 
     public GroupInfoBean getCurrentGroupInfo() {
         return Constant.currentGroupInfo;
+    }
+
+
+    public void upImage(String filePath, OnUpFileListener onUpFileListener) {
+        this.onUpFileListener  = onUpFileListener;
+        Tiny.getInstance().source(filePath).asFile().withOptions(new Tiny.FileCompressOptions()).compress(new FileCallback() {
+            @Override
+            public void callback(boolean isSuccess, String outfile) {
+                if (isSuccess) {
+
+                    String AttachmentName      = outfile.substring(outfile.lastIndexOf("/") + 1, outfile.lastIndexOf("."));
+                    String AttachmentExtention = outfile.substring(outfile.lastIndexOf("."));
+                    uploadFile(outfile, 1, AttachmentName, AttachmentExtention);
+                }
+            }
+        });
+    }
+
+    public void upFile(String outfile, OnUpFileListener onUpFileListener) {
+        this.onUpFileListener  = onUpFileListener;
+        String AttachmentName      = outfile.substring(outfile.lastIndexOf("/") + 1, outfile.lastIndexOf("."));
+        String AttachmentExtention = outfile.substring(outfile.lastIndexOf("."));
+        uploadFile(outfile, 99, AttachmentName, AttachmentExtention);
+    }
+
+    private void uploadFile(String filePath, int type, String AttachmentName, String AttachmentExtention) {
+        File   file      = new File(filePath);
+        byte[] fileArray = FileUtils.getBytesFromFile(file);
+        if (fileArray == null) {
+            return;
+        }
+        int                 count     = (fileArray.length / (1024 * 63)) + 1;
+        int                 lastSize  = fileArray.length - (count - 1) * 1024 * 63;
+        byte[]              itemBytes = new byte[1024 * 63];
+        String              UUID      = java.util.UUID.randomUUID().toString();//唯一标识
+        Map<String, Object> map       = new HashMap<String, Object>();
+        for (int i = 0; i < count; i++) {
+            if (i < count - 1)
+                System.arraycopy(fileArray, i * 1024 * 63, itemBytes, 0, 1024 * 63);
+            else {
+                if (lastSize > 0) {
+                    itemBytes = new byte[lastSize];
+                    System.arraycopy(fileArray, i * 1024 * 63, itemBytes, 0, lastSize);
+                } else {
+                    //不够63K种情况
+                    itemBytes = new byte[fileArray.length];
+                    System.arraycopy(fileArray, i * 1024 * 63, itemBytes, 0, fileArray.length);
+                }
+            }
+            if (i == 0) {
+                map.put("Index", i + 1);
+                map.put("GUID", UUID);
+                map.put("AttachmentType", type);
+                map.put("AttachmentName", AttachmentName);
+                map.put("AttachmentExtention", AttachmentExtention);
+                map.put("Count", count);
+            } else {
+                map.put("Index", i + 1);
+                map.put("GUID", UUID);
+                map.put("Count", count);
+            }
+            byte[] datas = CmdUtils.getInstance().uploadFile(itemBytes, (byte) 0x00, (byte) 0x0f, map);
+            TcpSocket.getInstance().addData(datas);
+        }
     }
 }

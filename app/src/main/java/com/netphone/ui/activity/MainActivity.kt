@@ -7,10 +7,9 @@ import android.support.v4.app.FragmentPagerAdapter
 import android.view.KeyEvent
 import android.view.View
 import android.widget.Toast
-import com.bigkoo.alertview.AlertView
-import com.bigkoo.alertview.OnItemClickListener
 import com.netphone.R
 import com.netphone.databinding.ActivityMainBinding
+import com.netphone.listener.PermissionListener
 import com.netphone.netsdk.LTApi
 import com.netphone.netsdk.LTConfigure
 import com.netphone.netsdk.base.AppBean
@@ -19,10 +18,9 @@ import com.netphone.ui.fragment.GroupsFragment
 import com.netphone.ui.fragment.SessionFragment
 import com.netphone.ui.fragment.SettingFragment
 import com.netphone.utils.LightStatusBarUtils
+import com.netphone.utils.PermissionUtil
 import com.storm.developapp.tools.AppManager
 import com.storm.tool.base.BaseActivity
-import com.tbruyelle.rxpermissions2.Permission
-import io.reactivex.functions.Consumer
 
 class MainActivity : BaseActivity<ActivityMainBinding>() {
 
@@ -81,31 +79,17 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
                 return 5
             }
         }
-        getRxPermissions().shouldShowRequestPermissionRationale(activity, Manifest.permission.RECORD_AUDIO, Manifest.permission.ACCESS_FINE_LOCATION).subscribe(object : Consumer<Boolean> {
-            override fun accept(t: Boolean?) {
-                if (!t!!) {
-                    AlertView(context.resources.getString(R.string.warn), context.resources.getString(R.string.permissions_hint), context.resources.getString(R.string.text_cancel), arrayOf(context.resources.getString(R.string.text_sure)), null, context, AlertView.Style.Alert, object : OnItemClickListener {
-                        override fun onItemClick(o: Any?, position: Int) {
-                            if (position == 0) {
-                                getRxPermissions().requestEach(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.RECORD_AUDIO).subscribe(object : Consumer<Permission> {
-                                    override fun accept(t: Permission?) {
-                                        if (t!!.granted) {
-                                            // 用户已经同意该权限
-                                            LTConfigure.getInstance().startLocationService()
-                                        } else if (t.shouldShowRequestPermissionRationale) {
-                                            // 用户拒绝了该权限，没有选中『不再询问』（Never ask again）,那么下次再次启动时，还会提示请求权限的对话框
-                                        } else {
-                                            // 用户拒绝了该权限，并且选中『不再询问』
-                                        }
-                                    }
-                                })
-                            }
-                        }
-                    }).show()
-                }
+        PermissionUtil.requiestPermission(activity,context,object : PermissionListener{
+            override fun PermissionFail() {
             }
-        })
 
+            override fun PermissionNever() {
+            }
+
+            override fun PermissionSuccess() {
+                LTConfigure.getInstance().startLocationService()
+            }
+        }, Manifest.permission.RECORD_AUDIO, Manifest.permission.ACCESS_FINE_LOCATION)
     }
 
     override fun initListener() {
