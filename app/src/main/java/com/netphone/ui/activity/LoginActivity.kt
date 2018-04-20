@@ -15,6 +15,7 @@ import com.netphone.netsdk.bean.UserListBean
 import com.netphone.netsdk.listener.OnLoginListener
 import com.netphone.netsdk.listener.OnNetworkListener
 import com.netphone.netsdk.utils.LogUtil
+import com.netphone.utils.ToastUtil
 import com.netphone.utils.ToastUtil.Companion.context
 import com.netphone.utils.ToastUtil.Companion.toasts
 import com.storm.tool.base.BaseActivity
@@ -25,7 +26,6 @@ import com.storm.tool.base.BaseActivity
 
 class LoginActivity : BaseActivity<ActivityLoginBinding>() {
 
-    var myNetListener: MyNetListener? = null
     var muLoginListener: MuLoginListener? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,7 +35,6 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>() {
 
     override fun onDestroy() {
         super.onDestroy()
-        myNetListener = null
         muLoginListener = null
     }
 
@@ -47,15 +46,34 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>() {
 
 
     override fun initListener() {
-        myNetListener = MyNetListener()
         muLoginListener = MuLoginListener(this)
-        LogUtil.error("LoginActivity.kt","51\tinitListener()\n"+ LTConfigure.getInstance()+"\t"+myNetListener);
-        LTConfigure.getInstance().setOnNetworkListener(myNetListener)
+        LTConfigure.getInstance().setOnNetworkListener(object : OnNetworkListener {
+            override fun onNoNet() {
+            }
+
+            override fun onWifiNet() {
+            }
+
+            override fun onMobileNet() {
+            }
+
+            override fun onConnectFail() {
+                activity.runOnUiThread {
+                    ToastUtil.toastl(ToastUtil.context!!.resources.getString(R.string.net_connect) + ToastUtil.context!!.resources.getString(R.string.fail))
+                }
+            }
+
+            override fun onConnectSuccess() {
+                activity.runOnUiThread {
+                    ToastUtil.toastl(ToastUtil.context!!.resources.getString(R.string.net_connect) + ToastUtil.context!!.resources.getString(R.string.success))
+                }
+            }
+        })
     }
 
     override fun initData() {
         binding.click = onClick()
-        StatusBarCompat.setStatusBarColor(this,context.resources.getColor( R.color.black), false);
+        StatusBarCompat.setStatusBarColor(this, context.resources.getColor(R.color.black), false);
 
         if (BuildConfig.DEBUG) {
             binding.etAccount.setText("debug")
@@ -65,7 +83,6 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>() {
 
     inner class onClick {
         open fun deletePsw(view: View) {
-//            toasts("删除")
             binding.etPassword.setText("")
         }
 
@@ -79,24 +96,6 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>() {
         }
     }
 
-    class MyNetListener : OnNetworkListener {
-        override fun onServiceConnect() {
-            toasts(context!!.resources.getString(R.string.net_connect) + context!!.resources.getString(R.string.success))
-        }
-
-        override fun onNoNet() {
-            LogUtil.error("LoginActivity.kt", "onNoNet\n" + "这里有个文本")
-        }
-
-        override fun onWifiNet() {
-            LogUtil.error("LoginActivity.kt", "onWifiNet\n" + "这里有个文本")
-
-        }
-
-        override fun onMobileNet() {
-            LogUtil.error("LoginActivity.kt", "onMobileNet\n" + "这里有个文本")
-        }
-    }
 
     class MuLoginListener(act: LoginActivity) : OnLoginListener {
         var activity = act
@@ -119,8 +118,6 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>() {
 
 
         override fun onComplete(userListBean: UserListBean?) {
-//                    LogUtil.error("LoginActivity.kt", "onComplete\n" + Gson().toJson(userListBean))
-
             activity.runOnUiThread {
                 activity.hideProgress()
                 Constant.listBean = userListBean;

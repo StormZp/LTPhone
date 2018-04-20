@@ -8,5 +8,6 @@ public interface OnNetworkListener {
     void onNoNet();
     void onWifiNet();
     void onMobileNet();
-    void onServiceConnect();
+    void onConnectFail();
+    void onConnectSuccess();
 }

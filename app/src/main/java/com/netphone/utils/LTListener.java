@@ -54,7 +54,11 @@ public class LTListener {
             }
 
             @Override
-            public void onServiceConnect() {
+            public void onConnectFail() {
+
+            }
+            @Override
+            public void onConnectSuccess() {
 
             }
         });

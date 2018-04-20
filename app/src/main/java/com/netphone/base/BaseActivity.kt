@@ -12,7 +12,6 @@ import com.netphone.R
 import com.netphone.netsdk.base.AppBean
 import com.netphone.netsdk.utils.EventBusUtil
 import com.netphone.utils.ProgressUtils
-import com.netphone.utils.StatusBarUtils
 import com.netphone.utils.ToastUtil
 import com.storm.developapp.tools.AppManager
 import com.tbruyelle.rxpermissions2.RxPermissions
@@ -109,12 +108,6 @@ open abstract class BaseActivity<T : ViewDataBinding> : AppCompatActivity() {
         initListener()
     }
 
-    /**
-     * statusBar的颜色
-     */
-    protected fun setBarColor(color: Int) {
-        StatusBarUtils.setWindowStatusBarColor(activity, context.resources.getColor(color))
-    }
 
     /**
      * 跳转

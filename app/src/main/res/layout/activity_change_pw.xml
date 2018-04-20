@@ -54,6 +54,12 @@
                 android:textSize="14dp" />
 
         </LinearLayout>
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/px1"
+            android:layout_alignParentBottom="true"
+            android:src="@color/line_view" />
+
 
         <ImageView
             android:layout_width="match_parent"

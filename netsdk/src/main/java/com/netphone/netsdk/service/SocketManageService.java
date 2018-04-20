@@ -28,12 +28,20 @@ public class SocketManageService extends Service {
     @Override
     public void onCreate()  {
         super.onCreate();
+
+        //终端ID
+        idBytes = CRC16.hexStringToBytes(CRC16.getDeviceId(LTConfigure.getInstance().getContext()));
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
         LogUtil.error("SocketManageService", "30\nonCreate()" + "SocketManageService启动了");
 //        mTcpSocket = new TcpSocket(LTConfigure.getInstance().getContext());
         TcpSocket.init(LTConfigure.getInstance().getContext());
 
         TcpSocket.getInstance().connect();
-        //终端ID
-        idBytes = CRC16.hexStringToBytes(CRC16.getDeviceId(LTConfigure.getInstance().getContext()));
+
+        return super.onStartCommand(intent, flags, startId);
+
     }
 }

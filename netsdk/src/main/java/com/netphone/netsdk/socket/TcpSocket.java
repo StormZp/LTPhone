@@ -26,18 +26,18 @@ import java.util.concurrent.LinkedBlockingQueue;
  */
 
 public class TcpSocket {
-    private static TcpSocket instance;//单例模式，因为只会在android主线程调用，不存在线程安全问题。
-    private static Context mContext;
-    private Socket mSocket;//socket通信
-    private DatagramSocket client;//UDP客户端
+    private static TcpSocket      instance;//单例模式，因为只会在android主线程调用，不存在线程安全问题。
+    private static Context        mContext;
+    private        Socket         mSocket;//socket通信
+    private        DatagramSocket client;//UDP客户端
 
 
     private boolean connectThreadStart;//socket连接线程
     private boolean receiveThreadStart;//接收socket数据线程
 
-    private List<Byte> list = new ArrayList<>();//用于处理拆包粘包
-    private BufferedOutputStream sendSocketStream = null;//数据输出流，可以处理各种基本数据类型，这里处理byte
-    private LinkedBlockingQueue<byte[]> msgQueue = new LinkedBlockingQueue<>();//发送的消息队列
+    private List<Byte>                  list             = new ArrayList<>();//用于处理拆包粘包
+    private BufferedOutputStream        sendSocketStream = null;//数据输出流，可以处理各种基本数据类型，这里处理byte
+    private LinkedBlockingQueue<byte[]> msgQueue         = new LinkedBlockingQueue<>();//发送的消息队列
 
     private TcpCmd mCmd;
 
@@ -74,6 +74,9 @@ public class TcpSocket {
     }
 
     public boolean isConnected() {
+        if (mSocket == null || mSocket.isClosed()) {
+            return false;
+        }
         return mSocket.isConnected();
     }
 
@@ -101,6 +104,7 @@ public class TcpSocket {
             } catch (Exception e) {
                 connectThreadStart = false;
                 LogUtil.error("创建连接失败:" + e);
+                LTConfigure.getInstance().mOnNetworkListener.onConnectFail();
                 // 通知
 //                EventBusUtil.sendEvent(new AppBean(EventConfig.TCP_CONNECT_STATUS_FAIL, 0, null, null));
                 return;
@@ -138,7 +142,7 @@ public class TcpSocket {
     private void onConnectSuccess() {
         LogUtil.error("tcp connect 建立成功,开始启动接发线程");
         if (LTConfigure.getInstance().mOnNetworkListener != null)
-            LTConfigure.getInstance().mOnNetworkListener.onServiceConnect();
+            LTConfigure.getInstance().mOnNetworkListener.onConnectSuccess();
 
         new Thread(sendThread).start();
         new Thread(receiveThread).start();
@@ -183,8 +187,8 @@ public class TcpSocket {
             LogUtil.error("接受线程启动了");
             receiveThreadStart = true;
             try {
-                byte[] cmdOrvoice;
-                byte[] realBytes;
+                byte[]          cmdOrvoice;
+                byte[]          realBytes;
                 DataInputStream inputStream;
                 while (receiveThreadStart) {
                     //先进行判断是指令数据还是语音数据
@@ -269,7 +273,7 @@ public class TcpSocket {
             next = nextContent + 14;
             if (next >= 14) {//可能有无回复内容这种情况，所以考虑=号
                 while (list.size() >= next) {
-                    byte[] pack = new byte[next];
+                    byte[] pack  = new byte[next];
                     byte[] bytes = Bytes.toArray(list);
                     System.arraycopy(bytes, 0, pack, 0, next);
                     list = list.subList(next, list.size());
@@ -305,6 +309,10 @@ public class TcpSocket {
 
     //添加发送数据
     public void addData(byte[] datas) {
+        if (!isConnected()){
+            getSocket();
+        }
+
         LogUtil.error("添加发送数据" + new Gson().toJson(datas
         ));
         if (datas != null && mSocket != null)

@@ -26,14 +26,14 @@ import com.netphone.netsdk.utils.SharedPreferenceUtil;
  * Message {这是力同的管理类}
  */
 public class LTConfigure {
-    private static LTApi ltApi;
-    private static Intent socketService;
-    private static Intent locationService;
-    public OnNetworkListener mOnNetworkListener;
-    public OnErrorListener mOnErrorListener;
+    private static LTApi             ltApi;
+    private static Intent            socketService;
+    private static Intent            locationService;
+    public         OnNetworkListener mOnNetworkListener;
+    public         OnErrorListener   mOnErrorListener;
 
-    private static LTConfigure mlt;
-    private static Context mContext;
+    private static LTConfigure                   mlt;
+    private static Context                       mContext;
     private static NetworkConnectChangedReceiver mNetworkConnectChangedReceiver;
 
     /**
@@ -89,12 +89,13 @@ public class LTConfigure {
         mlt = null;
         TcpCmd.isConnectBeat = false;
         TcpCmd.isGroupBeat = false;
-
+        mOnNetworkListener = null;
+        mOnErrorListener = null;
         mContext.stopService(socketService);
-//        mContext.stopService(locationService);
+        mContext.stopService(locationService);
     }
 
-    public void startLocationService(){
+    public void startLocationService() {
         mContext.startService(locationService);
     }
 
@@ -130,9 +131,9 @@ public class LTConfigure {
 
 
     private static MySQLiteOpenHelper mHelper;
-    private static SQLiteDatabase db;
-    private static DaoMaster mDaoMaster;
-    private static DaoSession mDaoSession;
+    private static SQLiteDatabase     db;
+    private static DaoMaster          mDaoMaster;
+    private static DaoSession         mDaoSession;
 
     /**
      * 设置greenDao
@@ -147,7 +148,7 @@ public class LTConfigure {
 //        mHelper = DaoMaster.DevOpenHelper(this, "notes-db", null);
         try {
             db = mHelper.getWritableDatabase();
-        } catch (RuntimeException e){
+        } catch (RuntimeException e) {
 
         }
         // 注意：该数据库连接属于 DaoMaster，所以多个 Session 指的是相同的数据库连接。
@@ -155,19 +156,19 @@ public class LTConfigure {
         mDaoSession = mDaoMaster.newSession();
     }
 
-    public DaoSession getDaoSession(){
+    public DaoSession getDaoSession() {
         return mDaoSession;
     }
 
 
-    public GroupInfoBean getCurrentGroup(){
-        String currentId = SharedPreferenceUtil.Companion.read(Constant.currentGroupId, "");
+    public GroupInfoBean getCurrentGroup() {
+        String           currentId        = SharedPreferenceUtil.Companion.read(Constant.currentGroupId, "");
         GroupInfoBeanDao groupInfoBeanDao = getDaoSession().getGroupInfoBeanDao();
-        GroupInfoBean unique = groupInfoBeanDao.queryBuilder().where(GroupInfoBeanDao.Properties.GroupID.eq(currentId)).build().unique();
-        return  unique;
+        GroupInfoBean    unique           = groupInfoBeanDao.queryBuilder().where(GroupInfoBeanDao.Properties.GroupID.eq(currentId)).build().unique();
+        return unique;
     }
 
-    public void setCurrentGroup(){
+    public void setCurrentGroup() {
 
     }
 
