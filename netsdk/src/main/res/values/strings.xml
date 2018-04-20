@@ -3,6 +3,7 @@
     <!--<string name="app_name">和智物联音视频系统</string>-->
     <string name="text_password">密码</string>
     <string name="text_login">登录</string>
+    <string name="auto_login">自动登录</string>
     <string name="text_register">注册</string>
     <string name="text_commit">提交</string>
 

@@ -2,11 +2,13 @@
 <layout>
 
     <data>
+
         <variable
             name="click"
-            type="com.netphone.ui.activity.LoginActivity.onClick"/>
+            type="com.netphone.ui.activity.LoginActivity.onClick" />
 
     </data>
+
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:fresco="http://schemas.android.com/apk/res-auto"
@@ -21,8 +23,8 @@
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="@dimen/dp120"
             android:layout_margin="@dimen/dp12"
+            android:paddingTop="@dimen/dp120"
             android:src="@mipmap/logo" />
 
         <LinearLayout
@@ -91,19 +93,30 @@
                     android:id="@+id/iv_delete"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:onClick="@{click.deletePsw}"
                     android:layout_margin="@dimen/dp8"
+                    android:onClick="@{click.deletePsw}"
                     android:src="@mipmap/icon_out" />
             </LinearLayout>
         </LinearLayout>
 
+        <CheckBox
+            android:id="@+id/auto"
+            android:theme="@style/My_CheckBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_marginRight="@dimen/dp14"
+            android:shadowColor="@color/white"
+            android:text="@string/auto_login"
+            android:textColor="@color/white" />
+
         <ImageView
             android:id="@+id/iv_submit"
             android:layout_width="match_parent"
-            android:paddingTop="@dimen/dp24"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/dp8"
             android:onClick="@{click.submit}"
+            android:paddingTop="@dimen/dp24"
             android:src="@mipmap/btn_denglu" />
     </LinearLayout>
 </layout>

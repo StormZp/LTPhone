@@ -16,8 +16,6 @@ import com.netphone.netsdk.listener.OnLoginListener
 import com.netphone.netsdk.listener.OnNetworkListener
 import com.netphone.netsdk.utils.LogUtil
 import com.netphone.utils.ToastUtil
-import com.netphone.utils.ToastUtil.Companion.context
-import com.netphone.utils.ToastUtil.Companion.toasts
 import com.storm.tool.base.BaseActivity
 
 /**
@@ -26,7 +24,6 @@ import com.storm.tool.base.BaseActivity
 
 class LoginActivity : BaseActivity<ActivityLoginBinding>() {
 
-    var muLoginListener: MuLoginListener? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -35,7 +32,6 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>() {
 
     override fun onDestroy() {
         super.onDestroy()
-        muLoginListener = null
     }
 
     override fun receiveEvent(appBean: AppBean<Any>) {
@@ -46,7 +42,6 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>() {
 
 
     override fun initListener() {
-        muLoginListener = MuLoginListener(this)
         LTConfigure.getInstance().setOnNetworkListener(object : OnNetworkListener {
             override fun onNoNet() {
             }
@@ -92,38 +87,27 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>() {
             if (TextUtils.isEmpty(account)) {
                 toasts(context.resources.getString(R.string.account_not_null))
             }
-            LTConfigure.getInstance().ltApi.login(account, password, muLoginListener!!)
-        }
-    }
+            LTConfigure.getInstance().ltApi.login(account, password, object : OnLoginListener{
+                override fun onSuccess(bean: UserInfoBean?) {
+                    Constant.info = bean;
+                    activity.runOnUiThread {
+                        ToastUtil.toasts(ToastUtil.context!!.resources.getString(R.string.text_login) + ToastUtil.context!!.resources.getString(R.string.success))
+                    }
+                    Constant.info = bean;
+                }
 
+                override fun onFail(code: Int, error: String?) {
+                    LogUtil.error("LoginActivity.kt", "onFail\n" + "$error")
+                    activity.runOnUiThread {
+                        ToastUtil.toasts(error!!)
+                    }
+                }
 
-    class MuLoginListener(act: LoginActivity) : OnLoginListener {
-        var activity = act
-        override fun onFail(code: Int, error: String?) {
-            LogUtil.error("LoginActivity.kt", "onFail\n" + "$error")
-            activity.activity.runOnUiThread {
-                toasts(error!!)
-            }
-        }
-
-        override fun onSuccess(bean: UserInfoBean?) {
-//                    LogUtil.error("LoginActivity.kt", "onSuccess\n" + Gson().toJson(personBean))
-            Constant.info = bean;
-            activity.activity.runOnUiThread {
-                toasts(context!!.resources.getString(R.string.text_login) + context!!.resources.getString(R.string.success))
-                activity.showProgress()
-            }
-            Constant.info = bean;
-        }
-
-
-        override fun onComplete(userListBean: UserListBean?) {
-            activity.runOnUiThread {
-                activity.hideProgress()
-                Constant.listBean = userListBean;
-                activity.jump(MainActivity::class.java)
-                activity.finish()
-            }
+                override fun onComplete(userListBean: UserListBean?) {
+                    Constant.listBean = userListBean;
+                    jump(MainActivity::class.java)
+                }
+            })
         }
     }
 }

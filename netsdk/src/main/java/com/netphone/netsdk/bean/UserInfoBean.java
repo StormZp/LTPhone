@@ -3,6 +3,8 @@ package com.netphone.netsdk.bean;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
+import com.netphone.netsdk.utils.Cn2Spell;
+
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Id;
@@ -133,7 +135,8 @@ public class UserInfoBean implements Serializable, Comparable<UserInfoBean> {
 
     public String getPinyin() {
         if (TextUtils.isEmpty(pinyin) && !TextUtils.isEmpty(RealName)) {
-            pinyin =Py; // 根据姓名获取拼音
+            pinyin = Cn2Spell.getPinYin(RealName); // 根据姓名获取拼音
+
             firstLetter = pinyin.substring(0, 1).toUpperCase(); // 获取拼音首字母并转成大写
             if (!firstLetter.matches("[A-Z]")) { // 如果不在A-Z中则默认为“#”
                 firstLetter = "#";
@@ -151,7 +154,8 @@ public class UserInfoBean implements Serializable, Comparable<UserInfoBean> {
 
     public String getFirstLetter() {
         if (TextUtils.isEmpty(firstLetter) && !TextUtils.isEmpty(RealName)) {
-            pinyin =Py; // 根据姓名获取拼音
+            pinyin = Cn2Spell.getPinYin(RealName); // 根据姓名获取拼音
+
             firstLetter = pinyin.substring(0, 1).toUpperCase(); // 获取拼音首字母并转成大写
             if (!firstLetter.matches("[A-Z]")) { // 如果不在A-Z中则默认为“#”
                 firstLetter = "#";

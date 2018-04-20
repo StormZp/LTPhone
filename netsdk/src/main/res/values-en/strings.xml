@@ -4,6 +4,7 @@
     <!--<string name="app_name">和智物联音视频系统</string>-->
     <string name="text_password">password</string>
     <string name="text_login"> login</string>
+    <string name="auto_login">auto login</string>
     <string name="text_register"> register</string>
     <string name="text_commit"> commit</string>
     <string name="text_sure"> submit</string>

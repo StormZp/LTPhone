@@ -74,7 +74,7 @@ public class TcpCmd {
                                     byte[] jsonBytes = new byte[bodyBytes.length - 1];
                                     System.arraycopy(bodyBytes, 1, jsonBytes, 0, bodyBytes.length - 1);
                                     String body = ByteIntUtils.utfToString(jsonBytes);
-
+                                    LogUtil.error("TcpCmd", "77\tcmdExplore()\n" + body);
                                     Gson gson = new Gson();
                                     UserInfoBean user = gson.fromJson(body, UserInfoBean.class);
                                     if (user == null) {
@@ -274,7 +274,8 @@ public class TcpCmd {
                         if (LTConfigure.getInstance().getLtApi().mOnLoginListener != null) {
                             String body = ByteIntUtils.utfToString(bodyBytes);
                             Gson   gson = new Gson();
-//                        LogUtil.saveLog(LTConfigure.getInstance().getContext(), "127\tcmdExplore()\n" +body);
+//                            LogUtil.saveLog(LTConfigure.getInstance().getContext(), "127\tcmdExplore()\n" + body);
+//                            LogUtil.error("TcpCmd", "278\tcmdExplore()\n" + body);
                             try {
                                 LogUtil.error("TcpCmd", "255\tcmdExplore()\n" + body);
                                 UserListBean userListBean = gson.fromJson(body, UserListBean.class);
@@ -285,7 +286,7 @@ public class TcpCmd {
                                     LTConfigure.getInstance().getLtApi().mOnLoginListener = null;
                                 }
                             } catch (Exception e) {
-
+                                LogUtil.error("TcpCmd", e);
                             }
                         }
 

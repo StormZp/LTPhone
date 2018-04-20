@@ -45,8 +45,25 @@ public class LTApi {
 
     public OnLoginListener mOnLoginListener;
 
+    /**
+     * 登录
+     *
+     * @param username      账号
+     * @param password      密码
+     * @param isAuto        是否下次自动
+     * @param loginListener 回调监听
+     */
     public void login(String username, String password, OnLoginListener loginListener) {
         mOnLoginListener = loginListener;
+//        if (isAuto){
+//            SharedPreferenceUtil.Companion.put(Constant.Auto_Login,true);
+//            SharedPreferenceUtil.Companion.put(Constant.username,username);
+//            SharedPreferenceUtil.Companion.put(Constant.password,password);
+//        }else {
+//            SharedPreferenceUtil.Companion.put(Constant.Auto_Login,false);
+//            SharedPreferenceUtil.Companion.put(Constant.username,"");
+//            SharedPreferenceUtil.Companion.put(Constant.password,"");
+//        }
         byte[] login = CmdUtils.getInstance().sendLogin(username, password);
         TcpSocket.getInstance().addData(login);
     }
@@ -56,9 +73,18 @@ public class LTApi {
     public OnGroupStateListener     groupStateListener;
     public OnGroupChatListener      groupChatListener;
     public OnLocationListener       onLocationListener;
-    public OnUpFileListener       onUpFileListener;
+    public OnUpFileListener         onUpFileListener;
     public String                   groupId;
 
+    /**
+     * 加入群组
+     *
+     * @param groupID
+     * @param groupComeInListener
+     * @param getGroupMemberListener
+     * @param groupStateListener
+     * @param groupChatListener
+     */
     public void joinGroup(String groupID, OnGroupComeInListener groupComeInListener, OnGetGroupMemberListener getGroupMemberListener, OnGroupStateListener groupStateListener, OnGroupChatListener groupChatListener) {
         this.groupComeInListener = groupComeInListener;
         this.getGroupMemberListener = getGroupMemberListener;
@@ -73,6 +99,11 @@ public class LTApi {
         TcpSocket.getInstance().addData(temp);
     }
 
+    /**
+     * 退出群组(已废弃)
+     *
+     * @param groupID
+     */
     @Deprecated
     public void exitGroup(String groupID) {
         byte[] joinGroup = CmdUtils.getInstance().commonApi2((byte) 0x00, (byte) 0x0A);
@@ -83,12 +114,23 @@ public class LTApi {
     private GroupChatMsgBeanDao groupChatMsgBeanDao;
     private UserInfoBeanDao     userInfoBeanDao;
 
+    /**
+     * 发送群聊信息
+     *
+     * @param id
+     * @param content
+     */
     public void sendGroupMessage(String id, String content) {
         byte[] words = CmdUtils.getInstance().sendGroupCommonBeanApi(id, content, (byte) 0x00, (byte) 0x1C);
         TcpSocket.getInstance().addData(words);
     }
 
-
+    /**
+     * 获取群聊聊天记录
+     *
+     * @param groupId
+     * @return
+     */
     public ArrayList<GroupChatMsgBean> getGroupChatMessage(String groupId) {
         if (groupChatMsgBeanDao == null)
             groupChatMsgBeanDao = LTConfigure.getInstance().getDaoSession().getGroupChatMsgBeanDao();
@@ -98,6 +140,11 @@ public class LTApi {
         return groupChatMsgBeans;
     }
 
+    /**
+     * 获取当前用户信息
+     *
+     * @return
+     */
     public UserInfoBean getCurrentInfo() {
         if (userInfoBeanDao == null)
             userInfoBeanDao = LTConfigure.getInstance().getDaoSession().getUserInfoBeanDao();
@@ -105,6 +152,11 @@ public class LTApi {
     }
 
 
+    /**
+     * 发送用户经纬度
+     *
+     * @param onLocationListener
+     */
     public void sendLocation(OnLocationListener onLocationListener) {
         this.onLocationListener = onLocationListener;
         if (LocationService.longitude == 0.0 && LocationService.latitude == 0.0) {
@@ -115,6 +167,11 @@ public class LTApi {
         TcpSocket.getInstance().addData(words);
     }
 
+    /**
+     * 一键呼救功能
+     *
+     * @param onLocationListener 呼救回调
+     */
     public void help(OnLocationListener onLocationListener) {
         this.onLocationListener = onLocationListener;
         if (LocationService.longitude == 0.0 && LocationService.latitude == 0.0) {
@@ -125,13 +182,37 @@ public class LTApi {
         TcpSocket.getInstance().addData(words);
     }
 
+    /**
+     * 离线
+     */
+    public void offLine() {
+
+    }
+
+    /**
+     * 在线
+     */
+    public void onLine() {
+
+    }
+
+    /**
+     * 获取当前群组信息
+     *
+     * @return
+     */
     public GroupInfoBean getCurrentGroupInfo() {
         return Constant.currentGroupInfo;
     }
 
-
+    /**
+     * 上传图片
+     *
+     * @param filePath         本地文件路径
+     * @param onUpFileListener 回调监听
+     */
     public void upImage(String filePath, OnUpFileListener onUpFileListener) {
-        this.onUpFileListener  = onUpFileListener;
+        this.onUpFileListener = onUpFileListener;
         Tiny.getInstance().source(filePath).asFile().withOptions(new Tiny.FileCompressOptions()).compress(new FileCallback() {
             @Override
             public void callback(boolean isSuccess, String outfile) {
@@ -145,13 +226,27 @@ public class LTApi {
         });
     }
 
+    /**
+     * 上传文件
+     *
+     * @param outfile
+     * @param onUpFileListener
+     */
     public void upFile(String outfile, OnUpFileListener onUpFileListener) {
-        this.onUpFileListener  = onUpFileListener;
+        this.onUpFileListener = onUpFileListener;
         String AttachmentName      = outfile.substring(outfile.lastIndexOf("/") + 1, outfile.lastIndexOf("."));
         String AttachmentExtention = outfile.substring(outfile.lastIndexOf("."));
         uploadFile(outfile, 99, AttachmentName, AttachmentExtention);
     }
 
+    /**
+     * 上传
+     *
+     * @param filePath
+     * @param type
+     * @param AttachmentName
+     * @param AttachmentExtention
+     */
     private void uploadFile(String filePath, int type, String AttachmentName, String AttachmentExtention) {
         File   file      = new File(filePath);
         byte[] fileArray = FileUtils.getBytesFromFile(file);

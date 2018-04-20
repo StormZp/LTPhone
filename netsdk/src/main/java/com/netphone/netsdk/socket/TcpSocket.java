@@ -57,7 +57,7 @@ public class TcpSocket {
     }
 
     public Socket getSocket() {
-        if (mSocket == null) {
+        if (mSocket == null||!mSocket.isConnected()||mSocket.isClosed()) {
             try {
                 mSocket = new Socket(TcpConfig.HOST, TcpConfig.PORT);
             } catch (IOException e) {
@@ -309,9 +309,12 @@ public class TcpSocket {
 
     //添加发送数据
     public void addData(byte[] datas) {
-        if (!isConnected()){
-            getSocket();
-        }
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                getSocket();
+            }
+        }).start();
 
         LogUtil.error("添加发送数据" + new Gson().toJson(datas
         ));
