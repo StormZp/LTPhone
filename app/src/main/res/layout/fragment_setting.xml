@@ -2,11 +2,13 @@
 <layout>
 
     <data>
+
         <variable
             name="click"
-            type="com.netphone.ui.fragment.SettingFragment.onClick"/>
+            type="com.netphone.ui.fragment.SettingFragment.onClick" />
 
     </data>
+
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -41,6 +43,7 @@
                         android:layout_width="@dimen/dp65"
                         android:layout_height="@dimen/dp65"
                         android:layout_marginLeft="8dp"
+                        android:onClick="@{click.head}"
                         android:src="@mipmap/icon_defult_detail" />
 
                     <TextView
@@ -57,12 +60,11 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="8dp"
-                        android:paddingTop="@dimen/dp8"
-                        android:paddingBottom="@dimen/dp8"
-                        android:onClick="@{click.openUserInfo}"
-
                         android:drawableRight="@mipmap/right_arrow"
                         android:gravity="center_vertical"
+                        android:onClick="@{click.openUserInfo}"
+                        android:paddingBottom="@dimen/dp8"
+                        android:paddingTop="@dimen/dp8"
                         android:text="@string/user_info" />
 
                 </LinearLayout>
@@ -115,9 +117,9 @@
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:onClick="@{click.sendLocation}"
-
                         android:gravity="center"
+
+                        android:onClick="@{click.sendLocation}"
                         android:orientation="horizontal">
 
                         <TextView
@@ -141,10 +143,10 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp90"
-                    android:paddingRight="@dimen/dp8"
-                    android:paddingLeft="@dimen/dp8"
                     android:layout_marginTop="@dimen/dp8"
-                    android:background="@color/white">
+                    android:background="@color/white"
+                    android:paddingLeft="@dimen/dp8"
+                    android:paddingRight="@dimen/dp8">
 
                     <LinearLayout
                         android:id="@+id/ll_uploadpic"
@@ -236,19 +238,18 @@
                         android:id="@+id/online_lay"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:gravity="center"
                         android:layout_marginRight="@dimen/dp8"
+                        android:gravity="center"
                         android:orientation="vertical">
 
                         <CheckBox
                             android:id="@+id/online_switch"
                             android:layout_width="@dimen/dp32"
                             android:layout_height="@dimen/dp16"
-                            android:button="@null"
                             android:layout_gravity="center_horizontal"
-                            android:gravity="center_horizontal"
                             android:background="@drawable/button_font"
-                          />
+                            android:button="@null"
+                            android:gravity="center_horizontal" />
 
                         <TextView
                             android:id="@+id/online_state"
@@ -271,6 +272,7 @@
                     android:background="@color/white"
                     android:gravity="center_vertical"
                     android:onClick="@{click.openPwChange}"
+
                     android:orientation="horizontal">
 
 
@@ -286,8 +288,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="@dimen/dp24"
                         android:layout_marginRight="8dp"
-                        android:src="@mipmap/right_arrow"
-                        />
+                        android:src="@mipmap/right_arrow" />
 
                 </LinearLayout>
 
@@ -298,6 +299,7 @@
                     android:layout_marginTop="@dimen/dp1"
                     android:background="@color/white"
                     android:gravity="center_vertical"
+                    android:onClick="@{click.aboutApp}"
                     android:orientation="horizontal">
 
 
@@ -313,8 +315,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="@dimen/dp24"
                         android:layout_marginRight="8dp"
-                        android:src="@mipmap/right_arrow"
-                        />
+                        android:src="@mipmap/right_arrow" />
 
                 </LinearLayout>
 
@@ -322,9 +323,9 @@
                     android:id="@+id/ll_exit"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp48"
-                    android:gravity="center"
-                    android:background="@color/white"
                     android:layout_marginTop="@dimen/dp8"
+                    android:background="@color/white"
+                    android:gravity="center"
                     android:onClick="@{click.exit}"
                     android:orientation="vertical">
 

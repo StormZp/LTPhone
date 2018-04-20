@@ -1,7 +1,9 @@
 package com.netphone.netsdk;
 
 import android.content.Context;
+import android.os.SystemClock;
 
+import com.google.gson.Gson;
 import com.netphone.gen.GroupChatMsgBeanDao;
 import com.netphone.gen.UserInfoBeanDao;
 import com.netphone.netsdk.Tool.Constant;
@@ -9,6 +11,7 @@ import com.netphone.netsdk.bean.GroupChatMsgBean;
 import com.netphone.netsdk.bean.GroupInfoBean;
 import com.netphone.netsdk.bean.UserInfoBean;
 import com.netphone.netsdk.listener.OnChangePasswordListener;
+import com.netphone.netsdk.listener.OnChangeUserInfoListener;
 import com.netphone.netsdk.listener.OnGetGroupMemberListener;
 import com.netphone.netsdk.listener.OnGroupChatListener;
 import com.netphone.netsdk.listener.OnGroupComeInListener;
@@ -21,6 +24,7 @@ import com.netphone.netsdk.service.LocationService;
 import com.netphone.netsdk.socket.TcpSocket;
 import com.netphone.netsdk.utils.CmdUtils;
 import com.netphone.netsdk.utils.FileUtils;
+import com.netphone.netsdk.utils.LogUtil;
 import com.netphone.netsdk.utils.SharedPreferenceUtil;
 import com.zxy.tiny.Tiny;
 import com.zxy.tiny.callback.FileCallback;
@@ -79,6 +83,7 @@ public class LTApi {
     public OnLocationListener       onLocationListener;
     public OnUpFileListener         onUpFileListener;
     public OnReFreshListener        onReFreshListener;
+    public OnChangeUserInfoListener onChangeUserInfoListener;
     public String                   groupId;
 
     /**
@@ -200,9 +205,18 @@ public class LTApi {
     public void onLine(Context context) {
         LTConfigure.init(context);
         LTConfigure.getInstance().startLocationService();
-        String username = SharedPreferenceUtil.Companion.read(Constant.username, "");
-        String password = SharedPreferenceUtil.Companion.read(Constant.password, "");
-        login(username, password, null);
+        final String username = SharedPreferenceUtil.Companion.read(Constant.username, "");
+        final String password = SharedPreferenceUtil.Companion.read(Constant.password, "");
+        LogUtil.error("LTApi", "205\tonLine()\n" + "请求登录$username" + username + "\tpassword:" + password);
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                SystemClock.sleep(500);
+                login(username, password, null);
+            }
+        }).start();
+
     }
 
     /**
@@ -308,13 +322,22 @@ public class LTApi {
 
     /**
      * 修改密码
-     * @param oldPassword 旧密码
-     * @param newPassword 新密码
+     *
+     * @param oldPassword              旧密码
+     * @param newPassword              新密码
      * @param onChangePasswordListener
      */
     public void changePassword(String oldPassword, String newPassword, OnChangePasswordListener onChangePasswordListener) {
         this.onChangePasswordListener = onChangePasswordListener;
         byte[] datas = CmdUtils.getInstance().editPW(oldPassword, newPassword);
+        TcpSocket.getInstance().addData(datas);
+    }
+
+    public void changeUserInfo(UserInfoBean userInfoBean, OnChangeUserInfoListener onChangeUserInfoListener) {
+        this.onChangeUserInfoListener = onChangeUserInfoListener;
+        Gson   gson  = new Gson();
+        String s     = gson.toJson(userInfoBean);
+        byte[] datas = CmdUtils.getInstance().commonApi((byte) 0x00, (byte) 0x17, s);
         TcpSocket.getInstance().addData(datas);
     }
 }

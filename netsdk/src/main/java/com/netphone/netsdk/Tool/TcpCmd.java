@@ -240,6 +240,13 @@ public class TcpCmd {
                     case 0x16://获取终端用户信息
                         break;
                     case 0x17://更新终端用户信息
+                        if (LTConfigure.getInstance().getLtApi().onChangeUserInfoListener != null) {
+                            if (bodyBytes[0] == 0x00) {
+                                LTConfigure.getInstance().getLtApi().onChangeUserInfoListener.onSuccess();
+                            } else {
+                                LTConfigure.getInstance().getLtApi().onChangeUserInfoListener.onFail();
+                            }
+                        }
                         break;
                     case 0x18://一键呼救回复
                         if (LTConfigure.getInstance().getLtApi().onLocationListener != null) {
@@ -288,7 +295,14 @@ public class TcpCmd {
                             try {
                                 LogUtil.error("TcpCmd", "255\tcmdExplore()\n" + body);
                                 UserListBean userListBean = gson.fromJson(body, UserListBean.class);
-                                mUserInfoBeanDao.insertOrReplaceInTx(userListBean.getUserInfo());
+                                List<UserInfoBean> userInfo = userListBean.getUserInfo();
+                                UserInfoBean currentInfo = LTApi.newInstance().getCurrentInfo();
+                                for (int i = 0; i < userInfo.size(); i++) {
+                                    if (!currentInfo.getUserId().equals(userInfo.get(i).getUserId())){
+                                        mUserInfoBeanDao.insertOrReplace(userInfo.get(i));
+                                    }
+                                }
+
                                 mGroupInfoBeanDao.insertOrReplaceInTx(userListBean.getGroupInfo());
                                 if (LTConfigure.getInstance().getLtApi().mOnLoginListener != null) {
                                     LTConfigure.getInstance().getLtApi().mOnLoginListener.onComplete(userListBean);

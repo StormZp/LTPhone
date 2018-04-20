@@ -44,8 +44,8 @@
 
         <activity
             android:name=".ui.activity.MainActivity"
-            android:screenOrientation="portrait"
             android:launchMode="singleTask"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|stateUnchanged"></activity>
         <activity
             android:name=".ui.activity.FriendChatActivity"
@@ -68,7 +68,14 @@
             android:name=".ui.activity.ChangePWActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|stateUnchanged"></activity>
-
+        <activity
+            android:name=".ui.activity.AboutAppActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|stateUnchanged"></activity>
+ <activity
+            android:name=".ui.activity.BigImageActiity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|stateUnchanged"></activity>
 
 
         <service android:name="com.netphone.netsdk.service.SocketManageService"></service>

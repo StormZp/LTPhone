@@ -16,11 +16,10 @@ import com.netphone.netsdk.LTApi
 import com.netphone.netsdk.Tool.Constant
 import com.netphone.netsdk.Tool.TcpConfig
 import com.netphone.netsdk.base.AppBean
+import com.netphone.netsdk.bean.ImageBean
 import com.netphone.netsdk.listener.OnLocationListener
 import com.netphone.netsdk.listener.OnUpFileListener
-import com.netphone.ui.activity.ChangePWActivity
-import com.netphone.ui.activity.LoginActivity
-import com.netphone.ui.activity.UserInfoActivity
+import com.netphone.ui.activity.*
 import com.netphone.utils.GlideCircleTransform
 import com.netphone.utils.GlideLoader
 import com.netphone.utils.LTListener
@@ -80,9 +79,9 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>() {
     override fun initListener() {
         binding.click = onClick()
         binding.onlineSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
-            if (isChecked){
+            if (isChecked) {
                 LTApi.newInstance().onLine(context.applicationContext)
-            }else{
+            } else {
                 LTApi.newInstance().offLine()
             }
         }
@@ -118,6 +117,10 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>() {
             AppManager.appManager.finishAllActivity()
             jump(LoginActivity::class.java)
 
+        }
+
+        open fun aboutApp(view: View) {
+            jump(AboutAppActivity::class.java)
         }
 
         open fun help(view: View) {
@@ -210,6 +213,14 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>() {
 
         open fun ReceiveImage(view: View) {
 
+        }
+
+        open fun head(view: View) {
+            var bundle = Bundle()
+            var imageBean = ImageBean()
+            imageBean.resourceHref = Constant.info.headIcon
+            bundle.putSerializable("bean", imageBean)
+            jump(BigImageActiity::class.java, bundle)
         }
     }
 
