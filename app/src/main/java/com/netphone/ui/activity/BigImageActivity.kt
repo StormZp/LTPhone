@@ -14,7 +14,7 @@ import com.storm.tool.base.BaseActivity
  * Created by XYSM on 2018/4/20.
  */
 
-class BigImageActiity : BaseActivity<ActivityBigImageBinding>() {
+class BigImageActivity : BaseActivity<ActivityBigImageBinding>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initBinding(R.layout.activity_big_image)
