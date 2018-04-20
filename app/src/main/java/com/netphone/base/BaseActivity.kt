@@ -5,10 +5,9 @@ import android.content.Context
 import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.databinding.ViewDataBinding
-import android.os.Build
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import android.view.View
+import com.githang.statusbar.StatusBarCompat
 import com.netphone.R
 import com.netphone.netsdk.base.AppBean
 import com.netphone.netsdk.utils.EventBusUtil
@@ -51,10 +50,10 @@ open abstract class BaseActivity<T : ViewDataBinding> : AppCompatActivity() {
     override fun onWindowFocusChanged(hasFocus: Boolean) {
         super.onWindowFocusChanged(hasFocus)
         //沉浸式
-        if (hasFocus && Build.VERSION.SDK_INT >= 19) {
-            val decorView = window.decorView
-            decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE
-        }
+//        if (hasFocus && Build.VERSION.SDK_INT >= 19) {
+//            val decorView = window.decorView
+//            decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE
+//        }
     }
 
     /**
@@ -104,8 +103,8 @@ open abstract class BaseActivity<T : ViewDataBinding> : AppCompatActivity() {
     fun initBinding(layout: Int) {
 
         binding = DataBindingUtil.setContentView<T>(this, layout)!!
-        setBarColor(R.color.white)
-
+//        setBarColor(R.color.white)
+        StatusBarCompat.setStatusBarColor(this,context.resources.getColor( R.color.white), true);
         initData()
         initListener()
     }

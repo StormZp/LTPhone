@@ -35,7 +35,7 @@ class ChangePWActivity : BaseActivity<ActivityChangePwBinding>() {
 
     override fun initData() {
         binding.click = onClick()
-        setBarColor(R.color.black)
+//        setBarColor(R.color.black)
         binding.title.title.text = context.resources.getString(R.string.change_password)
     }
 

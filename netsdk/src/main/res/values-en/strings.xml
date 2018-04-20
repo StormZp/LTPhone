@@ -25,9 +25,12 @@
     <string name="text_name">name:</string>
     <string name="text_sex">sex:</string>
     <string name="text_remark">remark:</string>
-    <string name="input_old_password">input old password:</string>
-    <string name="input_new_password">input new password:</string>
-    <string name="input_new_password_again">new password again:</string>
+    <string name="input_old_password">Old password:</string>
+    <string name="old_passowrd_hint">Please enter the old password</string>
+    <string name="new_passowrd_hint">6-12 new ciphers</string>
+    <string name="sure_passowrd_hint">Enter the new password again</string>
+    <string name="input_new_password">New password:</string>
+    <string name="input_new_password_again">Confirm:</string>
     <string name="grab_wheat">Grab wheat</string>
     <string name="release_wheat">Release wheat</string>
     <string name="mandatory_broadcasting">Mandatory broadcasting</string>

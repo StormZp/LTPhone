@@ -17,10 +17,11 @@ import com.netphone.ui.fragment.FriendsFragment
 import com.netphone.ui.fragment.GroupsFragment
 import com.netphone.ui.fragment.SessionFragment
 import com.netphone.ui.fragment.SettingFragment
-import com.netphone.utils.LightStatusBarUtils
 import com.netphone.utils.PermissionUtil
 import com.storm.developapp.tools.AppManager
 import com.storm.tool.base.BaseActivity
+
+
 
 class MainActivity : BaseActivity<ActivityMainBinding>() {
 
@@ -33,12 +34,12 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 
     override fun onStart() {
         super.onStart()
-        LightStatusBarUtils.setLightStatusBar(activity, true)
+//        LightStatusBarUtils.setLightStatusBar(activity, true)
     }
 
     override fun onResume() {
         super.onResume()
-        LightStatusBarUtils.setLightStatusBar(activity, true)
+//        LightStatusBarUtils.setLightStatusBar(activity, true)
     }
 
     override fun onDestroy() {
@@ -90,6 +91,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
                 LTConfigure.getInstance().startLocationService()
             }
         }, Manifest.permission.RECORD_AUDIO, Manifest.permission.ACCESS_FINE_LOCATION)
+
     }
 
     override fun initListener() {

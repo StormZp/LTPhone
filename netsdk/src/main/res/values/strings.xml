@@ -23,9 +23,12 @@
     <string name="text_name">姓名:</string>
     <string name="text_sex">性别:</string>
     <string name="text_remark">备注:</string>
-    <string name="input_old_password">输入旧密码:</string>
-    <string name="input_new_password">设置新密码:</string>
-    <string name="input_new_password_again">请再次输入新密码:</string>
+    <string name="input_old_password">旧密码:</string>
+    <string name="old_passowrd_hint">请输入旧密码</string>
+    <string name="new_passowrd_hint">6-12位新密码</string>
+    <string name="sure_passowrd_hint">再次输入新密码</string>
+    <string name="input_new_password">新密码:</string>
+    <string name="input_new_password_again">请确认:</string>
     <string name="grab_wheat">抢麦</string>
     <string name="release_wheat">释放麦</string>
     <string name="mandatory_broadcasting">强制广播</string>
@@ -132,7 +135,8 @@
     <string name="old_password_fail">原密码验证出错</string>
     <string name="not_null">不能为空</string>
     <string name="old_passowrd">旧密码</string>
-    <string name="new_passowrd">新密码</string>
+
+    <string name="new_passowrd">新密码:</string>
     <string name="input_again">请再次输入</string>
     <string name="password_came">旧密码与新密码相同</string>
     <string name="new_password_not_came">两次新密码不一致</string>

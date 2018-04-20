@@ -3,6 +3,7 @@ package com.netphone.ui.activity
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.View
+import com.githang.statusbar.StatusBarCompat
 import com.netphone.BuildConfig
 import com.netphone.R
 import com.netphone.databinding.ActivityLoginBinding
@@ -54,8 +55,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>() {
 
     override fun initData() {
         binding.click = onClick()
-        setBarColor(R.color.black)
-
+        StatusBarCompat.setStatusBarColor(this,context.resources.getColor( R.color.black), false);
 
         if (BuildConfig.DEBUG) {
             binding.etAccount.setText("debug")
