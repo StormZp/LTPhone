@@ -63,9 +63,15 @@ public class Cn2Spell {
         for (int i = 0; i < nameChar.length; i++) {
             if (nameChar[i] > 128 && nameChar.length != 0) {
                 try {
-                    sb.append(PinyinHelper.toHanyuPinyinStringArray(nameChar[i], defaultFormat)[0]);
+                    String[] strings = PinyinHelper.toHanyuPinyinStringArray(nameChar[i], defaultFormat);
+                    if (strings.length != 0) {
+                        sb.append(strings[0]);
+                    } else {
+                        sb.append(chines.charAt(0));
+                    }
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    LogUtil.error("Cn2Spell", e);
+//                    c.printStackTrace();
                 }
             } else {
                 sb.append(nameChar[i]);

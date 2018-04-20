@@ -21,7 +21,7 @@ import com.netphone.netsdk.bean.ImageBean
 import com.netphone.netsdk.listener.OnLocationListener
 import com.netphone.netsdk.listener.OnUpFileListener
 import com.netphone.ui.activity.*
-import com.netphone.ui.dialog.PermissionDilog
+import com.netphone.ui.dialog.MessageDialog
 import com.netphone.utils.GlideCircleTransform
 import com.netphone.utils.GlideLoader
 import com.netphone.utils.LTListener
@@ -230,7 +230,7 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>() {
         }
 
         open fun test(view: View) {
-            jump(PermissionDilog::class.java)
+            jump(MessageDialog::class.java)
         }
     }
 

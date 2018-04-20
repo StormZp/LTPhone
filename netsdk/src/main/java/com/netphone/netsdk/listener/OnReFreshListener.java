@@ -1,5 +1,6 @@
 package com.netphone.netsdk.listener;
 
+import com.netphone.netsdk.bean.GroupChatMsgBean;
 import com.netphone.netsdk.bean.UserListBean;
 
 /**
@@ -8,4 +9,5 @@ import com.netphone.netsdk.bean.UserListBean;
 
 public interface OnReFreshListener {
     void onReFresh(UserListBean userListBean);
+    void onWordBroadcast(GroupChatMsgBean chatMsgBean);
 }

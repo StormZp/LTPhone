@@ -84,6 +84,13 @@
             android:theme="@style/MyDialogStyle"
             android:windowBackground="@android:color/transparent"
             android:windowSoftInputMode="adjustUnspecified" />
+ <activity
+            android:name="com.netphone.ui.dialog.MessageDialog"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait"
+            android:theme="@style/MyDialogStyle"
+            android:windowBackground="@android:color/transparent"
+            android:windowSoftInputMode="adjustUnspecified" />
 
 
 

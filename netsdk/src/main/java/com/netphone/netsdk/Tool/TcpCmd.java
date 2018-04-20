@@ -217,13 +217,13 @@ public class TcpCmd {
                         }
                         break;
                     case 0x10://修改密码
-                        if (LTApi.newInstance().onChangePasswordListener!=null){
+                        if (LTApi.newInstance().onChangePasswordListener != null) {
                             if (bodyBytes[0] == 0x00) {
                                 LTApi.newInstance().onChangePasswordListener.onSuccess();
-                            } else  if (bodyBytes[0] == 0x01){
-                                LTApi.newInstance().onChangePasswordListener.onFail(0x01,LTConfigure.getInstance().getContext().getResources().getString(R.string.old_password_fail));
-                            }else  if (bodyBytes[0] == 0x07){
-                                LTApi.newInstance().onChangePasswordListener.onFail(0x07,LTConfigure.getInstance().getContext().getResources().getString(R.string.not_login));
+                            } else if (bodyBytes[0] == 0x01) {
+                                LTApi.newInstance().onChangePasswordListener.onFail(0x01, LTConfigure.getInstance().getContext().getResources().getString(R.string.old_password_fail));
+                            } else if (bodyBytes[0] == 0x07) {
+                                LTApi.newInstance().onChangePasswordListener.onFail(0x07, LTConfigure.getInstance().getContext().getResources().getString(R.string.not_login));
                             }
                         }
                         break;
@@ -294,11 +294,11 @@ public class TcpCmd {
 //                            LogUtil.error("TcpCmd", "278\tcmdExplore()\n" + body);
                             try {
                                 LogUtil.error("TcpCmd", "255\tcmdExplore()\n" + body);
-                                UserListBean userListBean = gson.fromJson(body, UserListBean.class);
-                                List<UserInfoBean> userInfo = userListBean.getUserInfo();
-                                UserInfoBean currentInfo = LTApi.newInstance().getCurrentInfo();
+                                UserListBean       userListBean = gson.fromJson(body, UserListBean.class);
+                                List<UserInfoBean> userInfo     = userListBean.getUserInfo();
+                                UserInfoBean       currentInfo  = LTApi.newInstance().getCurrentInfo();
                                 for (int i = 0; i < userInfo.size(); i++) {
-                                    if (!currentInfo.getUserId().equals(userInfo.get(i).getUserId())){
+                                    if (!currentInfo.getUserId().equals(userInfo.get(i).getUserId())) {
                                         mUserInfoBeanDao.insertOrReplace(userInfo.get(i));
                                     }
                                 }
@@ -308,7 +308,7 @@ public class TcpCmd {
                                     LTConfigure.getInstance().getLtApi().mOnLoginListener.onComplete(userListBean);
                                     LTConfigure.getInstance().getLtApi().mOnLoginListener = null;
                                 }
-                                if (LTConfigure.getInstance().getLtApi().onReFreshListener!=null){
+                                if (LTConfigure.getInstance().getLtApi().onReFreshListener != null) {
                                     LTConfigure.getInstance().getLtApi().onReFreshListener.onReFresh(userListBean);
                                 }
                             } catch (Exception e) {
@@ -428,6 +428,14 @@ public class TcpCmd {
 
                         if (LTApi.newInstance().groupChatListener != null) {
                             LTApi.newInstance().groupChatListener.onReceiverListener(msg);
+                        }
+                        break;
+                    case 0x27://收到群聊消息
+                        String body2 = ByteIntUtils.utfToString(bodyBytes);
+                        LogUtil.error("TcpCmd", "435\tcmdExplore()\n" + body2);
+                        GroupChatMsgBean msg2 = new Gson().fromJson(body2, GroupChatMsgBean.class);
+                        if (LTApi.newInstance().onReFreshListener != null) {
+                            LTApi.newInstance().onReFreshListener.onWordBroadcast(msg2);
                         }
                         break;
                 }

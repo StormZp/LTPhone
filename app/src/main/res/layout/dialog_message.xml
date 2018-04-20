@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <data>
+
+        <variable
+            name="click"
+            type="com.netphone.ui.dialog.MessageDialog.OnClick" />
+
+    </data>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:focusableInTouchMode="true"
+        android:gravity="center"
+        android:onClick="@{click.finish}"
+        android:orientation="vertical">
+
+
+        <LinearLayout
+            android:layout_width="@dimen/dp320"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+
+            <LinearLayout
+                android:layout_width="@dimen/dp320"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/dp16"
+                android:background="@drawable/shape_btn_white_bg"
+                android:onClick="@{click.nunn}"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp12"
+                    android:drawableLeft="@mipmap/icon_gb"
+                    android:drawablePadding="@dimen/dp5"
+                    android:gravity="center_vertical"
+                    android:padding="@dimen/dp3"
+                    android:text="@string/Word_broadcasting"
+                    android:textColor="@color/textcolor_black"
+                    android:textSize="@dimen/dp18" />
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/px1"
+                    android:layout_alignParentBottom="true"
+                    android:src="@color/line_view" />
+
+                <TextView
+                    android:id="@+id/name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp12"
+                    android:drawablePadding="@dimen/dp5"
+                    android:gravity="center_vertical"
+                    android:padding="@dimen/dp3"
+                    android:text="来自:ＣＥＯ熊总"
+                    android:textColor="@color/textcolor_gray"
+                    android:textSize="@dimen/dp16" />
+
+                <EditText
+                    android:id="@+id/content"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp90"
+                    android:layout_margin="@dimen/dp12"
+                    android:background="@drawable/shape_btn_white_line"
+                    android:enabled="false"
+                    android:padding="@dimen/dp6" />
+
+
+                <TextView
+                    android:id="@+id/iv_submit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/dp18"
+                    android:layout_marginLeft="@dimen/dp8"
+                    android:layout_marginRight="@dimen/dp8"
+                    android:layout_marginTop="@dimen/dp18"
+                    android:background="@drawable/shape_btn_blue_bg"
+                    android:gravity="center"
+                    android:onClick="@{click.sure}"
+                    android:paddingBottom="@dimen/dp6"
+                    android:paddingTop="@dimen/dp6"
+                    android:text="@string/call_back"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/dp18" />
+
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="@dimen/dp48"
+                android:layout_height="@dimen/dp48"
+                android:layout_marginTop="@dimen/dp18"
+                android:onClick="@{click.finish}"
+                android:padding="@dimen/dp6"
+                android:src="@mipmap/icon_shanchu" />
+        </LinearLayout>
+
+
+    </LinearLayout>
+</layout>

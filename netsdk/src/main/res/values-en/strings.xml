@@ -198,5 +198,8 @@
     <string name="permissions_mic_hint">Start connecting the microphone</string>
     <string name="permissions_sd">SD card authority</string>
     <string name="permissions_sd_hint">Picture file reading</string>
+    <string name="Word_broadcasting">Word broadcasting</string>
+    <string name="call_back">call back</string>
+    <string name="come_form">Come form:</string>
 
 </resources>

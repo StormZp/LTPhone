@@ -190,6 +190,9 @@
     <string name="permissions_mic_hint">开始连接麦克风</string>
     <string name="permissions_sd">ＳＤ卡权限</string>
     <string name="permissions_sd_hint">图片文件读取</string>
+    <string name="Word_broadcasting">文字广播</string>
+    <string name="call_back">马上回复</string>
+    <string name="come_form">来自:</string>
 
 
 </resources>

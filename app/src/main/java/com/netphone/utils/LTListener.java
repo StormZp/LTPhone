@@ -1,7 +1,11 @@
 package com.netphone.utils;
 
+import android.content.Intent;
+import android.os.Bundle;
+
 import com.netphone.config.Constant;
 import com.netphone.config.EventConfig;
+import com.netphone.config.MyApp;
 import com.netphone.netsdk.LTApi;
 import com.netphone.netsdk.LTConfigure;
 import com.netphone.netsdk.base.AppBean;
@@ -17,6 +21,7 @@ import com.netphone.netsdk.listener.OnNetworkListener;
 import com.netphone.netsdk.listener.OnReFreshListener;
 import com.netphone.netsdk.utils.EventBusUtil;
 import com.netphone.netsdk.utils.LogUtil;
+import com.netphone.ui.dialog.MessageDialog;
 
 import java.util.List;
 
@@ -60,6 +65,7 @@ public class LTListener {
             public void onConnectFail() {
 
             }
+
             @Override
             public void onConnectSuccess() {
 
@@ -142,11 +148,20 @@ public class LTListener {
         });
     }
 
-    public void setOnReFreshListener(){
+    public void setOnReFreshListener() {
         LTApi.newInstance().setOnReFreshListener(new OnReFreshListener() {
             @Override
             public void onReFresh(UserListBean userListBean) {
                 LogUtil.error("LTListener", "148\tonReFresh()\n" + "刷新了");
+            }
+
+            @Override
+            public void onWordBroadcast(GroupChatMsgBean chatMsgBean) {
+                Intent intent = new Intent(MyApp.getContext(), MessageDialog.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("bean", chatMsgBean);
+                intent.putExtras(bundle);
+                MyApp.getInstense().getContext().startActivity(intent);
             }
         });
     }

@@ -13,11 +13,20 @@ import com.netphone.utils.ToastUtil;
  */
 
 public class MyApp extends Application {
-    private Context mContext;
+    private static Context mContext;
+    private static MyApp   myApp;
+
+    public static MyApp getInstense() {
+        if (myApp == null) {
+            myApp = new MyApp();
+        }
+        return myApp;
+    }
 
     @Override
     public void onCreate() {
         super.onCreate();
+
         mContext = this.getApplicationContext();
 
         LTConfigure.init(mContext);
@@ -32,7 +41,7 @@ public class MyApp extends Application {
     }
 
 
-    public Context getContext() {
+    public static Context getContext() {
         return mContext;
     }
 }
