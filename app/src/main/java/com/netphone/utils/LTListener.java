@@ -7,13 +7,16 @@ import com.netphone.netsdk.LTConfigure;
 import com.netphone.netsdk.base.AppBean;
 import com.netphone.netsdk.bean.GroupChatMsgBean;
 import com.netphone.netsdk.bean.UserInfoBean;
+import com.netphone.netsdk.bean.UserListBean;
 import com.netphone.netsdk.listener.OnGetGroupMemberListener;
 import com.netphone.netsdk.listener.OnGroupChatListener;
 import com.netphone.netsdk.listener.OnGroupComeInListener;
 import com.netphone.netsdk.listener.OnGroupStateListener;
 import com.netphone.netsdk.listener.OnLocationListener;
 import com.netphone.netsdk.listener.OnNetworkListener;
+import com.netphone.netsdk.listener.OnReFreshListener;
 import com.netphone.netsdk.utils.EventBusUtil;
+import com.netphone.netsdk.utils.LogUtil;
 
 import java.util.List;
 
@@ -135,6 +138,15 @@ public class LTListener {
             @Override
             public void onReceiverListener(GroupChatMsgBean bean) {
                 EventBusUtil.sendEvent(new AppBean(EventConfig.RECEIVER_WORD_GROUP, bean));
+            }
+        });
+    }
+
+    public void setOnReFreshListener(){
+        LTApi.newInstance().setOnReFreshListener(new OnReFreshListener() {
+            @Override
+            public void onReFresh(UserListBean userListBean) {
+                LogUtil.error("LTListener", "148\tonReFresh()\n" + "刷新了");
             }
         });
     }

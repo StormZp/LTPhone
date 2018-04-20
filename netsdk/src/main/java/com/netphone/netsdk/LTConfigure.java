@@ -16,6 +16,7 @@ import com.netphone.netsdk.listener.OnNetworkListener;
 import com.netphone.netsdk.service.LocationService;
 import com.netphone.netsdk.service.NetworkConnectChangedReceiver;
 import com.netphone.netsdk.service.SocketManageService;
+import com.netphone.netsdk.socket.TcpSocket;
 import com.netphone.netsdk.utils.LogUtil;
 import com.netphone.netsdk.utils.MySQLiteOpenHelper;
 import com.netphone.netsdk.utils.SharedPreferenceUtil;
@@ -33,7 +34,7 @@ public class LTConfigure {
     public         OnErrorListener   mOnErrorListener;
 
     private static LTConfigure                   mlt;
-    private static Context                       mContext;
+    public static  Context                       mContext;
     private static NetworkConnectChangedReceiver mNetworkConnectChangedReceiver;
 
     /**
@@ -91,8 +92,18 @@ public class LTConfigure {
         TcpCmd.isGroupBeat = false;
         mOnNetworkListener = null;
         mOnErrorListener = null;
+        TcpSocket.getInstance().disconnect();
+
         mContext.stopService(socketService);
         mContext.stopService(locationService);
+        mContext = null;
+
+
+//        ltApi.onReFreshListener = null;
+        ltApi.onUpFileListener = null;
+        ltApi.onLocationListener = null;
+        ltApi.mOnLoginListener = null;
+        ltApi = null;
     }
 
     public void startLocationService() {

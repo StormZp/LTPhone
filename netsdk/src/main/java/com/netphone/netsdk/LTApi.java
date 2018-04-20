@@ -1,5 +1,7 @@
 package com.netphone.netsdk;
 
+import android.content.Context;
+
 import com.netphone.gen.GroupChatMsgBeanDao;
 import com.netphone.gen.UserInfoBeanDao;
 import com.netphone.netsdk.Tool.Constant;
@@ -12,6 +14,7 @@ import com.netphone.netsdk.listener.OnGroupComeInListener;
 import com.netphone.netsdk.listener.OnGroupStateListener;
 import com.netphone.netsdk.listener.OnLocationListener;
 import com.netphone.netsdk.listener.OnLoginListener;
+import com.netphone.netsdk.listener.OnReFreshListener;
 import com.netphone.netsdk.listener.OnUpFileListener;
 import com.netphone.netsdk.service.LocationService;
 import com.netphone.netsdk.socket.TcpSocket;
@@ -50,15 +53,14 @@ public class LTApi {
      *
      * @param username      账号
      * @param password      密码
-     * @param isAuto        是否下次自动
      * @param loginListener 回调监听
      */
     public void login(String username, String password, OnLoginListener loginListener) {
         mOnLoginListener = loginListener;
 //        if (isAuto){
 //            SharedPreferenceUtil.Companion.put(Constant.Auto_Login,true);
-//            SharedPreferenceUtil.Companion.put(Constant.username,username);
-//            SharedPreferenceUtil.Companion.put(Constant.password,password);
+        SharedPreferenceUtil.Companion.put(Constant.username, username);
+        SharedPreferenceUtil.Companion.put(Constant.password, password);
 //        }else {
 //            SharedPreferenceUtil.Companion.put(Constant.Auto_Login,false);
 //            SharedPreferenceUtil.Companion.put(Constant.username,"");
@@ -74,6 +76,7 @@ public class LTApi {
     public OnGroupChatListener      groupChatListener;
     public OnLocationListener       onLocationListener;
     public OnUpFileListener         onUpFileListener;
+    public OnReFreshListener        onReFreshListener;
     public String                   groupId;
 
     /**
@@ -186,14 +189,18 @@ public class LTApi {
      * 离线
      */
     public void offLine() {
-
+        LTConfigure.getInstance().onDestory();
     }
 
     /**
      * 在线
      */
-    public void onLine() {
-
+    public void onLine(Context context) {
+        LTConfigure.init(context);
+        LTConfigure.getInstance().startLocationService();
+        String username = SharedPreferenceUtil.Companion.read(Constant.username, "");
+        String password = SharedPreferenceUtil.Companion.read(Constant.password, "");
+        login(username, password, null);
     }
 
     /**
@@ -286,5 +293,9 @@ public class LTApi {
             byte[] datas = CmdUtils.getInstance().uploadFile(itemBytes, (byte) 0x00, (byte) 0x0f, map);
             TcpSocket.getInstance().addData(datas);
         }
+    }
+
+    public void setOnReFreshListener(OnReFreshListener onReFreshListener) {
+        this.onReFreshListener = onReFreshListener;
     }
 }

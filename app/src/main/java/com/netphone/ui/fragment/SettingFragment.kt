@@ -79,6 +79,13 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>() {
 
     override fun initListener() {
         binding.click = onClick()
+        binding.onlineSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
+            if (isChecked){
+                LTApi.newInstance().onLine(context.applicationContext)
+            }else{
+                LTApi.newInstance().offLine()
+            }
+        }
     }
 
     override fun initData() {

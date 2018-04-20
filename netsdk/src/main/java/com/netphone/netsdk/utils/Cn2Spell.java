@@ -18,7 +18,7 @@ public class Cn2Spell {
      */
     public static String getPinYinHeadChar(String chines) {
         sb.setLength(0);
-        char[] chars = chines.toCharArray();
+        char[]                  chars         = chines.toCharArray();
         HanyuPinyinOutputFormat defaultFormat = new HanyuPinyinOutputFormat();
         defaultFormat.setCaseType(HanyuPinyinCaseType.LOWERCASE);
         defaultFormat.setToneType(HanyuPinyinToneType.WITHOUT_TONE);
@@ -41,7 +41,7 @@ public class Cn2Spell {
      */
     public static String getPinYinFirstLetter(String str) {
         sb.setLength(0);
-        char c = str.charAt(0);
+        char     c           = str.charAt(0);
         String[] pinyinArray = PinyinHelper.toHanyuPinyinStringArray(c);
         if (pinyinArray != null) {
             sb.append(pinyinArray[0].charAt(0));
@@ -56,12 +56,12 @@ public class Cn2Spell {
      */
     public static String getPinYin(String chines) {
         sb.setLength(0);
-        char[] nameChar = chines.toCharArray();
+        char[]                  nameChar      = chines.toCharArray();
         HanyuPinyinOutputFormat defaultFormat = new HanyuPinyinOutputFormat();
         defaultFormat.setCaseType(HanyuPinyinCaseType.LOWERCASE);
         defaultFormat.setToneType(HanyuPinyinToneType.WITHOUT_TONE);
         for (int i = 0; i < nameChar.length; i++) {
-            if (nameChar[i] > 128) {
+            if (nameChar[i] > 128 && nameChar.length != 0) {
                 try {
                     sb.append(PinyinHelper.toHanyuPinyinStringArray(nameChar[i], defaultFormat)[0]);
                 } catch (Exception e) {

@@ -17,6 +17,7 @@ import com.netphone.ui.fragment.FriendsFragment
 import com.netphone.ui.fragment.GroupsFragment
 import com.netphone.ui.fragment.SessionFragment
 import com.netphone.ui.fragment.SettingFragment
+import com.netphone.utils.LTListener
 import com.netphone.utils.PermissionUtil
 import com.storm.developapp.tools.AppManager
 import com.storm.tool.base.BaseActivity
@@ -92,6 +93,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
             }
         }, Manifest.permission.RECORD_AUDIO, Manifest.permission.ACCESS_FINE_LOCATION)
 
+        LTListener.newInstance().setOnReFreshListener()
     }
 
     override fun initListener() {

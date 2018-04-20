@@ -285,6 +285,9 @@ public class TcpCmd {
                                     LTConfigure.getInstance().getLtApi().mOnLoginListener.onComplete(userListBean);
                                     LTConfigure.getInstance().getLtApi().mOnLoginListener = null;
                                 }
+                                if (LTConfigure.getInstance().getLtApi().onReFreshListener!=null){
+                                    LTConfigure.getInstance().getLtApi().onReFreshListener.onReFresh(userListBean);
+                                }
                             } catch (Exception e) {
                                 LogUtil.error("TcpCmd", e);
                             }
