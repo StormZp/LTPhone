@@ -10,11 +10,13 @@ import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.ToOne;
 
+import java.io.Serializable;
+
 /**
  * Created by XYSM on 2018/4/21.
  */
 @Entity
-public class FriendChatMsgBean {
+public class FriendChatMsgBean implements Serializable {
 
     /**
      * ReceiveId : 17090515420560223893
@@ -25,6 +27,10 @@ public class FriendChatMsgBean {
     private String ReceiveId;//好友
     private String msg;
     private String Name;
+
+    private String Message;//广播专用
+
+    private String FromUserId;//广播专用
 
     @Id(autoincrement = true)
     private Long         id;
@@ -44,12 +50,14 @@ public class FriendChatMsgBean {
     private transient FriendChatMsgBeanDao myDao;
 
 
-    @Generated(hash = 856719111)
-    public FriendChatMsgBean(String ReceiveId, String msg, String Name, Long id,
-            String sendId, Long dateTime) {
+    @Generated(hash = 2139020593)
+    public FriendChatMsgBean(String ReceiveId, String msg, String Name, String Message,
+            String FromUserId, Long id, String sendId, Long dateTime) {
         this.ReceiveId = ReceiveId;
         this.msg = msg;
         this.Name = Name;
+        this.Message = Message;
+        this.FromUserId = FromUserId;
         this.id = id;
         this.sendId = sendId;
         this.dateTime = dateTime;
@@ -213,5 +221,21 @@ public class FriendChatMsgBean {
     public void __setDaoSession(DaoSession daoSession) {
         this.daoSession = daoSession;
         myDao = daoSession != null ? daoSession.getFriendChatMsgBeanDao() : null;
+    }
+
+    public String getMessage() {
+        return this.Message;
+    }
+
+    public void setMessage(String Message) {
+        this.Message = Message;
+    }
+
+    public String getFromUserId() {
+        return this.FromUserId;
+    }
+
+    public void setFromUserId(String FromUserId) {
+        this.FromUserId = FromUserId;
     }
 }

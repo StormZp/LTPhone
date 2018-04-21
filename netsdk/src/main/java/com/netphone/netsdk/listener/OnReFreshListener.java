@@ -1,7 +1,7 @@
 package com.netphone.netsdk.listener;
 
+import com.netphone.netsdk.bean.BroadcastBean;
 import com.netphone.netsdk.bean.FriendChatMsgBean;
-import com.netphone.netsdk.bean.GroupChatMsgBean;
 import com.netphone.netsdk.bean.ImageBean;
 import com.netphone.netsdk.bean.UserListBean;
 
@@ -11,7 +11,7 @@ import com.netphone.netsdk.bean.UserListBean;
 
 public interface OnReFreshListener {
     void onReFresh(UserListBean userListBean);
-    void onWordBroadcast(GroupChatMsgBean chatMsgBean);
+    void onWordBroadcast(BroadcastBean msgBean);
     void onSqueezeLine();
     void onElectronWall();
     void onMultiMedia(ImageBean bean);

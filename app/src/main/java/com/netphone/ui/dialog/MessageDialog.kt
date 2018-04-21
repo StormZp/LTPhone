@@ -5,9 +5,10 @@ import android.view.View
 import com.netphone.R
 import com.netphone.databinding.DialogMessageBinding
 import com.netphone.gen.UserInfoBeanDao
+import com.netphone.netsdk.LTApi
 import com.netphone.netsdk.LTConfigure
 import com.netphone.netsdk.base.AppBean
-import com.netphone.netsdk.bean.GroupChatMsgBean
+import com.netphone.netsdk.bean.BroadcastBean
 import com.storm.tool.base.BaseActivity
 
 /**
@@ -16,6 +17,7 @@ import com.storm.tool.base.BaseActivity
 
 class MessageDialog : BaseActivity<DialogMessageBinding>() {
     private var isCall = false
+    private lateinit var bean: BroadcastBean
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,7 +26,7 @@ class MessageDialog : BaseActivity<DialogMessageBinding>() {
 
     override fun initData() {
         var extras = intent.extras
-        var bean = extras.getSerializable("bean") as GroupChatMsgBean
+        bean = extras.getSerializable("bean") as BroadcastBean
 
 
         var userInfoBeanDao = LTConfigure.getInstance().daoSession.userInfoBeanDao
@@ -34,7 +36,8 @@ class MessageDialog : BaseActivity<DialogMessageBinding>() {
             binding.name.text = context.resources.getString(R.string.come_form) + unique.realName
         }
 
-        binding.content.setText(bean.msg)
+        binding.content.setText(bean.message)
+        binding.click = OnClick()
     }
 
     override fun initListener() {
@@ -48,11 +51,14 @@ class MessageDialog : BaseActivity<DialogMessageBinding>() {
 
     inner class OnClick {
         open fun sure(view: View) {
-            toasts("回复")
             if (isCall) {//第二步
-                toasts("回复")
+                var toString = binding.content.text.toString()
+                LTApi.newInstance().sendFriendMessage(bean.fromUserId, toString)
+                finish()
             } else {//第一步
+                isCall = true
                 binding.content.setText("")
+                binding.content.isEnabled = true
                 binding.ivSubmit.setText(context.resources.getString(R.string.text_sure))
             }
         }

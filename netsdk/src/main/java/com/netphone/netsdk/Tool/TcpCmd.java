@@ -13,6 +13,7 @@ import com.netphone.gen.UserInfoBeanDao;
 import com.netphone.netsdk.LTApi;
 import com.netphone.netsdk.LTConfigure;
 import com.netphone.netsdk.R;
+import com.netphone.netsdk.bean.BroadcastBean;
 import com.netphone.netsdk.bean.FriendChatMsgBean;
 import com.netphone.netsdk.bean.GroupChatMsgBean;
 import com.netphone.netsdk.bean.GroupInfoBean;
@@ -470,10 +471,10 @@ public class TcpCmd {
                             LTApi.newInstance().groupChatListener.onReceiverListener(msg);
                         }
                         break;
-                    case 0x27://收到群聊消息
+                    case 0x27://收到文字广播
                         body = ByteIntUtils.utfToString(bodyBytes);
                         LogUtil.error("TcpCmd", "435\tcmdExplore()\n" + body);
-                        GroupChatMsgBean msg2 = mGson.fromJson(body, GroupChatMsgBean.class);
+                        BroadcastBean msg2 = mGson.fromJson(body, BroadcastBean.class);
                         if (LTApi.newInstance().onReFreshListener != null) {
                             LTApi.newInstance().onReFreshListener.onWordBroadcast(msg2);
                         }

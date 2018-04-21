@@ -15,6 +15,7 @@ import com.netphone.config.MyApp;
 import com.netphone.netsdk.LTApi;
 import com.netphone.netsdk.LTConfigure;
 import com.netphone.netsdk.base.AppBean;
+import com.netphone.netsdk.bean.BroadcastBean;
 import com.netphone.netsdk.bean.FriendChatMsgBean;
 import com.netphone.netsdk.bean.GroupChatMsgBean;
 import com.netphone.netsdk.bean.ImageBean;
@@ -166,10 +167,10 @@ public class LTListener {
             }
 
             @Override
-            public void onWordBroadcast(GroupChatMsgBean chatMsgBean) {
+            public void onWordBroadcast(BroadcastBean msgBean) {
                 Intent intent = new Intent(MyApp.getContext(), MessageDialog.class);
                 Bundle bundle = new Bundle();
-                bundle.putSerializable("bean", chatMsgBean);
+                bundle.putSerializable("bean", msgBean);
                 intent.putExtras(bundle);
                 MyApp.getInstense().getContext().startActivity(intent);
             }
