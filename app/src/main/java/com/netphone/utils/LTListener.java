@@ -1,8 +1,14 @@
 package com.netphone.utils;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.NotificationCompat;
 
+import com.netphone.R;
 import com.netphone.config.Constant;
 import com.netphone.config.EventConfig;
 import com.netphone.config.MyApp;
@@ -21,6 +27,7 @@ import com.netphone.netsdk.listener.OnNetworkListener;
 import com.netphone.netsdk.listener.OnReFreshListener;
 import com.netphone.netsdk.utils.EventBusUtil;
 import com.netphone.netsdk.utils.LogUtil;
+import com.netphone.ui.activity.MainActivity;
 import com.netphone.ui.dialog.MessageDialog;
 
 import java.util.List;
@@ -166,10 +173,47 @@ public class LTListener {
 
             @Override
             public void onSqueezeLine() {
-                EventBusUtil.sendEvent(new AppBean(EventConfig.SQUEEZE_OFF_LINE,null));
+                EventBusUtil.sendEvent(new AppBean(EventConfig.SQUEEZE_OFF_LINE, null));
 
             }
+
+            @Override
+            public void onElectronWall() {
+                showNotification(MyApp.getContext(), 100, MyApp.getContext().getResources().getString(R.string.Fences), MyApp.getContext().getResources().getString(R.string.Fences_out));
+            }
         });
+    }
+
+    /**
+     * 电子围栏通知栏
+     *
+     * @param context
+     * @param id
+     * @param title
+     * @param text
+     */
+    private void showNotification(Context context, int id, String title, String text) {
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
+        builder.setSmallIcon(R.mipmap.ic_launcher);
+        builder.setContentTitle(title);
+        builder.setContentText(text);
+        //设置为true，点击该条通知会自动删除，false时只能通过滑动来删除
+        builder.setAutoCancel(true);
+        builder.setOnlyAlertOnce(true);
+        // 需要VIBRATE权限 设置上述铃声，振动，闪烁用|分隔，常量在Notification里
+        builder.setDefaults(Notification.DEFAULT_VIBRATE | Notification.DEFAULT_LIGHTS);
+        //设置优先级，级别高的排在前面
+        builder.setPriority(Notification.PRIORITY_DEFAULT);
+
+        // Creates an explicit intent for an Activity in your app
+        //自定义打开的界面
+        Intent resultIntent = new Intent(context, MainActivity.class);
+        resultIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        PendingIntent contentIntent = PendingIntent.getActivity(context, 0,
+                resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        builder.setContentIntent(contentIntent);
+        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.notify(id, builder.build());
     }
 
     public void sendLocation(int type, OnLocationListener onLocationListener) {
