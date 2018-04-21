@@ -76,6 +76,10 @@
             android:name=".ui.activity.BigImageActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|stateUnchanged"></activity>
+        <activity
+            android:name=".ui.activity.ReceiverImageActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|stateUnchanged"></activity>
 
         <activity
             android:name="com.netphone.ui.dialog.PermissionDilog"
@@ -84,14 +88,13 @@
             android:theme="@style/MyDialogStyle"
             android:windowBackground="@android:color/transparent"
             android:windowSoftInputMode="adjustUnspecified" />
- <activity
+        <activity
             android:name="com.netphone.ui.dialog.MessageDialog"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait"
             android:theme="@style/MyDialogStyle"
             android:windowBackground="@android:color/transparent"
             android:windowSoftInputMode="adjustUnspecified" />
-
 
 
         <service android:name="com.netphone.netsdk.service.SocketManageService"></service>

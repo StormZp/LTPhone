@@ -29,6 +29,7 @@
             android:layout_width="@dimen/dp65"
             android:layout_height="@dimen/dp65"
             android:layout_marginLeft="@dimen/dp16"
+            android:padding="@dimen/dp3"
             android:background="@drawable/shape_btn_white_bg"
             android:src="@mipmap/icon_defult_detail"
 

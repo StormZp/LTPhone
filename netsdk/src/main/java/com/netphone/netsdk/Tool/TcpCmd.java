@@ -7,6 +7,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.netphone.gen.GroupChatMsgBeanDao;
 import com.netphone.gen.GroupInfoBeanDao;
+import com.netphone.gen.ImageBeanDao;
 import com.netphone.gen.UserInfoBeanDao;
 import com.netphone.netsdk.LTApi;
 import com.netphone.netsdk.LTConfigure;
@@ -41,7 +42,7 @@ public class TcpCmd {
     private int              port;
     private UserInfoBeanDao  mUserInfoBeanDao;
     private GroupInfoBeanDao mGroupInfoBeanDao;
-
+    private ImageBeanDao     mImageBeanDao;
 
     public void cmdData(byte[] pagBytes) {
         byte[] tempBytes = new byte[2];
@@ -62,6 +63,8 @@ public class TcpCmd {
         }
         if (mGroupInfoBeanDao == null) {
             mGroupInfoBeanDao = LTConfigure.getInstance().getDaoSession().getGroupInfoBeanDao();
+        } if (mImageBeanDao == null) {
+            mImageBeanDao = LTConfigure.getInstance().getDaoSession().getImageBeanDao();
         }
         String body = "";
         LogUtil.error("TcpCmd", "64\tcmdExplore()\n" + String.format("pagBytes[7] == %x && pagBytes[8] == %x", pagBytes[7], pagBytes[8]));
@@ -402,6 +405,7 @@ public class TcpCmd {
                         ImageBean bean = new Gson().fromJson(body, ImageBean.class);
                         bean.setDate(System.currentTimeMillis());
                         bean.setReceiveId(SharedPreferenceUtil.Companion.read(Constant.UserId, ""));
+                        mImageBeanDao.insertOrReplace(bean);
                         if (LTApi.newInstance().onReFreshListener != null) {
                             LTApi.newInstance().onReFreshListener.onMultiMedia(bean);
                         }

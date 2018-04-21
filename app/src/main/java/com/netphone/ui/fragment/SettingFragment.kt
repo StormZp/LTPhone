@@ -103,7 +103,7 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>() {
 
         }
 
-        if (BuildConfig.DEBUG){
+        if (BuildConfig.DEBUG) {
 //            binding.lltex
         }
 
@@ -218,7 +218,7 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>() {
         }
 
         open fun ReceiveImage(view: View) {
-
+            jump(ReceiverImageActivity::class.java)
         }
 
         open fun head(view: View) {

@@ -1,8 +1,10 @@
 package com.netphone.ui.activity
 
 import android.os.Bundle
+import android.support.v7.widget.LinearLayoutManager
 import android.view.View
 import com.netphone.R
+import com.netphone.adapter.ImageAdapter
 import com.netphone.databinding.ActivityReceiverImageBinding
 import com.netphone.netsdk.LTApi
 import com.netphone.netsdk.Tool.Constant
@@ -22,7 +24,8 @@ class ReceiverImageActivity : BaseActivity<ActivityReceiverImageBinding>() {
     override fun initData() {
         var receiverImages = LTApi.newInstance().getReceiverImages(Constant.info.userId)
 
-
+        binding.recycle.adapter = ImageAdapter(context, receiverImages)
+        binding.recycle.layoutManager = LinearLayoutManager(context)
     }
 
     override fun initListener() {
