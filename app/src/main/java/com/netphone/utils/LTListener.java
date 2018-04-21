@@ -15,6 +15,7 @@ import com.netphone.config.MyApp;
 import com.netphone.netsdk.LTApi;
 import com.netphone.netsdk.LTConfigure;
 import com.netphone.netsdk.base.AppBean;
+import com.netphone.netsdk.bean.FriendChatMsgBean;
 import com.netphone.netsdk.bean.GroupChatMsgBean;
 import com.netphone.netsdk.bean.ImageBean;
 import com.netphone.netsdk.bean.UserInfoBean;
@@ -189,6 +190,13 @@ public class LTListener {
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("bean", bean);
                 MyApp.getContext().startActivity(new Intent(MyApp.getContext(), BigImageActivity.class).putExtras(bundle));
+            }
+
+            @Override
+            public void onFriendChatMsg(FriendChatMsgBean bean) {
+                AppBean appBean = new AppBean(EventConfig.FRIEND_SEND_MSG, bean);
+                appBean.setMsg(bean.getReceiveId());
+                EventBusUtil.sendEvent(appBean);
             }
         });
     }

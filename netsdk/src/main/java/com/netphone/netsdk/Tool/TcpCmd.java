@@ -356,6 +356,9 @@ public class TcpCmd {
                         if (mFriendChatMsgBeanDao == null)
                             mFriendChatMsgBeanDao = LTConfigure.getInstance().getDaoSession().getFriendChatMsgBeanDao();
                         mFriendChatMsgBeanDao.insertOrReplace(friendChatMsgBean);
+                        if (LTApi.newInstance().onReFreshListener != null) {
+                            LTApi.newInstance().onReFreshListener.onFriendChatMsg(friendChatMsgBean);
+                        }
                         break;
                     case 0x09://当有新的终端加入到当前的活动群聊中时
                         if (LTConfigure.getInstance().getLtApi().groupStateListener != null) {

@@ -96,7 +96,7 @@ open class GroupChatActivity : BaseActivity<ActivityChatGroupBinding>() {
             }
             EventConfig.MENBER_JOIN -> {
                 var userInfoBean1 = appBean.data as UserInfoBean
-                if (!userInfoBean.userId.equals(userInfoBean1.userId)){
+                if (!userInfoBean.userId.equals(userInfoBean1.userId)) {
                     var groupChatMsgBean = GroupChatMsgBean()
                     groupChatMsgBean.fromUserName = userInfoBean1.realName + context.resources.getString(R.string.add_group)
                     adapter.addMsg(groupChatMsgBean)
@@ -114,15 +114,16 @@ open class GroupChatActivity : BaseActivity<ActivityChatGroupBinding>() {
             }
             EventConfig.SYSTEM_RELAXED_MAC -> {
                 var groupChatMsgBean = GroupChatMsgBean()
-                groupChatMsgBean.fromUserName =  context.resources.getString(R.string.system_relase_mic)
+                groupChatMsgBean.fromUserName = context.resources.getString(R.string.system_relase_mic)
                 adapter.addMsg(groupChatMsgBean)
             }
             EventConfig.GRAB_WHEAT_SUCCESS -> {
                 var groupChatMsgBean = GroupChatMsgBean()
-                groupChatMsgBean.fromUserName =  context.resources.getString(R.string.preemption)+  context.resources.getString(R.string.success)
+                groupChatMsgBean.fromUserName = context.resources.getString(R.string.preemption) + context.resources.getString(R.string.success)
                 adapter.addMsg(groupChatMsgBean)
             }
         }
+        binding.recycle.smoothScrollToPosition(adapter.itemCount - 1);
     }
 
     override fun receiveStickyEvent(appBean: AppBean<Any>) {

@@ -42,6 +42,11 @@ public class FriendChatAdapter extends RecyclerView.Adapter<FriendChatAdapter.Vi
         mUserInfoBean = LTApi.newInstance().getCurrentInfo();
     }
 
+    public void addData(FriendChatMsgBean bean){
+        mDatas.add(bean);
+        notifyDataSetChanged();
+    }
+
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = mLayoutInflater.inflate(R.layout.item_chat, parent, false);

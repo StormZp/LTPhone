@@ -5,9 +5,11 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.View
 import com.netphone.R
 import com.netphone.adapter.FriendChatAdapter
+import com.netphone.config.EventConfig
 import com.netphone.databinding.ActivityChatFriendBinding
 import com.netphone.netsdk.LTApi
 import com.netphone.netsdk.base.AppBean
+import com.netphone.netsdk.bean.FriendChatMsgBean
 import com.netphone.netsdk.bean.UserInfoBean
 import com.netphone.utils.AppUtil
 import com.storm.tool.base.BaseActivity
@@ -19,6 +21,7 @@ open class FriendChatActivity : BaseActivity<ActivityChatFriendBinding>() {
 
     private var isShowKeyBoard = false
     private lateinit var user: UserInfoBean
+    private lateinit var friendChatAdapter: FriendChatAdapter
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,9 +34,10 @@ open class FriendChatActivity : BaseActivity<ActivityChatFriendBinding>() {
         binding.title.title.text = user.realName
         binding.click = OnClick()
 
-        var friendChatAdapter = FriendChatAdapter(context, LTApi.newInstance().getFriendChatMessage(user.userId))
+        friendChatAdapter = FriendChatAdapter(context, LTApi.newInstance().getFriendChatMessage(user.userId))
         binding.recycle.adapter = friendChatAdapter
         binding.recycle.layoutManager = LinearLayoutManager(context)
+        registerEventBus()
     }
 
     override fun initListener() {
@@ -41,6 +45,15 @@ open class FriendChatActivity : BaseActivity<ActivityChatFriendBinding>() {
     }
 
     override fun receiveEvent(appBean: AppBean<Any>) {
+        when (appBean.code) {
+            EventConfig.FRIEND_SEND_MSG -> {
+                if (appBean.msg.equals(user.userId)) {
+                    var friendChatMsgBean = appBean.data as FriendChatMsgBean
+                    friendChatAdapter.addData(friendChatMsgBean)
+                }
+            }
+        }
+        binding.recycle.smoothScrollToPosition(friendChatAdapter.itemCount - 1);
     }
 
     override fun receiveStickyEvent(appBean: AppBean<Any>) {

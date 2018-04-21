@@ -155,8 +155,11 @@ public class LTApi {
 
         if (friendChatMsgBeanDao == null)
             friendChatMsgBeanDao = LTConfigure.getInstance().getDaoSession().getFriendChatMsgBeanDao();
-
         friendChatMsgBeanDao.insertOrReplace(bean);
+
+        if (LTApi.newInstance().onReFreshListener != null) {
+            LTApi.newInstance().onReFreshListener.onFriendChatMsg(bean);
+        }
         byte[] words = CmdUtils.getInstance().sendFriendCommonBeanApi(id, content, (byte) 0x00, (byte) 0x08);
         TcpSocket.getInstance().addData(words);
     }
