@@ -5,10 +5,12 @@ import android.os.SystemClock;
 
 import com.google.gson.Gson;
 import com.netphone.gen.GroupChatMsgBeanDao;
+import com.netphone.gen.ImageBeanDao;
 import com.netphone.gen.UserInfoBeanDao;
 import com.netphone.netsdk.Tool.Constant;
 import com.netphone.netsdk.bean.GroupChatMsgBean;
 import com.netphone.netsdk.bean.GroupInfoBean;
+import com.netphone.netsdk.bean.ImageBean;
 import com.netphone.netsdk.bean.UserInfoBean;
 import com.netphone.netsdk.listener.OnChangePasswordListener;
 import com.netphone.netsdk.listener.OnChangeUserInfoListener;
@@ -339,5 +341,11 @@ public class LTApi {
         String s     = gson.toJson(userInfoBean);
         byte[] datas = CmdUtils.getInstance().commonApi((byte) 0x00, (byte) 0x17, s);
         TcpSocket.getInstance().addData(datas);
+    }
+
+
+    public List<ImageBean> getReceiverImages(String userId){
+        ImageBeanDao imageBeanDao = LTConfigure.getInstance().getDaoSession().getImageBeanDao();
+        return imageBeanDao.queryBuilder().where(ImageBeanDao.Properties.ReceiveId.eq(userId)).list();
     }
 }

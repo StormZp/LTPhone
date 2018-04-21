@@ -13,6 +13,7 @@ import com.netphone.netsdk.LTConfigure;
 import com.netphone.netsdk.R;
 import com.netphone.netsdk.bean.GroupChatMsgBean;
 import com.netphone.netsdk.bean.GroupInfoBean;
+import com.netphone.netsdk.bean.ImageBean;
 import com.netphone.netsdk.bean.UserInfoBean;
 import com.netphone.netsdk.bean.UserListBean;
 import com.netphone.netsdk.socket.TcpSocket;
@@ -62,6 +63,7 @@ public class TcpCmd {
         if (mGroupInfoBeanDao == null) {
             mGroupInfoBeanDao = LTConfigure.getInstance().getDaoSession().getGroupInfoBeanDao();
         }
+        String body = "";
         LogUtil.error("TcpCmd", "64\tcmdExplore()\n" + String.format("pagBytes[7] == %x && pagBytes[8] == %x", pagBytes[7], pagBytes[8]));
         switch (pagBytes[7]) {
             case 0x00://终端>>服务端指令列表
@@ -73,7 +75,7 @@ public class TcpCmd {
                                 case 0x00://登录成功
                                     byte[] jsonBytes = new byte[bodyBytes.length - 1];
                                     System.arraycopy(bodyBytes, 1, jsonBytes, 0, bodyBytes.length - 1);
-                                    String body = ByteIntUtils.utfToString(jsonBytes);
+                                    body = ByteIntUtils.utfToString(jsonBytes);
                                     LogUtil.error("TcpCmd", "77\tcmdExplore()\n" + body);
                                     Gson gson = new Gson();
                                     UserInfoBean user = gson.fromJson(body, UserInfoBean.class);
@@ -288,8 +290,8 @@ public class TcpCmd {
                 switch (pagBytes[8]) {
                     case 0x00://推送用户列表信息,由于socket写在服务里原因，在主页没能正常停止服务，会导致服务一直开启，socket写入数据
                         if (LTConfigure.getInstance().getLtApi().mOnLoginListener != null) {
-                            String body = ByteIntUtils.utfToString(bodyBytes);
-                            Gson   gson = new Gson();
+                            body = ByteIntUtils.utfToString(bodyBytes);
+                            Gson gson = new Gson();
 //                            LogUtil.saveLog(LTConfigure.getInstance().getContext(), "127\tcmdExplore()\n" + body);
 //                            LogUtil.error("TcpCmd", "278\tcmdExplore()\n" + body);
                             try {
@@ -335,7 +337,7 @@ public class TcpCmd {
                         break;
                     case 0x09://当有新的终端加入到当前的活动群聊中时
                         if (LTConfigure.getInstance().getLtApi().groupStateListener != null) {
-                            String       body = ByteIntUtils.utfToString(bodyBytes);
+                            body = ByteIntUtils.utfToString(bodyBytes);
                             Gson         gson = new Gson();
                             UserInfoBean user = gson.fromJson(body, UserInfoBean.class);
                             LTConfigure.getInstance().getLtApi().groupStateListener.onMenberJoin(user);
@@ -344,7 +346,7 @@ public class TcpCmd {
                         break;
                     case 0x0A://当现有终端退出了当前的活动群聊中时
                         if (LTConfigure.getInstance().getLtApi().groupStateListener != null) {
-                            String       body = ByteIntUtils.utfToString(bodyBytes);
+                            body = ByteIntUtils.utfToString(bodyBytes);
                             Gson         gson = new Gson();
                             UserInfoBean user = gson.fromJson(body, UserInfoBean.class);
                             LTConfigure.getInstance().getLtApi().groupStateListener.onMenberExit(user);
@@ -352,7 +354,7 @@ public class TcpCmd {
                         break;
                     case 0x0B://在群聊中时,麦权被抢占
                         if (LTConfigure.getInstance().getLtApi().groupStateListener != null) {
-                            String       body = ByteIntUtils.utfToString(bodyBytes);
+                            body = ByteIntUtils.utfToString(bodyBytes);
                             Gson         gson = new Gson();
                             UserInfoBean user = gson.fromJson(body, UserInfoBean.class);
                             LTConfigure.getInstance().getLtApi().groupStateListener.onMenberhaveMac(user);
@@ -360,7 +362,7 @@ public class TcpCmd {
                         break;
                     case 0x0C://麦权被释放
                         if (LTConfigure.getInstance().getLtApi().groupStateListener != null) {
-                            String       body = ByteIntUtils.utfToString(bodyBytes);
+                            body = ByteIntUtils.utfToString(bodyBytes);
                             Gson         gson = new Gson();
                             UserInfoBean user = gson.fromJson(body, UserInfoBean.class);
                             LTConfigure.getInstance().getLtApi().groupStateListener.onMemberRelaxedMac(user);
@@ -396,8 +398,17 @@ public class TcpCmd {
                     case 0x15://强制加入群聊
                         break;
                     case 0x16://收到多媒体内容(图片,视频,文件等)
+                        body = ByteIntUtils.utfToString(bodyBytes);
+                        ImageBean bean = new Gson().fromJson(body, ImageBean.class);
+                        bean.setDate(System.currentTimeMillis());
+                        bean.setReceiveId(SharedPreferenceUtil.Companion.read(Constant.UserId, ""));
+                        if (LTApi.newInstance().onReFreshListener != null) {
+                            LTApi.newInstance().onReFreshListener.onMultiMedia(bean);
+                        }
+
+
                         break;
-                    case 0x17://收到多媒体内容(图片,视频,文件等)
+                    case 0x17://组呼中,被系统分配了权限
                         break;
                     case 0x18://被发起主叫(从调度台)
                         break;
@@ -424,7 +435,7 @@ public class TcpCmd {
                     case 0x25://播放监听文件
                         break;
                     case 0x26://收到群聊消息
-                        String body = ByteIntUtils.utfToString(bodyBytes);
+                        body = ByteIntUtils.utfToString(bodyBytes);
                         LogUtil.error("TcpCmd", "356\tcmdExplore()\n" + body);
                         Gson gson = new Gson();
                         GroupChatMsgBean msg = gson.fromJson(body, GroupChatMsgBean.class);
@@ -439,9 +450,9 @@ public class TcpCmd {
                         }
                         break;
                     case 0x27://收到群聊消息
-                        String body2 = ByteIntUtils.utfToString(bodyBytes);
-                        LogUtil.error("TcpCmd", "435\tcmdExplore()\n" + body2);
-                        GroupChatMsgBean msg2 = new Gson().fromJson(body2, GroupChatMsgBean.class);
+                        body = ByteIntUtils.utfToString(bodyBytes);
+                        LogUtil.error("TcpCmd", "435\tcmdExplore()\n" + body);
+                        GroupChatMsgBean msg2 = new Gson().fromJson(body, GroupChatMsgBean.class);
                         if (LTApi.newInstance().onReFreshListener != null) {
                             LTApi.newInstance().onReFreshListener.onWordBroadcast(msg2);
                         }

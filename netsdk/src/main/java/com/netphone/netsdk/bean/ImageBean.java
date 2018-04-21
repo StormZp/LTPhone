@@ -2,8 +2,13 @@ package com.netphone.netsdk.bean;
 
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;
+import org.greenrobot.greendao.annotation.ToOne;
 
 import java.io.Serializable;
+import org.greenrobot.greendao.DaoException;
+import com.netphone.gen.DaoSession;
+import com.netphone.gen.UserInfoBeanDao;
+import com.netphone.gen.ImageBeanDao;
 
 /**
  * Created Storm
@@ -27,6 +32,16 @@ public class ImageBean implements Serializable {
     private long date; //时间段
 
     static final long serialVersionUID = 42L;
+    @ToOne(joinProperty = "FromUserId")
+    private UserInfoBean formUser;
+    /** Used to resolve relations */
+    @Generated(hash = 2040040024)
+    private transient DaoSession daoSession;
+    /** Used for active entity operations. */
+    @Generated(hash = 911538130)
+    private transient ImageBeanDao myDao;
+    @Generated(hash = 451238850)
+    private transient String formUser__resolvedKey;
 
     @Generated(hash = 158614178)
     public ImageBean(int Category, String FromUserId, String ReceiveId, String ResourceName,
@@ -89,6 +104,78 @@ public class ImageBean implements Serializable {
 
     public void setDate(long date) {
         this.date = date;
+    }
+
+    /** To-one relationship, resolved on first access. */
+    @Generated(hash = 1000248935)
+    public UserInfoBean getFormUser() {
+        String __key = this.FromUserId;
+        if (formUser__resolvedKey == null || formUser__resolvedKey != __key) {
+            final DaoSession daoSession = this.daoSession;
+            if (daoSession == null) {
+                throw new DaoException("Entity is detached from DAO context");
+            }
+            UserInfoBeanDao targetDao = daoSession.getUserInfoBeanDao();
+            UserInfoBean formUserNew = targetDao.load(__key);
+            synchronized (this) {
+                formUser = formUserNew;
+                formUser__resolvedKey = __key;
+            }
+        }
+        return formUser;
+    }
+
+    /** called by internal mechanisms, do not call yourself. */
+    @Generated(hash = 308601812)
+    public void setFormUser(UserInfoBean formUser) {
+        synchronized (this) {
+            this.formUser = formUser;
+            FromUserId = formUser == null ? null : formUser.getUserId();
+            formUser__resolvedKey = FromUserId;
+        }
+    }
+
+    /**
+     * Convenient call for {@link org.greenrobot.greendao.AbstractDao#delete(Object)}.
+     * Entity must attached to an entity context.
+     */
+    @Generated(hash = 128553479)
+    public void delete() {
+        if (myDao == null) {
+            throw new DaoException("Entity is detached from DAO context");
+        }
+        myDao.delete(this);
+    }
+
+    /**
+     * Convenient call for {@link org.greenrobot.greendao.AbstractDao#refresh(Object)}.
+     * Entity must attached to an entity context.
+     */
+    @Generated(hash = 1942392019)
+    public void refresh() {
+        if (myDao == null) {
+            throw new DaoException("Entity is detached from DAO context");
+        }
+        myDao.refresh(this);
+    }
+
+    /**
+     * Convenient call for {@link org.greenrobot.greendao.AbstractDao#update(Object)}.
+     * Entity must attached to an entity context.
+     */
+    @Generated(hash = 713229351)
+    public void update() {
+        if (myDao == null) {
+            throw new DaoException("Entity is detached from DAO context");
+        }
+        myDao.update(this);
+    }
+
+    /** called by internal mechanisms, do not call yourself. */
+    @Generated(hash = 1437742468)
+    public void __setDaoSession(DaoSession daoSession) {
+        this.daoSession = daoSession;
+        myDao = daoSession != null ? daoSession.getImageBeanDao() : null;
     }
     
 }

@@ -16,6 +16,7 @@ import com.netphone.netsdk.LTApi;
 import com.netphone.netsdk.LTConfigure;
 import com.netphone.netsdk.base.AppBean;
 import com.netphone.netsdk.bean.GroupChatMsgBean;
+import com.netphone.netsdk.bean.ImageBean;
 import com.netphone.netsdk.bean.UserInfoBean;
 import com.netphone.netsdk.bean.UserListBean;
 import com.netphone.netsdk.listener.OnGetGroupMemberListener;
@@ -27,6 +28,7 @@ import com.netphone.netsdk.listener.OnNetworkListener;
 import com.netphone.netsdk.listener.OnReFreshListener;
 import com.netphone.netsdk.utils.EventBusUtil;
 import com.netphone.netsdk.utils.LogUtil;
+import com.netphone.ui.activity.BigImageActivity;
 import com.netphone.ui.activity.MainActivity;
 import com.netphone.ui.dialog.MessageDialog;
 
@@ -180,6 +182,13 @@ public class LTListener {
             @Override
             public void onElectronWall() {
                 showNotification(MyApp.getContext(), 100, MyApp.getContext().getResources().getString(R.string.Fences), MyApp.getContext().getResources().getString(R.string.Fences_out));
+            }
+
+            @Override
+            public void onMultiMedia(ImageBean bean) {
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("bean", bean);
+                MyApp.getContext().startActivity(new Intent(MyApp.getContext(), BigImageActivity.class).putExtras(bundle));
             }
         });
     }

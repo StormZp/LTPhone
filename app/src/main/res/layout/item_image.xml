@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:orientation="vertical">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/px1"
+        android:layout_alignParentBottom="true"
+        android:src="@color/line_view" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp80"
+        android:layout_weight="1"
+        android:background="@color/white"
+        android:gravity="center_vertical">
+
+        <CheckBox
+            android:id="@+id/edit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/head"
+            android:layout_width="@dimen/dp65"
+            android:layout_height="@dimen/dp65"
+            android:layout_marginLeft="@dimen/dp16"
+            android:background="@drawable/shape_btn_white_bg"
+            android:src="@mipmap/icon_defult_detail"
+
+            />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:padding="10dp"
+                android:text="文件名123"
+                android:textColor="@color/textcolor_black"
+                android:textSize="@dimen/dp16" />
+
+            <TextView
+                android:id="@+id/from"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_below="@id/name"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:padding="10dp"
+                android:text="发件人:公关部小林"
+                android:textColor="@color/textcolor_gray"
+                android:textSize="@dimen/dp12" />
+
+            <TextView
+                android:id="@+id/time"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@id/name"
+                android:layout_toRightOf="@+id/from"
+                android:layout_weight="1"
+                android:gravity="center_vertical|right"
+                android:padding="10dp"
+                android:text="2018年4月21日11:48:20"
+                android:textColor="@color/textcolor_gray"
+                android:textSize="@dimen/dp12" />
+        </RelativeLayout>
+
+
+    </LinearLayout>
+
+
+</LinearLayout>
