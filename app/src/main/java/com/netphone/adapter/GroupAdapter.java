@@ -28,7 +28,7 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
     private LayoutInflater mLayoutInflater = null;
     private Context mContext;
     private List<GroupInfoBean> datas = new ArrayList<>();
-    private String id;
+    private String               id;
     private GlideCircleTransform mGlideCircleTransform;
 
     public GroupAdapter(Context mContext, List<GroupInfoBean> datas) {
@@ -49,6 +49,7 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
     public void onBindViewHolder(ViewHolder holder, int position) {
         final GroupInfoBean groupInfoBean = datas.get(position);
         holder.tvName.setText(groupInfoBean.getGroupName());
+        holder.tvOnline.setText(groupInfoBean.getOnLineCount() + "/" + groupInfoBean.getAllCount());
         Glide.with(mContext).load(TcpConfig.URL + groupInfoBean.getHeadIcon()).placeholder(R.mipmap.icon_defult_detail).error(R.mipmap.icon_defult_detail).transform(mGlideCircleTransform).into(holder.ivHead);
 
         holder.getView().setOnClickListener(new View.OnClickListener() {
@@ -71,14 +72,16 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
 
     //自定义的ViewHolder，持有每个Item的的所有界面元素
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        private TextView tvName;
+        private TextView  tvName;
+        private TextView  tvOnline;
         private ImageView ivHead;
-        private View view;
+        private View      view;
 
         public ViewHolder(View view) {
             super(view);
             this.view = view;
             tvName = (TextView) view.findViewById(R.id.tv_name);
+            tvOnline = (TextView) view.findViewById(R.id.on_line_number);
             ivHead = (ImageView) view.findViewById(R.id.iv_head);
         }
 

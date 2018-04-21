@@ -1,6 +1,8 @@
 package com.netphone.adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +14,8 @@ import com.bumptech.glide.Glide;
 import com.netphone.R;
 import com.netphone.netsdk.Tool.TcpConfig;
 import com.netphone.netsdk.bean.ReplyMsgBean;
+import com.netphone.ui.activity.FriendChatActivity;
+import com.netphone.utils.ChatTimeUtil;
 import com.netphone.utils.GlideCircleTransform;
 
 import java.util.ArrayList;
@@ -47,7 +51,7 @@ public class ReplyAdapter extends RecyclerView.Adapter<ReplyAdapter.ViewHolder> 
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = mLayoutInflater.inflate(R.layout.item_friends, parent, false);
+        View view = mLayoutInflater.inflate(R.layout.item_reply, parent, false);
         return new ReplyAdapter.ViewHolder(view);
     }
 
@@ -57,8 +61,29 @@ public class ReplyAdapter extends RecyclerView.Adapter<ReplyAdapter.ViewHolder> 
 
         if (user.getReceiver() != null) {
             viewHolder.name.setText(user.getReceiver().getRealName());
-            viewHolder.online.setText(user.getLastMsg() + "----" + user.getUnread());
+            viewHolder.content.setText(user.getLastMsg());
+            if (user.getLastTime() != 0) {
+                viewHolder.time.setText(ChatTimeUtil.getInterval(user.getLastTime()));
+            }
+            if (user.getUnread() != 0) {
+                viewHolder.unread.setVisibility(View.VISIBLE);
+                viewHolder.unread.setText(user.getUnread()+"");
+            } else {
+                viewHolder.unread.setVisibility(View.INVISIBLE);
+
+            }
             Glide.with(mContext).load(TcpConfig.URL + user.getReceiver().getHeadIcon()).placeholder(R.mipmap.icon_defult_detail).error(R.mipmap.icon_defult_detail).transform(mGlideCircleTransform).into(viewHolder.head);
+
+            viewHolder.mView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(mContext, FriendChatActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("bean", user.getReceiver());
+                    intent.putExtras(bundle);
+                    mContext.startActivity(intent);
+                }
+            });
         }
 
     }
@@ -70,9 +95,10 @@ public class ReplyAdapter extends RecyclerView.Adapter<ReplyAdapter.ViewHolder> 
     }
 
     final static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView  catalog;
         TextView  name;
-        TextView  online;
+        TextView  content;
+        TextView  time;
+        TextView  unread;
         ImageView head;
         View      mView;
 
@@ -80,8 +106,9 @@ public class ReplyAdapter extends RecyclerView.Adapter<ReplyAdapter.ViewHolder> 
             super(itemView);
             mView = itemView;
             name = (TextView) mView.findViewById(R.id.name);
-            catalog = (TextView) mView.findViewById(R.id.catalog);
-            online = (TextView) mView.findViewById(R.id.online);
+            content = (TextView) mView.findViewById(R.id.content);
+            time = (TextView) mView.findViewById(R.id.time);
+            unread = (TextView) mView.findViewById(R.id.unread);
             head = (ImageView) mView.findViewById(R.id.head);
         }
     }

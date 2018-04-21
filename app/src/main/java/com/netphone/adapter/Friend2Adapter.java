@@ -20,6 +20,7 @@ import com.netphone.netsdk.utils.LogUtil;
 import com.netphone.ui.activity.FriendChatActivity;
 import com.netphone.utils.GlideCircleTransform;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -43,6 +44,7 @@ public class Friend2Adapter extends RecyclerView.Adapter<Friend2Adapter.ViewHold
     public void setList(List<UserInfoBean> list) {
         this.list.clear();
         this.list.addAll(list);
+        Collections.sort(this.list); // 对list进行排序，需要让User实现Comparable接口重写compareTo方法
         notifyDataSetChanged();
     }
 
@@ -68,9 +70,11 @@ public class Friend2Adapter extends RecyclerView.Adapter<Friend2Adapter.ViewHold
 
         viewHolder.name.setText(this.list.get(position).getRealName());
         viewHolder.catalog.setText(user.getFirstLetter().toUpperCase());
-        boolean aTrue = !TextUtils.isEmpty(user.getIsOnLine()) && (user.getIsOnLine().equals("1") || user.getIsOnLine().equals("true"));
+        boolean aTrue = !TextUtils.isEmpty(user.getIsOnLine()) && (user.getIsOnLine().equals("0") || user.getIsOnLine().equals("true"));
+        LogUtil.error("Friend2Adapter", "74\tonBindViewHolder()\n" + user.getIsOnLine());
         viewHolder.online.setText(aTrue ? mContext.getResources().getString(R.string.off_line) : mContext.getResources().getString(R.string.onLine));
-//        LogUtil.error("FriendAdapter", "62\tgetView()\n" + user.getHeadIcon());
+        viewHolder.online.setTextColor(aTrue ? mContext.getResources().getColor(R.color.text_gray) : mContext.getResources().getColor(R.color.text_black));
+        viewHolder.name.setTextColor(aTrue ? mContext.getResources().getColor(R.color.text_gray) : mContext.getResources().getColor(R.color.text_black));
         Glide.with(mContext).load(TcpConfig.URL + user.getHeadIcon()).placeholder(R.mipmap.icon_defult_detail).error(R.mipmap.icon_defult_detail).transform(mGlideCircleTransform).into(viewHolder.head);
 
 

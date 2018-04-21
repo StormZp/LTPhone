@@ -43,6 +43,7 @@
                     android:orientation="horizontal">
 
                     <RadioButton
+                        android:id="@+id/tab_session"
                         style="@style/tab_menu_item"
                         android:drawableTop="@drawable/tab_menu_message"
                         android:onClick="@{click.message}"

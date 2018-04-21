@@ -42,8 +42,8 @@ public class ChatTimeUtil {
 
             long time = new Date().getTime() - d1.getTime();// 得出的时间间隔是毫秒
 
-            if (time / 1000 < 60 ) {
-                result= "刚刚";
+//            if (time / 1000 < 60 ) {
+//                result= "刚刚";
 //                // 如果时间间隔小于等于0秒则显示“刚刚”time/10得出的时间间隔的单位是秒
 //
 //                result= "刚刚";
@@ -56,7 +56,7 @@ public class ChatTimeUtil {
 //
 //                result= se + "秒前";
 
-            } else if (time / 3600000 < 24  ) {
+             if (time / 3600000 < 24  ) {
                 SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
 
                 result= sdf.format(d1.getTime());

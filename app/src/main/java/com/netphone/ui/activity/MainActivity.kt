@@ -66,6 +66,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     override fun initData() {
         binding.click = OnClick()
         registerEventBus()
+
+        binding.tabSession.isChecked = true
         binding.viewpage.adapter = object : FragmentPagerAdapter(supportFragmentManager) {
             override fun getItem(position: Int): Fragment {
                 when (position) {
@@ -159,7 +161,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
             } else {
                 toasts(context.resources.getString(R.string.You_re_not_in_the_group_yet))
                 binding.viewpage.setCurrentItem(3, false)
-                binding.tabGroup.isClickable = true
+                binding.tabGroup.isChecked = true
             }
         }
 
