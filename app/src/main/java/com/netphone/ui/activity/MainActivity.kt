@@ -1,13 +1,18 @@
 package com.netphone.ui.activity
 
 import android.Manifest
+import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentPagerAdapter
 import android.view.KeyEvent
 import android.view.View
 import android.widget.Toast
+import com.bigkoo.alertview.AlertView
+import com.bigkoo.alertview.OnItemClickListener
 import com.netphone.R
+import com.netphone.config.EventConfig
+import com.netphone.config.MyApp
 import com.netphone.databinding.ActivityMainBinding
 import com.netphone.netsdk.LTApi
 import com.netphone.netsdk.LTConfigure
@@ -60,7 +65,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 
     override fun initData() {
         binding.click = OnClick()
-
+        registerEventBus()
         binding.viewpage.adapter = object : FragmentPagerAdapter(supportFragmentManager) {
             override fun getItem(position: Int): Fragment {
                 when (position) {
@@ -87,7 +92,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
             override fun accept(t: Boolean?) {
                 if (!t!!) {
                     jump(PermissionDilog::class.java)
-                }else{
+                } else {
                     LTConfigure.getInstance().startLocationService()
                 }
             }
@@ -117,9 +122,22 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     }
 
     override fun receiveEvent(appBean: AppBean<Any>) {
+        when(appBean.code){
+            EventConfig.SQUEEZE_OFF_LINE->{
+                AlertView(context.resources.getString(R.string.warn), context.resources.getString(R.string.login_other), context.resources.getString(R.string.text_cancel),
+                        arrayOf(context.resources.getString(R.string.text_sure)), null,activity, AlertView.Style.Alert,
+                        OnItemClickListener { o, position ->
+                            if (position == 0) {
+                                AppManager.appManager.finishAllActivity()
+                                MyApp.getContext().startActivity(Intent(MyApp.getContext(), LoginActivity::class.java))
+                            }
+                        }).show()
+            }
+        }
     }
 
     override fun receiveStickyEvent(appBean: AppBean<Any>) {
+
     }
 
 

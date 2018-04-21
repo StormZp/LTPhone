@@ -163,6 +163,12 @@ public class LTListener {
                 intent.putExtras(bundle);
                 MyApp.getInstense().getContext().startActivity(intent);
             }
+
+            @Override
+            public void onSqueezeLine() {
+                EventBusUtil.sendEvent(new AppBean(EventConfig.SQUEEZE_OFF_LINE,null));
+
+            }
         });
     }
 

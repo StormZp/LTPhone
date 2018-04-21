@@ -57,7 +57,7 @@ public class TcpSocket {
     }
 
     public Socket getSocket() {
-        if (mSocket == null||!mSocket.isConnected()||mSocket.isClosed()) {
+        if (mSocket == null || !mSocket.isConnected() || mSocket.isClosed()) {
             try {
                 mSocket = new Socket(TcpConfig.HOST, TcpConfig.PORT);
             } catch (IOException e) {
@@ -230,7 +230,8 @@ public class TcpSocket {
             if (mSocket != null)
                 mSocket.close();
             mSocket = null;
-            sendSocketStream.close();
+            if (sendSocketStream != null)
+                sendSocketStream.close();
             sendSocketStream = null;
         } catch (IOException e) {
             e.printStackTrace();

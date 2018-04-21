@@ -33,8 +33,9 @@ public class LTConfigure {
     public         OnNetworkListener mOnNetworkListener;
     public         OnErrorListener   mOnErrorListener;
 
-    private static LTConfigure                   mlt;
-    public static  Context                       mContext;
+    private static LTConfigure mlt;
+    public static  Context     mContext;
+    private static boolean isInit = false;
     private static NetworkConnectChangedReceiver mNetworkConnectChangedReceiver;
 
     /**
@@ -52,6 +53,7 @@ public class LTConfigure {
         setDatabase();
         SharedPreferenceUtil.Companion.init(mContext);
         ltApi = LTApi.newInstance();
+        isInit = true;
     }
 
 
@@ -85,7 +87,8 @@ public class LTConfigure {
      * 销毁
      */
     public void onDestory() {
-        mContext.unregisterReceiver(mNetworkConnectChangedReceiver);
+        if (mContext != null && mNetworkConnectChangedReceiver != null)
+            mContext.unregisterReceiver(mNetworkConnectChangedReceiver);
         mNetworkConnectChangedReceiver = null;
         mlt = null;
         TcpCmd.isConnectBeat = false;
@@ -94,17 +97,27 @@ public class LTConfigure {
         mOnErrorListener = null;
         TcpSocket.getInstance().disconnect();
 
-        mContext.stopService(socketService);
-        mContext.stopService(locationService);
+        if (mContext != null) {
+            mContext.stopService(socketService);
+            mContext.stopService(locationService);
+        }
         mContext = null;
 
 
 //        ltApi.onReFreshListener = null;
-        ltApi.onUpFileListener = null;
-        ltApi.onLocationListener = null;
-        ltApi.mOnLoginListener = null;
+        if (ltApi != null) {
+            ltApi.onUpFileListener = null;
+            ltApi.onLocationListener = null;
+            ltApi.mOnLoginListener = null;
+        }
         ltApi = null;
+        isInit = false;
     }
+
+    public  boolean isIsInit() {
+        return isInit;
+    }
+
 
     public void startLocationService() {
         mContext.startService(locationService);

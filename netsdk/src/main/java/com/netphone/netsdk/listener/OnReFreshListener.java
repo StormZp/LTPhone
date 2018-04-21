@@ -10,4 +10,5 @@ import com.netphone.netsdk.bean.UserListBean;
 public interface OnReFreshListener {
     void onReFresh(UserListBean userListBean);
     void onWordBroadcast(GroupChatMsgBean chatMsgBean);
+    void onSqueezeLine();
 }

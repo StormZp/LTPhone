@@ -384,6 +384,13 @@ public class TcpCmd {
                     case 0x13://当用户超出电子围栏范围时
                         break;
                     case 0x14://收到被挤下线指令
+                        LTConfigure.getInstance().onDestory();
+                        if (LTApi.newInstance().onReFreshListener != null) {
+                            LTApi.newInstance().onReFreshListener.onSqueezeLine();
+                            LTApi.newInstance().onReFreshListener = null;
+                        }
+
+
                         break;
                     case 0x15://强制加入群聊
                         break;

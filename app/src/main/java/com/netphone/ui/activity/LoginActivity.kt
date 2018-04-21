@@ -7,6 +7,7 @@ import android.view.View
 import com.githang.statusbar.StatusBarCompat
 import com.netphone.BuildConfig
 import com.netphone.R
+import com.netphone.config.MyApp
 import com.netphone.databinding.ActivityLoginBinding
 import com.netphone.netsdk.LTConfigure
 import com.netphone.netsdk.Tool.Constant
@@ -73,7 +74,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>() {
         StatusBarCompat.setStatusBarColor(this, context.resources.getColor(R.color.black), false);
 
         if (BuildConfig.DEBUG) {
-            binding.etAccount.setText("debug")
+            binding.etAccount.setText("debug1")
             binding.etPassword.setText("123456")
         }
     }
@@ -89,6 +90,11 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>() {
             if (TextUtils.isEmpty(account)) {
                 toasts(context.resources.getString(R.string.account_not_null))
             }
+
+            if (!LTConfigure.getInstance().isIsInit) {
+                LTConfigure.init(MyApp.getContext())
+            }
+
             LTConfigure.getInstance().ltApi.login(account, password, object : OnLoginListener {
                 override fun onSuccess(bean: UserInfoBean?) {
                     Constant.info = bean;
