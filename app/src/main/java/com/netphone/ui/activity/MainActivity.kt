@@ -18,7 +18,7 @@ import com.netphone.netsdk.LTApi
 import com.netphone.netsdk.LTConfigure
 import com.netphone.netsdk.base.AppBean
 import com.netphone.netsdk.listener.OnErrorListener
-import com.netphone.ui.dialog.PermissionDilog
+import com.netphone.ui.dialog.PermissionDialog
 import com.netphone.ui.fragment.FriendsFragment
 import com.netphone.ui.fragment.GroupsFragment
 import com.netphone.ui.fragment.SessionFragment
@@ -91,7 +91,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         getRxPermissions().shouldShowRequestPermissionRationale(activity, Manifest.permission.RECORD_AUDIO, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.READ_EXTERNAL_STORAGE).subscribe(object : Consumer<Boolean> {
             override fun accept(t: Boolean?) {
                 if (!t!!) {
-                    jump(PermissionDilog::class.java)
+                    jump(PermissionDialog::class.java)
                 } else {
                     LTConfigure.getInstance().startLocationService()
                 }

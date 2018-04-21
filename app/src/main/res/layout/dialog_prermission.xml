@@ -5,7 +5,7 @@
 
         <variable
             name="click"
-            type="com.netphone.ui.dialog.PermissionDilog.OnClick" />
+            type="com.netphone.ui.dialog.PermissionDialog.OnClick" />
     </data>
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"

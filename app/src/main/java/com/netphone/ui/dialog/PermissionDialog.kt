@@ -16,7 +16,7 @@ import io.reactivex.functions.Consumer
  * Created by XYSM on 2018/4/20.
  */
 
-class PermissionDilog : BaseActivity<DialogPrermissionBinding>() {
+class PermissionDialog : BaseActivity<DialogPrermissionBinding>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initBinding(R.layout.dialog_prermission)
