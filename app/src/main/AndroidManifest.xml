@@ -82,7 +82,7 @@
             android:windowSoftInputMode="stateHidden|stateUnchanged"></activity>
 
         <activity
-            android:name="com.netphone.ui.dialog.PermissionDilog"
+            android:name="com.netphone.ui.dialog.PermissionDialog"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait"
             android:theme="@style/MyDialogStyle"

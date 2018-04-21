@@ -5,6 +5,7 @@ import android.text.TextUtils;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.netphone.gen.FriendChatMsgBeanDao;
 import com.netphone.gen.GroupChatMsgBeanDao;
 import com.netphone.gen.GroupInfoBeanDao;
 import com.netphone.gen.ImageBeanDao;
@@ -12,6 +13,7 @@ import com.netphone.gen.UserInfoBeanDao;
 import com.netphone.netsdk.LTApi;
 import com.netphone.netsdk.LTConfigure;
 import com.netphone.netsdk.R;
+import com.netphone.netsdk.bean.FriendChatMsgBean;
 import com.netphone.netsdk.bean.GroupChatMsgBean;
 import com.netphone.netsdk.bean.GroupInfoBean;
 import com.netphone.netsdk.bean.ImageBean;
@@ -39,10 +41,12 @@ import java.util.List;
 public class TcpCmd {
 
     private InetAddress addr = null;
-    private int              port;
-    private UserInfoBeanDao  mUserInfoBeanDao;
-    private GroupInfoBeanDao mGroupInfoBeanDao;
-    private ImageBeanDao     mImageBeanDao;
+    private int                  port;
+    private UserInfoBeanDao      mUserInfoBeanDao;
+    private GroupInfoBeanDao     mGroupInfoBeanDao;
+    private FriendChatMsgBeanDao mFriendChatMsgBeanDao;
+    private ImageBeanDao         mImageBeanDao;
+    private Gson mGson = new Gson();
 
     public void cmdData(byte[] pagBytes) {
         byte[] tempBytes = new byte[2];
@@ -63,7 +67,8 @@ public class TcpCmd {
         }
         if (mGroupInfoBeanDao == null) {
             mGroupInfoBeanDao = LTConfigure.getInstance().getDaoSession().getGroupInfoBeanDao();
-        } if (mImageBeanDao == null) {
+        }
+        if (mImageBeanDao == null) {
             mImageBeanDao = LTConfigure.getInstance().getDaoSession().getImageBeanDao();
         }
         String body = "";
@@ -80,8 +85,7 @@ public class TcpCmd {
                                     System.arraycopy(bodyBytes, 1, jsonBytes, 0, bodyBytes.length - 1);
                                     body = ByteIntUtils.utfToString(jsonBytes);
                                     LogUtil.error("TcpCmd", "77\tcmdExplore()\n" + body);
-                                    Gson gson = new Gson();
-                                    UserInfoBean user = gson.fromJson(body, UserInfoBean.class);
+                                    UserInfoBean user = mGson.fromJson(body, UserInfoBean.class);
                                     if (user == null) {
                                         LogUtil.error("user =null");
                                         return;
@@ -160,6 +164,12 @@ public class TcpCmd {
                     case 0x07://挂断视频通话
                         break;
                     case 0x08://发送文字消息
+                        body = ByteIntUtils.utfToString(bodyBytes);
+                        switch (bodyBytes[0]) {
+                            case 0x00:
+                                LogUtil.error("TcpCmd", "166\tcmdExplore()\n" + "发送成功");
+                                break;
+                        }
                         break;
                     case 0x09://取消呼叫
                         break;
@@ -274,7 +284,7 @@ public class TcpCmd {
                                     byte[] bytes = Arrays.copyOfRange(bodyBytes, 1, bodyBytes.length);
                                     String json = ByteIntUtils.utfToString(bytes);
                                     LogUtil.error("TcpCmd", "226\tcmdExplore()\n" + json);
-                                    List<UserInfoBean> bean = new Gson().fromJson(json, new TypeToken<List<UserInfoBean>>() {
+                                    List<UserInfoBean> bean = mGson.fromJson(json, new TypeToken<List<UserInfoBean>>() {
                                     }.getType());
                                     LTConfigure.getInstance().getLtApi().getGroupMemberListener.onGetMemberSuccess(bean);
                                     break;
@@ -294,12 +304,11 @@ public class TcpCmd {
                     case 0x00://推送用户列表信息,由于socket写在服务里原因，在主页没能正常停止服务，会导致服务一直开启，socket写入数据
                         if (LTConfigure.getInstance().getLtApi().mOnLoginListener != null) {
                             body = ByteIntUtils.utfToString(bodyBytes);
-                            Gson gson = new Gson();
 //                            LogUtil.saveLog(LTConfigure.getInstance().getContext(), "127\tcmdExplore()\n" + body);
 //                            LogUtil.error("TcpCmd", "278\tcmdExplore()\n" + body);
                             try {
                                 LogUtil.error("TcpCmd", "255\tcmdExplore()\n" + body);
-                                UserListBean       userListBean = gson.fromJson(body, UserListBean.class);
+                                UserListBean       userListBean = mGson.fromJson(body, UserListBean.class);
                                 List<UserInfoBean> userInfo     = userListBean.getUserInfo();
                                 UserInfoBean       currentInfo  = LTApi.newInstance().getCurrentInfo();
                                 for (int i = 0; i < userInfo.size(); i++) {
@@ -337,12 +346,21 @@ public class TcpCmd {
                     case 0x07://对方挂断视频通话
                         break;
                     case 0x08://收到文字消息
+                        body = ByteIntUtils.utfToString(bodyBytes);
+                        LogUtil.error("TcpCmd", "342\tcmdExplore()\n" + body);
+
+                        FriendChatMsgBean friendChatMsgBean = mGson.fromJson(body, FriendChatMsgBean.class);
+
+                        friendChatMsgBean.setSendId(friendChatMsgBean.getReceiveId());
+                        friendChatMsgBean.setDateTime(System.currentTimeMillis());
+                        if (mFriendChatMsgBeanDao == null)
+                            mFriendChatMsgBeanDao = LTConfigure.getInstance().getDaoSession().getFriendChatMsgBeanDao();
+                        mFriendChatMsgBeanDao.insertOrReplace(friendChatMsgBean);
                         break;
                     case 0x09://当有新的终端加入到当前的活动群聊中时
                         if (LTConfigure.getInstance().getLtApi().groupStateListener != null) {
                             body = ByteIntUtils.utfToString(bodyBytes);
-                            Gson         gson = new Gson();
-                            UserInfoBean user = gson.fromJson(body, UserInfoBean.class);
+                            UserInfoBean user = mGson.fromJson(body, UserInfoBean.class);
                             LTConfigure.getInstance().getLtApi().groupStateListener.onMenberJoin(user);
                         }
 
@@ -350,24 +368,21 @@ public class TcpCmd {
                     case 0x0A://当现有终端退出了当前的活动群聊中时
                         if (LTConfigure.getInstance().getLtApi().groupStateListener != null) {
                             body = ByteIntUtils.utfToString(bodyBytes);
-                            Gson         gson = new Gson();
-                            UserInfoBean user = gson.fromJson(body, UserInfoBean.class);
+                            UserInfoBean user = mGson.fromJson(body, UserInfoBean.class);
                             LTConfigure.getInstance().getLtApi().groupStateListener.onMenberExit(user);
                         }
                         break;
                     case 0x0B://在群聊中时,麦权被抢占
                         if (LTConfigure.getInstance().getLtApi().groupStateListener != null) {
                             body = ByteIntUtils.utfToString(bodyBytes);
-                            Gson         gson = new Gson();
-                            UserInfoBean user = gson.fromJson(body, UserInfoBean.class);
+                            UserInfoBean user = mGson.fromJson(body, UserInfoBean.class);
                             LTConfigure.getInstance().getLtApi().groupStateListener.onMenberhaveMac(user);
                         }
                         break;
                     case 0x0C://麦权被释放
                         if (LTConfigure.getInstance().getLtApi().groupStateListener != null) {
                             body = ByteIntUtils.utfToString(bodyBytes);
-                            Gson         gson = new Gson();
-                            UserInfoBean user = gson.fromJson(body, UserInfoBean.class);
+                            UserInfoBean user = mGson.fromJson(body, UserInfoBean.class);
                             LTConfigure.getInstance().getLtApi().groupStateListener.onMemberRelaxedMac(user);
                         }
                         break;
@@ -402,7 +417,7 @@ public class TcpCmd {
                         break;
                     case 0x16://收到多媒体内容(图片,视频,文件等)
                         body = ByteIntUtils.utfToString(bodyBytes);
-                        ImageBean bean = new Gson().fromJson(body, ImageBean.class);
+                        ImageBean bean = mGson.fromJson(body, ImageBean.class);
                         bean.setDate(System.currentTimeMillis());
                         bean.setReceiveId(SharedPreferenceUtil.Companion.read(Constant.UserId, ""));
                         mImageBeanDao.insertOrReplace(bean);
@@ -441,8 +456,7 @@ public class TcpCmd {
                     case 0x26://收到群聊消息
                         body = ByteIntUtils.utfToString(bodyBytes);
                         LogUtil.error("TcpCmd", "356\tcmdExplore()\n" + body);
-                        Gson gson = new Gson();
-                        GroupChatMsgBean msg = gson.fromJson(body, GroupChatMsgBean.class);
+                        GroupChatMsgBean msg = mGson.fromJson(body, GroupChatMsgBean.class);
                         msg.setDateTime(System.currentTimeMillis());
                         msg.setReceiveId(SharedPreferenceUtil.Companion.read(Constant.UserId, ""));
 
@@ -456,7 +470,7 @@ public class TcpCmd {
                     case 0x27://收到群聊消息
                         body = ByteIntUtils.utfToString(bodyBytes);
                         LogUtil.error("TcpCmd", "435\tcmdExplore()\n" + body);
-                        GroupChatMsgBean msg2 = new Gson().fromJson(body, GroupChatMsgBean.class);
+                        GroupChatMsgBean msg2 = mGson.fromJson(body, GroupChatMsgBean.class);
                         if (LTApi.newInstance().onReFreshListener != null) {
                             LTApi.newInstance().onReFreshListener.onWordBroadcast(msg2);
                         }

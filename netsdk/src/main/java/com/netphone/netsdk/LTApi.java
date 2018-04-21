@@ -4,10 +4,12 @@ import android.content.Context;
 import android.os.SystemClock;
 
 import com.google.gson.Gson;
+import com.netphone.gen.FriendChatMsgBeanDao;
 import com.netphone.gen.GroupChatMsgBeanDao;
 import com.netphone.gen.ImageBeanDao;
 import com.netphone.gen.UserInfoBeanDao;
 import com.netphone.netsdk.Tool.Constant;
+import com.netphone.netsdk.bean.FriendChatMsgBean;
 import com.netphone.netsdk.bean.GroupChatMsgBean;
 import com.netphone.netsdk.bean.GroupInfoBean;
 import com.netphone.netsdk.bean.ImageBean;
@@ -53,7 +55,6 @@ public class LTApi {
         return mApi;
     }
 
-    public OnLoginListener mOnLoginListener;
 
     /**
      * 登录
@@ -77,6 +78,7 @@ public class LTApi {
         TcpSocket.getInstance().addData(login);
     }
 
+    public OnLoginListener          mOnLoginListener;
     public OnGroupComeInListener    groupComeInListener;
     public OnGetGroupMemberListener getGroupMemberListener;
     public OnGroupStateListener     groupStateListener;
@@ -123,8 +125,9 @@ public class LTApi {
     }
 
 
-    private GroupChatMsgBeanDao groupChatMsgBeanDao;
-    private UserInfoBeanDao     userInfoBeanDao;
+    private GroupChatMsgBeanDao  groupChatMsgBeanDao;
+    private UserInfoBeanDao      userInfoBeanDao;
+    private FriendChatMsgBeanDao friendChatMsgBeanDao;
 
     /**
      * 发送群聊信息
@@ -135,6 +138,42 @@ public class LTApi {
     public void sendGroupMessage(String id, String content) {
         byte[] words = CmdUtils.getInstance().sendGroupCommonBeanApi(id, content, (byte) 0x00, (byte) 0x1C);
         TcpSocket.getInstance().addData(words);
+    }
+
+    /**
+     * 发送单聊信息
+     *
+     * @param id
+     * @param content
+     */
+    public void sendFriendMessage(String id, String content) {
+        FriendChatMsgBean bean = new FriendChatMsgBean();
+        bean.setReceiveId(id);
+        bean.setMsg(content);
+        bean.setSendId(Constant.info.getUserId());
+        bean.setDateTime(System.currentTimeMillis());
+
+        if (friendChatMsgBeanDao == null)
+            friendChatMsgBeanDao = LTConfigure.getInstance().getDaoSession().getFriendChatMsgBeanDao();
+
+        friendChatMsgBeanDao.insertOrReplace(bean);
+        byte[] words = CmdUtils.getInstance().sendFriendCommonBeanApi(id, content, (byte) 0x00, (byte) 0x08);
+        TcpSocket.getInstance().addData(words);
+    }
+
+    /**
+     * 获取好友聊天记录
+     *
+     * @param receiveId 好友id
+     * @return
+     */
+    public ArrayList<FriendChatMsgBean> getFriendChatMessage(String receiveId) {
+        if (friendChatMsgBeanDao == null)
+            friendChatMsgBeanDao = LTConfigure.getInstance().getDaoSession().getFriendChatMsgBeanDao();
+        List<FriendChatMsgBean>      list              = friendChatMsgBeanDao.queryBuilder().where(FriendChatMsgBeanDao.Properties.ReceiveId.eq(receiveId)).list();
+        ArrayList<FriendChatMsgBean> groupChatMsgBeans = new ArrayList<>();
+        groupChatMsgBeans.addAll(list);
+        return groupChatMsgBeans;
     }
 
     /**
@@ -344,7 +383,7 @@ public class LTApi {
     }
 
 
-    public List<ImageBean> getReceiverImages(String userId){
+    public List<ImageBean> getReceiverImages(String userId) {
         ImageBeanDao imageBeanDao = LTConfigure.getInstance().getDaoSession().getImageBeanDao();
         return imageBeanDao.queryBuilder().where(ImageBeanDao.Properties.ReceiveId.eq(userId)).list();
     }

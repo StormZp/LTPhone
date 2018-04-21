@@ -397,6 +397,22 @@ public class CmdUtils {
         byte[] temp = sendCmds(cmdId, cmdId2, byteArray);
         return temp;
     }
+ /**
+     * 发送好友消息
+     *
+     * @param ReceiveId
+     * @param msg
+     */
+    public byte[] sendFriendCommonBeanApi(String ReceiveId, String msg, byte cmdId, byte cmdId2) {
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("ReceiveId", ReceiveId);
+        map.put("msg", msg);
+        String json = new Gson().toJson(map);
+        //再进行UTF8编码
+        byte[] byteArray = json.getBytes(Charset.forName("utf-8"));
+        byte[] temp = sendCmds(cmdId, cmdId2, byteArray);
+        return temp;
+    }
 
     /**
      * 上传文件，图片，视频...
