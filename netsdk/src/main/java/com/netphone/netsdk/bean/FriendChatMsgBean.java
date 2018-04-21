@@ -28,38 +28,40 @@ public class FriendChatMsgBean implements Serializable {
     private String msg;
     private String Name;
 
-    private String Message;//广播专用
-
-    private String FromUserId;//广播专用
 
     @Id(autoincrement = true)
     private Long         id;
     private String       sendId;//发送者
+    private String       userId;//发送者
     @ToOne(joinProperty = "sendId")
     private UserInfoBean sendBean;
+    @ToOne(joinProperty = "userId")
+    private UserInfoBean user;
 
     private Long dateTime;
 
     @ToOne(joinProperty = "ReceiveId")
-    private UserInfoBean UserInfoBean;
-    /** Used to resolve relations */
+    private           UserInfoBean         UserInfoBean;
+    /**
+     * Used to resolve relations
+     */
     @Generated(hash = 2040040024)
-    private transient DaoSession daoSession;
-    /** Used for active entity operations. */
+    private transient DaoSession           daoSession;
+    /**
+     * Used for active entity operations.
+     */
     @Generated(hash = 738263186)
     private transient FriendChatMsgBeanDao myDao;
 
-
-    @Generated(hash = 2139020593)
-    public FriendChatMsgBean(String ReceiveId, String msg, String Name, String Message,
-            String FromUserId, Long id, String sendId, Long dateTime) {
+    @Generated(hash = 810318606)
+    public FriendChatMsgBean(String ReceiveId, String msg, String Name, Long id,
+            String sendId, String userId, Long dateTime) {
         this.ReceiveId = ReceiveId;
         this.msg = msg;
         this.Name = Name;
-        this.Message = Message;
-        this.FromUserId = FromUserId;
         this.id = id;
         this.sendId = sendId;
+        this.userId = userId;
         this.dateTime = dateTime;
     }
 
@@ -67,14 +69,8 @@ public class FriendChatMsgBean implements Serializable {
     public FriendChatMsgBean() {
     }
 
-    @Generated(hash = 1157664268)
-    private transient String sendBean__resolvedKey;
-    @Generated(hash = 1253302719)
-    private transient String UserInfoBean__resolvedKey;
-
-
     public String getReceiveId() {
-        return ReceiveId;
+        return this.ReceiveId;
     }
 
     public void setReceiveId(String ReceiveId) {
@@ -82,7 +78,7 @@ public class FriendChatMsgBean implements Serializable {
     }
 
     public String getMsg() {
-        return msg;
+        return this.msg;
     }
 
     public void setMsg(String msg) {
@@ -90,7 +86,7 @@ public class FriendChatMsgBean implements Serializable {
     }
 
     public String getName() {
-        return Name;
+        return this.Name;
     }
 
     public void setName(String Name) {
@@ -121,7 +117,12 @@ public class FriendChatMsgBean implements Serializable {
         this.dateTime = dateTime;
     }
 
-    /** To-one relationship, resolved on first access. */
+    @Generated(hash = 1157664268)
+    private transient String sendBean__resolvedKey;
+
+    /**
+     * To-one relationship, resolved on first access.
+     */
     @Generated(hash = 877489041)
     public UserInfoBean getSendBean() {
         String __key = this.sendId;
@@ -130,8 +131,8 @@ public class FriendChatMsgBean implements Serializable {
             if (daoSession == null) {
                 throw new DaoException("Entity is detached from DAO context");
             }
-            UserInfoBeanDao targetDao = daoSession.getUserInfoBeanDao();
-            UserInfoBean sendBeanNew = targetDao.load(__key);
+            UserInfoBeanDao targetDao   = daoSession.getUserInfoBeanDao();
+            UserInfoBean    sendBeanNew = targetDao.load(__key);
             synchronized (this) {
                 sendBean = sendBeanNew;
                 sendBean__resolvedKey = __key;
@@ -140,7 +141,9 @@ public class FriendChatMsgBean implements Serializable {
         return sendBean;
     }
 
-    /** called by internal mechanisms, do not call yourself. */
+    /**
+     * called by internal mechanisms, do not call yourself.
+     */
     @Generated(hash = 728494189)
     public void setSendBean(UserInfoBean sendBean) {
         synchronized (this) {
@@ -150,7 +153,14 @@ public class FriendChatMsgBean implements Serializable {
         }
     }
 
-    /** To-one relationship, resolved on first access. */
+    @Generated(hash = 1253302719)
+    private transient String UserInfoBean__resolvedKey;
+    @Generated(hash = 1867105156)
+    private transient String user__resolvedKey;
+
+    /**
+     * To-one relationship, resolved on first access.
+     */
     @Generated(hash = 654270903)
     public UserInfoBean getUserInfoBean() {
         String __key = this.ReceiveId;
@@ -160,8 +170,8 @@ public class FriendChatMsgBean implements Serializable {
             if (daoSession == null) {
                 throw new DaoException("Entity is detached from DAO context");
             }
-            UserInfoBeanDao targetDao = daoSession.getUserInfoBeanDao();
-            UserInfoBean UserInfoBeanNew = targetDao.load(__key);
+            UserInfoBeanDao targetDao       = daoSession.getUserInfoBeanDao();
+            UserInfoBean    UserInfoBeanNew = targetDao.load(__key);
             synchronized (this) {
                 UserInfoBean = UserInfoBeanNew;
                 UserInfoBean__resolvedKey = __key;
@@ -170,7 +180,9 @@ public class FriendChatMsgBean implements Serializable {
         return UserInfoBean;
     }
 
-    /** called by internal mechanisms, do not call yourself. */
+    /**
+     * called by internal mechanisms, do not call yourself.
+     */
     @Generated(hash = 1387282139)
     public void setUserInfoBean(UserInfoBean UserInfoBean) {
         synchronized (this) {
@@ -216,26 +228,50 @@ public class FriendChatMsgBean implements Serializable {
         myDao.update(this);
     }
 
-    /** called by internal mechanisms, do not call yourself. */
+    /**
+     * called by internal mechanisms, do not call yourself.
+     */
     @Generated(hash = 886087880)
     public void __setDaoSession(DaoSession daoSession) {
         this.daoSession = daoSession;
         myDao = daoSession != null ? daoSession.getFriendChatMsgBeanDao() : null;
     }
 
-    public String getMessage() {
-        return this.Message;
+    public String getUserId() {
+        return this.userId;
     }
 
-    public void setMessage(String Message) {
-        this.Message = Message;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
-    public String getFromUserId() {
-        return this.FromUserId;
+    /** To-one relationship, resolved on first access. */
+    @Generated(hash = 14347509)
+    public UserInfoBean getUser() {
+        String __key = this.userId;
+        if (user__resolvedKey == null || user__resolvedKey != __key) {
+            final DaoSession daoSession = this.daoSession;
+            if (daoSession == null) {
+                throw new DaoException("Entity is detached from DAO context");
+            }
+            UserInfoBeanDao targetDao = daoSession.getUserInfoBeanDao();
+            UserInfoBean userNew = targetDao.load(__key);
+            synchronized (this) {
+                user = userNew;
+                user__resolvedKey = __key;
+            }
+        }
+        return user;
     }
 
-    public void setFromUserId(String FromUserId) {
-        this.FromUserId = FromUserId;
+    /** called by internal mechanisms, do not call yourself. */
+    @Generated(hash = 672230781)
+    public void setUser(UserInfoBean user) {
+        synchronized (this) {
+            this.user = user;
+            userId = user == null ? null : user.getUserId();
+            user__resolvedKey = userId;
+        }
     }
+
 }

@@ -13,6 +13,7 @@ import com.netphone.netsdk.bean.FriendChatMsgBean;
 import com.netphone.netsdk.bean.GroupChatMsgBean;
 import com.netphone.netsdk.bean.GroupInfoBean;
 import com.netphone.netsdk.bean.ImageBean;
+import com.netphone.netsdk.bean.ReplyMsgBean;
 import com.netphone.netsdk.bean.UserInfoBean;
 import com.netphone.netsdk.listener.OnChangePasswordListener;
 import com.netphone.netsdk.listener.OnChangeUserInfoListener;
@@ -29,6 +30,7 @@ import com.netphone.netsdk.socket.TcpSocket;
 import com.netphone.netsdk.utils.CmdUtils;
 import com.netphone.netsdk.utils.FileUtils;
 import com.netphone.netsdk.utils.LogUtil;
+import com.netphone.netsdk.utils.ReplyUtil;
 import com.netphone.netsdk.utils.SharedPreferenceUtil;
 import com.zxy.tiny.Tiny;
 import com.zxy.tiny.callback.FileCallback;
@@ -151,17 +153,30 @@ public class LTApi {
         bean.setReceiveId(id);
         bean.setMsg(content);
         bean.setSendId(Constant.info.getUserId());
+        bean.setUserId(Constant.info.getUserId());
         bean.setDateTime(System.currentTimeMillis());
 
         if (friendChatMsgBeanDao == null)
             friendChatMsgBeanDao = LTConfigure.getInstance().getDaoSession().getFriendChatMsgBeanDao();
         friendChatMsgBeanDao.insertOrReplace(bean);
+        ReplyUtil.insertMsg(bean.getReceiveId(), bean.getUserId(), bean.getMsg(), true);
 
         if (LTApi.newInstance().onReFreshListener != null) {
             LTApi.newInstance().onReFreshListener.onFriendChatMsg(bean);
         }
         byte[] words = CmdUtils.getInstance().sendFriendCommonBeanApi(id, content, (byte) 0x00, (byte) 0x08);
         TcpSocket.getInstance().addData(words);
+    }
+
+    public void joinFriendChat(String id) {
+        ReplyUtil.read(id, Constant.info.getUserId());
+
+    }
+
+    public ArrayList<ReplyMsgBean> getSessionList() {
+        ArrayList<ReplyMsgBean> replyMsgBeans = new ArrayList<>();
+        replyMsgBeans.addAll(ReplyUtil.getList(Constant.info.getUserId()));
+        return replyMsgBeans;
     }
 
     /**

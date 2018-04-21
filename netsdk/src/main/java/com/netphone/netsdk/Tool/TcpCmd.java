@@ -26,6 +26,7 @@ import com.netphone.netsdk.utils.ByteUtil;
 import com.netphone.netsdk.utils.CmdUtils;
 import com.netphone.netsdk.utils.DataTypeChangeHelper;
 import com.netphone.netsdk.utils.LogUtil;
+import com.netphone.netsdk.utils.ReplyUtil;
 import com.netphone.netsdk.utils.SharedPreferenceUtil;
 
 import java.io.IOException;
@@ -79,40 +80,45 @@ public class TcpCmd {
                 switch (pagBytes[8]) {
 
                     case 0x00://登录回复
-                        if (LTConfigure.getInstance().getLtApi().mOnLoginListener != null)
-                            switch (bodyBytes[0]) {
-                                case 0x00://登录成功
-                                    byte[] jsonBytes = new byte[bodyBytes.length - 1];
-                                    System.arraycopy(bodyBytes, 1, jsonBytes, 0, bodyBytes.length - 1);
-                                    body = ByteIntUtils.utfToString(jsonBytes);
-                                    LogUtil.error("TcpCmd", "77\tcmdExplore()\n" + body);
-                                    UserInfoBean user = mGson.fromJson(body, UserInfoBean.class);
-                                    if (user == null) {
-                                        LogUtil.error("user =null");
-                                        return;
-                                    } else {
-                                        LogUtil.error("user= " + user.toString());
-                                    }
-                                    isConnectBeat = true;
-                                    SharedPreferenceUtil.Companion.put(Constant.UserId, user.getUserId());
-                                    startBeat.start();
-                                    mUserInfoBeanDao.insertOrReplace(user);
-                                    LTConfigure.getInstance().getLtApi().mOnLoginListener.onSuccess(user);
-                                    break;
-                                case 0x01://登录失败
-                                    LTConfigure.getInstance().getLtApi().mOnLoginListener.onFail(1, LTConfigure.getInstance().getContext().getResources().getString(R.string.account_or_password_mistake));
-                                    break;
-                                case 0x02://该终端被遥弊
-                                    LTConfigure.getInstance().getLtApi().mOnLoginListener.onFail(2, LTConfigure.getInstance().getContext().getResources().getString(R.string.terminal_malpractices));
-                                    break;
-                                case 0x03://账号过期
-                                    LTConfigure.getInstance().getLtApi().mOnLoginListener.onFail(3, LTConfigure.getInstance().getContext().getResources().getString(R.string.Account_expiration));
-                                    break;
-                                case 0x08://该账号已经登录
-                                    LTConfigure.getInstance().getLtApi().mOnLoginListener.onFail(8, LTConfigure.getInstance().getContext().getResources().getString(R.string.account_already_login));
-                                    break;
 
-                            }
+                        switch (bodyBytes[0]) {
+                            case 0x00://登录成功
+                                byte[] jsonBytes = new byte[bodyBytes.length - 1];
+                                System.arraycopy(bodyBytes, 1, jsonBytes, 0, bodyBytes.length - 1);
+                                body = ByteIntUtils.utfToString(jsonBytes);
+                                LogUtil.error("TcpCmd", "77\tcmdExplore()\n" + body);
+                                UserInfoBean user = mGson.fromJson(body, UserInfoBean.class);
+                                if (user == null) {
+                                    LogUtil.error("user =null");
+                                    return;
+                                } else {
+                                    LogUtil.error("user= " + user.toString());
+                                }
+                                isConnectBeat = true;
+                                SharedPreferenceUtil.Companion.put(Constant.UserId, user.getUserId());
+                                startBeat.start();
+                                mUserInfoBeanDao.insertOrReplace(user);
+                                if (LTConfigure.getInstance().getLtApi().mOnLoginListener != null)
+                                    LTConfigure.getInstance().getLtApi().mOnLoginListener.onSuccess(user);
+                                break;
+                            case 0x01://登录失败
+                                if (LTConfigure.getInstance().getLtApi().mOnLoginListener != null)
+                                    LTConfigure.getInstance().getLtApi().mOnLoginListener.onFail(1, LTConfigure.getInstance().getContext().getResources().getString(R.string.account_or_password_mistake));
+                                break;
+                            case 0x02://该终端被遥弊
+                                if (LTConfigure.getInstance().getLtApi().mOnLoginListener != null)
+                                    LTConfigure.getInstance().getLtApi().mOnLoginListener.onFail(2, LTConfigure.getInstance().getContext().getResources().getString(R.string.terminal_malpractices));
+                                break;
+                            case 0x03://账号过期
+                                if (LTConfigure.getInstance().getLtApi().mOnLoginListener != null)
+                                    LTConfigure.getInstance().getLtApi().mOnLoginListener.onFail(3, LTConfigure.getInstance().getContext().getResources().getString(R.string.Account_expiration));
+                                break;
+                            case 0x08://该账号已经登录
+                                if (LTConfigure.getInstance().getLtApi().mOnLoginListener != null)
+                                    LTConfigure.getInstance().getLtApi().mOnLoginListener.onFail(8, LTConfigure.getInstance().getContext().getResources().getString(R.string.account_already_login));
+                                break;
+
+                        }
                         break;
                     case 0x01://上传GPS的回复
                         if (LTConfigure.getInstance().getLtApi().onLocationListener != null) {
@@ -303,32 +309,31 @@ public class TcpCmd {
             case 0x01://服务端>>终端指令列表
                 switch (pagBytes[8]) {
                     case 0x00://推送用户列表信息,由于socket写在服务里原因，在主页没能正常停止服务，会导致服务一直开启，socket写入数据
-                        if (LTConfigure.getInstance().getLtApi().mOnLoginListener != null) {
-                            body = ByteIntUtils.utfToString(bodyBytes);
+
+                        body = ByteIntUtils.utfToString(bodyBytes);
 //                            LogUtil.saveLog(LTConfigure.getInstance().getContext(), "127\tcmdExplore()\n" + body);
 //                            LogUtil.error("TcpCmd", "278\tcmdExplore()\n" + body);
-                            try {
-                                LogUtil.error("TcpCmd", "255\tcmdExplore()\n" + body);
-                                UserListBean       userListBean = mGson.fromJson(body, UserListBean.class);
-                                List<UserInfoBean> userInfo     = userListBean.getUserInfo();
-                                UserInfoBean       currentInfo  = LTApi.newInstance().getCurrentInfo();
-                                for (int i = 0; i < userInfo.size(); i++) {
-                                    if (!currentInfo.getUserId().equals(userInfo.get(i).getUserId())) {
-                                        mUserInfoBeanDao.insertOrReplace(userInfo.get(i));
-                                    }
+                        try {
+                            LogUtil.error("TcpCmd", "255\tcmdExplore()\n" + body);
+                            UserListBean       userListBean = mGson.fromJson(body, UserListBean.class);
+                            List<UserInfoBean> userInfo     = userListBean.getUserInfo();
+                            UserInfoBean       currentInfo  = LTApi.newInstance().getCurrentInfo();
+                            for (int i = 0; i < userInfo.size(); i++) {
+                                if (!currentInfo.getUserId().equals(userInfo.get(i).getUserId())) {
+                                    mUserInfoBeanDao.insertOrReplace(userInfo.get(i));
                                 }
-
-                                mGroupInfoBeanDao.insertOrReplaceInTx(userListBean.getGroupInfo());
-                                if (LTConfigure.getInstance().getLtApi().mOnLoginListener != null) {
-                                    LTConfigure.getInstance().getLtApi().mOnLoginListener.onComplete(userListBean);
-                                    LTConfigure.getInstance().getLtApi().mOnLoginListener = null;
-                                }
-                                if (LTConfigure.getInstance().getLtApi().onReFreshListener != null) {
-                                    LTConfigure.getInstance().getLtApi().onReFreshListener.onReFresh(userListBean);
-                                }
-                            } catch (Exception e) {
-                                LogUtil.error("TcpCmd", e);
                             }
+
+                            mGroupInfoBeanDao.insertOrReplaceInTx(userListBean.getGroupInfo());
+                            if (LTConfigure.getInstance().getLtApi().mOnLoginListener != null) {
+                                LTConfigure.getInstance().getLtApi().mOnLoginListener.onComplete(userListBean);
+                                LTConfigure.getInstance().getLtApi().mOnLoginListener = null;
+                            }
+                            if (LTConfigure.getInstance().getLtApi().onReFreshListener != null) {
+                                LTConfigure.getInstance().getLtApi().onReFreshListener.onReFresh(userListBean);
+                            }
+                        } catch (Exception e) {
+                            LogUtil.error("TcpCmd", e);
                         }
 
                         break;
@@ -353,10 +358,13 @@ public class TcpCmd {
                         FriendChatMsgBean friendChatMsgBean = mGson.fromJson(body, FriendChatMsgBean.class);
 
                         friendChatMsgBean.setSendId(friendChatMsgBean.getReceiveId());
+                        friendChatMsgBean.setUserId(Constant.info.getUserId());
                         friendChatMsgBean.setDateTime(System.currentTimeMillis());
                         if (mFriendChatMsgBeanDao == null)
                             mFriendChatMsgBeanDao = LTConfigure.getInstance().getDaoSession().getFriendChatMsgBeanDao();
                         mFriendChatMsgBeanDao.insertOrReplace(friendChatMsgBean);
+
+                        ReplyUtil.insertMsg(friendChatMsgBean.getReceiveId(), friendChatMsgBean.getUserId(), friendChatMsgBean.getMsg());
                         if (LTApi.newInstance().onReFreshListener != null) {
                             LTApi.newInstance().onReFreshListener.onFriendChatMsg(friendChatMsgBean);
                         }

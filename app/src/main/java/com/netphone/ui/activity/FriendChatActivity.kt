@@ -37,6 +37,8 @@ open class FriendChatActivity : BaseActivity<ActivityChatFriendBinding>() {
         friendChatAdapter = FriendChatAdapter(context, LTApi.newInstance().getFriendChatMessage(user.userId))
         binding.recycle.adapter = friendChatAdapter
         binding.recycle.layoutManager = LinearLayoutManager(context)
+
+        LTApi.newInstance().joinFriendChat(user.userId)
         registerEventBus()
     }
 

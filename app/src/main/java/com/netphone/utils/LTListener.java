@@ -29,7 +29,6 @@ import com.netphone.netsdk.listener.OnLocationListener;
 import com.netphone.netsdk.listener.OnNetworkListener;
 import com.netphone.netsdk.listener.OnReFreshListener;
 import com.netphone.netsdk.utils.EventBusUtil;
-import com.netphone.netsdk.utils.LogUtil;
 import com.netphone.ui.activity.BigImageActivity;
 import com.netphone.ui.activity.MainActivity;
 import com.netphone.ui.dialog.MessageDialog;
@@ -163,7 +162,8 @@ public class LTListener {
         LTApi.newInstance().setOnReFreshListener(new OnReFreshListener() {
             @Override
             public void onReFresh(UserListBean userListBean) {
-                LogUtil.error("LTListener", "148\tonReFresh()\n" + "刷新了");
+                com.netphone.netsdk.Tool.Constant.listBean = userListBean;
+                EventBusUtil.sendEvent(new AppBean(EventConfig.REFRESH_FRIEND, null));
             }
 
             @Override

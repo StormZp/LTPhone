@@ -40,6 +40,11 @@ public class Friend2Adapter extends RecyclerView.Adapter<Friend2Adapter.ViewHold
         mLayoutInflater = LayoutInflater.from(mContext);
     }
 
+    public void setList(List<UserInfoBean> list) {
+        this.list.clear();
+        this.list.addAll(list);
+        notifyDataSetChanged();
+    }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -82,18 +87,17 @@ public class Friend2Adapter extends RecyclerView.Adapter<Friend2Adapter.ViewHold
     }
 
 
-
     @Override
     public int getItemCount() {
         return list == null ? 0 : list.size();
     }
 
     final static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView catalog;
-        TextView name;
-        TextView online;
+        TextView  catalog;
+        TextView  name;
+        TextView  online;
         ImageView head;
-        View mView;
+        View      mView;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -104,6 +108,7 @@ public class Friend2Adapter extends RecyclerView.Adapter<Friend2Adapter.ViewHold
             head = (ImageView) mView.findViewById(R.id.head);
         }
     }
+
     /**
      * 获取catalog首次出现位置
      */
