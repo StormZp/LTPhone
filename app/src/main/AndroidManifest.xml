@@ -80,6 +80,14 @@
             android:name=".ui.activity.ReceiverImageActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|stateUnchanged"></activity>
+        <activity
+            android:name=".ui.activity.BroadcastSendActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|stateUnchanged"></activity>
+        <activity
+            android:name=".ui.activity.BroadcastReceiveActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|stateUnchanged"></activity>
 
         <activity
             android:name="com.netphone.ui.dialog.PermissionDialog"

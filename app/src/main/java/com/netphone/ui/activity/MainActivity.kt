@@ -101,6 +101,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         })
 
         LTListener.newInstance().setOnReFreshListener()
+        LTListener.newInstance().setOnBroadcastListener()
     }
 
     override fun initListener() {
@@ -110,7 +111,9 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
             }
 
             override fun onNotLogin() {
-                ToastUtil.toasts(context.getResources().getString(R.string.not_login))
+                activity.runOnUiThread {
+                    ToastUtil.toasts(context.getResources().getString(R.string.not_login))
+                }
             }
 
             override fun onCRCError() {
@@ -124,10 +127,10 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     }
 
     override fun receiveEvent(appBean: AppBean<Any>) {
-        when(appBean.code){
-            EventConfig.SQUEEZE_OFF_LINE->{
+        when (appBean.code) {
+            EventConfig.SQUEEZE_OFF_LINE -> {
                 AlertView(context.resources.getString(R.string.warn), context.resources.getString(R.string.login_other), context.resources.getString(R.string.text_cancel),
-                        arrayOf(context.resources.getString(R.string.text_sure)), null,activity, AlertView.Style.Alert,
+                        arrayOf(context.resources.getString(R.string.text_sure)), null, activity, AlertView.Style.Alert,
                         OnItemClickListener { o, position ->
                             if (position == 0) {
                                 AppManager.appManager.finishAllActivity()

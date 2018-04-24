@@ -16,4 +16,5 @@ public interface OnReFreshListener {
     void onElectronWall();
     void onMultiMedia(ImageBean bean);
     void onFriendChatMsg(FriendChatMsgBean bean);
+    void onBroadcastCome(int state);//0 接收 1 发送
 }

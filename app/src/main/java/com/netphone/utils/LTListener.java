@@ -21,6 +21,7 @@ import com.netphone.netsdk.bean.GroupChatMsgBean;
 import com.netphone.netsdk.bean.ImageBean;
 import com.netphone.netsdk.bean.UserInfoBean;
 import com.netphone.netsdk.bean.UserListBean;
+import com.netphone.netsdk.listener.OnBroadcastListener;
 import com.netphone.netsdk.listener.OnGetGroupMemberListener;
 import com.netphone.netsdk.listener.OnGroupChatListener;
 import com.netphone.netsdk.listener.OnGroupComeInListener;
@@ -30,7 +31,9 @@ import com.netphone.netsdk.listener.OnNetworkListener;
 import com.netphone.netsdk.listener.OnReFreshListener;
 import com.netphone.netsdk.utils.EventBusUtil;
 import com.netphone.ui.activity.BigImageActivity;
+import com.netphone.ui.activity.BroadcastReceiveActivity;
 import com.netphone.ui.activity.MainActivity;
+import com.netphone.ui.activity.BroadcastSendActivity;
 import com.netphone.ui.dialog.MessageDialog;
 
 import java.util.List;
@@ -198,6 +201,43 @@ public class LTListener {
                 AppBean appBean = new AppBean(EventConfig.FRIEND_SEND_MSG, bean);
                 appBean.setMsg(bean.getReceiveId());
                 EventBusUtil.sendEvent(appBean);
+            }
+
+            @Override
+            public void onBroadcastCome(int state) {
+                if (state == 0) {
+                    Intent intent = new Intent(MyApp.getContext(), BroadcastReceiveActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    MyApp.getInstense().getContext().startActivity(intent);
+                } else if (state == 1) {
+                    Intent intent = new Intent(MyApp.getContext(), BroadcastSendActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    MyApp.getInstense().getContext().startActivity(intent);
+                }
+
+            }
+        });
+    }
+
+    public void setOnBroadcastListener() {
+        LTApi.newInstance().setOnBroadcastListener(new OnBroadcastListener() {
+            @Override
+            public void onSend() {
+                Intent intent = new Intent(MyApp.getContext(), BroadcastSendActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                MyApp.getInstense().getContext().startActivity(intent);
+            }
+
+            @Override
+            public void onStop() {
+                EventBusUtil.sendEvent(new AppBean(EventConfig.BROADCAST_OVER, null));
+            }
+
+            @Override
+            public void onReceiver() {
+                Intent intent = new Intent(MyApp.getContext(), BroadcastReceiveActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                MyApp.getInstense().getContext().startActivity(intent);
             }
         });
     }

@@ -15,6 +15,7 @@ import com.netphone.netsdk.bean.GroupInfoBean;
 import com.netphone.netsdk.bean.ImageBean;
 import com.netphone.netsdk.bean.ReplyMsgBean;
 import com.netphone.netsdk.bean.UserInfoBean;
+import com.netphone.netsdk.listener.OnBroadcastListener;
 import com.netphone.netsdk.listener.OnChangePasswordListener;
 import com.netphone.netsdk.listener.OnChangeUserInfoListener;
 import com.netphone.netsdk.listener.OnGetGroupMemberListener;
@@ -89,6 +90,7 @@ public class LTApi {
     public OnLocationListener       onLocationListener;
     public OnUpFileListener         onUpFileListener;
     public OnReFreshListener        onReFreshListener;
+    public OnBroadcastListener      onBroadcastListener;
     public OnChangeUserInfoListener onChangeUserInfoListener;
     public String                   groupId;
 
@@ -377,6 +379,16 @@ public class LTApi {
      */
     public void setOnReFreshListener(OnReFreshListener onReFreshListener) {
         this.onReFreshListener = onReFreshListener;
+    }
+
+    /**
+     * 设置广播监听
+     *
+     *
+     * @param onBroadcastListener
+     */
+    public void setOnBroadcastListener(OnBroadcastListener onBroadcastListener) {
+        this.onBroadcastListener = onBroadcastListener;
     }
 
     /**

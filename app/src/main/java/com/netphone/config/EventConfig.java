@@ -22,4 +22,5 @@ public class EventConfig {
     public static final int SQUEEZE_OFF_LINE    = 15;//被抢登录
     public static final int FRIEND_SEND_MSG     = 16;//好友发送消息
     public static final int REFRESH_FRIEND      = 17;//刷新好友列表
+    public static final int BROADCAST_OVER      = 18;//广播结束
 }

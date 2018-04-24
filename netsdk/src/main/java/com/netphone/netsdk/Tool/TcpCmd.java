@@ -96,7 +96,8 @@ public class TcpCmd {
                                 }
                                 isConnectBeat = true;
                                 SharedPreferenceUtil.Companion.put(Constant.UserId, user.getUserId());
-                                startBeat.start();
+                                if (startBeat != null && !startBeat.isAlive())
+                                    startBeat.start();
                                 mUserInfoBeanDao.insertOrReplace(user);
                                 if (LTConfigure.getInstance().getLtApi().mOnLoginListener != null)
                                     LTConfigure.getInstance().getLtApi().mOnLoginListener.onSuccess(user);
@@ -451,13 +452,27 @@ public class TcpCmd {
                         break;
                     case 0x1E://监听(主动)已被中断
                         break;
-                    case 0x1F://从服务台发起广播(发起方)
+                    case 0x1F://从服务台发起广播(发起方) 收到端口号
+//                        port = ByteUtil.getInt(bodyBytes, 0);//udp 端口
+                        if (LTApi.newInstance().onBroadcastListener != null) {
+                            LTApi.newInstance().onBroadcastListener.onSend();
+                        }
                         break;
                     case 0x20://广播到达最大时长(发起方) 中断广播
+                        if (LTApi.newInstance().onBroadcastListener != null) {
+                            LTApi.newInstance().onBroadcastListener.onStop();
+                        }
                         break;
                     case 0x21://开始接收广播内容
+                        //                        port = ByteUtil.getInt(bodyBytes, 0);//udp 端口
+                        if (LTApi.newInstance().onBroadcastListener != null) {
+                            LTApi.newInstance().onBroadcastListener.onReceiver();
+                        }
                         break;
                     case 0x22://停止接收广播内容
+                        if (LTApi.newInstance().onBroadcastListener != null) {
+                            LTApi.newInstance().onBroadcastListener.onStop();
+                        }
                         break;
                     case 0x23://开始播放监听内容
                         break;

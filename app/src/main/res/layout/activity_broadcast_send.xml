@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <data>
+
+        <variable
+            name="click"
+            type="com.netphone.ui.activity.BroadcastSendActivity.OnClick" />
+    </data>
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:focusableInTouchMode="true"
+        android:background="@color/white"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/dp65"
+            android:gravity="center"
+            android:text="00:57"
+            android:textColor="@color/textcolor_dhr"
+            android:textSize="@dimen/dp36" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/time"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="我正在广播"
+            android:textColor="@color/textcolor_black"
+            android:textSize="@dimen/dp16" />
+
+        <ImageView
+            android:id="@+id/submit"
+            android:layout_width="@dimen/dp80"
+            android:layout_height="@dimen/dp80"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="@dimen/dp85"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/dp8"
+            android:onClick="@{click.back}"
+            android:src="@mipmap/icon_click_over" />
+
+        <ImageView
+            android:id="@+id/icon"
+            android:layout_width="wrap_content"
+            android:layout_above="@+id/submit"
+            android:layout_height="wrap_content"
+
+            android:layout_centerHorizontal="true"
+            android:src="@mipmap/icon_broadcast" />
+
+
+    </RelativeLayout>
+</layout>

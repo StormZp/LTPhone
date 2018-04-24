@@ -74,7 +74,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>() {
         StatusBarCompat.setStatusBarColor(this, context.resources.getColor(R.color.black), false);
 
         if (BuildConfig.DEBUG) {
-            binding.etAccount.setText("debug1")
+            binding.etAccount.setText("测试企业2")
             binding.etPassword.setText("123456")
         }
     }
