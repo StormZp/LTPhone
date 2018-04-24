@@ -32,6 +32,7 @@
     <color name="bg_login_edit_color">#DDE7F2</color>
 
     <color name="bg_color_white">#F4F4F4</color>
+    <color name="bg_voice">#312E44</color>
 
     <color name="bg_33">#33FE695A</color>
     <color name="bg_88">#88FE695A</color>
@@ -39,6 +40,7 @@
     <color name="hint2">#8A8A8A</color>
     <color name="bg_f8">#f8f8f8</color>
     <color name="bg_f1">#f1f1f1</color>
+    <color name="bg_f0">#F0F0F0</color>
     <color name="bg_c2">#c2c2c2</color>
     <color name="bg_3e">#eeeeee</color>
     <color name="bg_3d">#dddddd</color>

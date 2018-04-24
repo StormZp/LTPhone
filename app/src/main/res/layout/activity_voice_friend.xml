@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <data>
+        <variable
+            name="click"
+            type="com.netphone.ui.activity.FriendVoiceActivity.OnClick"/>
+
+    </data>
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/bg_voice"
+        android:fitsSystemWindows="true"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+
+        <ImageView
+            android:layout_width="68dp"
+            android:layout_height="68dp"
+            android:layout_marginTop="120dp"
+            android:src="@mipmap/icon_defult_detail" />
+
+        <TextView
+            android:id="@+id/tv_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="123"
+            android:textColor="@color/white"
+            android:textSize="24dp" />
+
+        <TextView
+            android:id="@+id/state"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp8"
+            android:text="接听中"
+            android:textColor="@color/white"
+            android:textSize="@dimen/dp12" />
+
+        <TextView
+            android:id="@+id/tv_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="120dp"
+            android:text="00:00:00"
+            android:textColor="@color/white"
+            android:textSize="15sp" />
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal">
+
+            <RelativeLayout
+                android:id="@+id/lay_sound"
+                android:layout_width="48dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                >
+
+                <ImageView
+                    android:id="@+id/iv_sound"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:background="@mipmap/icon_jingyin" />
+
+                <Button
+                    android:id="@+id/btn_sound"
+                    android:layout_width="48dp"
+                    android:layout_height="68dp"
+                    android:layout_below="@+id/iv_sound"
+                    android:background="@null"
+                    android:text="@string/loudspeaker_mute"
+                    android:textColor="@color/white"
+                    android:visibility="visible" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/lay_refuse"
+                android:layout_width="48dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp">
+
+                <ImageView
+                    android:id="@+id/iv_refuse"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:background="@mipmap/icon_quxiao" />
+
+                <Button
+                    android:id="@+id/btn_refuse"
+                    android:layout_width="48dp"
+                    android:layout_height="68dp"
+                    android:layout_below="@+id/iv_refuse"
+                    android:background="@null"
+                    android:text="@string/text_refuse"
+                    android:textColor="@color/white"
+                    android:visibility="visible" />
+            </RelativeLayout>
+
+
+            <RelativeLayout
+                android:id="@+id/lay_off"
+                android:layout_width="48dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:visibility="visible">
+
+                <ImageView
+                    android:id="@+id/iv_off"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:background="@mipmap/icon_quxiao" />
+
+                <Button
+                    android:id="@+id/btn_off"
+                    android:layout_width="48dp"
+                    android:layout_height="68dp"
+                    android:layout_below="@+id/iv_off"
+                    android:background="@null"
+                    android:text="@string/text_hang_up"
+                    android:textColor="@color/white"
+                    android:visibility="visible" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/lay_receive"
+                android:layout_width="48dp"
+                android:layout_height="wrap_content"
+
+                android:layout_margin="5dp">
+
+                <ImageView
+                    android:id="@+id/iv_receive"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:background="@mipmap/icon_defult_detail" />
+
+                <Button
+                    android:id="@+id/btn_receive"
+                    android:layout_width="48dp"
+                    android:layout_height="68dp"
+                    android:layout_below="@+id/iv_receive"
+                    android:background="@null"
+                    android:text="@string/text_accepted"
+                    android:textColor="@color/white"
+                    android:visibility="visible" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/lay_ison"
+                android:layout_width="48dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:visibility="visible">
+
+                <ImageView
+                    android:id="@+id/iv_ison"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:background="@mipmap/icon_yangshengqi" />
+
+                <Button
+                    android:id="@+id/btn_ison"
+                    android:layout_width="48dp"
+                    android:layout_height="68dp"
+                    android:layout_below="@+id/iv_ison"
+                    android:background="@null"
+
+                    android:text="@string/text_hands_free"
+                    android:textColor="@color/white" />
+            </RelativeLayout>
+
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+</layout>

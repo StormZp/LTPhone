@@ -32,6 +32,12 @@ open class FriendChatActivity : BaseActivity<ActivityChatFriendBinding>() {
     override fun initData() {
         user = intent.extras.getSerializable("bean") as UserInfoBean
         binding.title.title.text = user.realName
+        binding.title.menuDate.setImageResource(R.mipmap.icon_tel)
+        binding.title.menuDate.visibility = View.VISIBLE
+        binding.title.menuDate.setOnClickListener {
+            jump(FriendVoiceActivity::class.java, intent.extras)
+        }
+
         binding.click = OnClick()
 
         friendChatAdapter = FriendChatAdapter(context, LTApi.newInstance().getFriendChatMessage(user.userId))

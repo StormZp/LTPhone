@@ -9,10 +9,10 @@
     </data>
 
     <com.netphone.view.InputMethodLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/input_lay"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:focusableInTouchMode="true"
-        android:id="@+id/input_lay"
         android:orientation="vertical">
 
         <LinearLayout
@@ -89,55 +89,140 @@
                 android:id="@+id/recycle"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/white"
                 android:layout_marginTop="@dimen/dp8"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:background="@color/white" />
 
-            <LinearLayout
-                android:id="@+id/lay_edit"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/dp48"
-                android:gravity="center_vertical">
+                android:layout_height="wrap_content">
 
-
-                <ImageView
-                    android:id="@+id/keyboard"
-                    android:layout_width="@dimen/dp36"
-                    android:layout_height="@dimen/dp36"
-                    android:layout_marginLeft="@dimen/dp14"
-                    android:onClick="@{click.keyboardShow}"
-                    android:src="@mipmap/icon_jp" />
-
-                <ImageView
-                    android:id="@+id/iv_voice"
-                    android:layout_width="@dimen/dp36"
-                    android:layout_height="@dimen/dp36"
-                    android:layout_marginLeft="@dimen/dp8"
-                    android:src="@mipmap/icon_yy" />
-
-                <EditText
-                    android:id="@+id/et_content"
+                <RelativeLayout
+                    android:id="@+id/lay_voice"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="@dimen/dp8"
-                    android:layout_marginRight="@dimen/dp8"
-                    android:layout_marginTop="@dimen/dp5"
-                    android:layout_marginBottom="@dimen/dp5"
-                    android:layout_weight="1"
-                    android:background="@drawable/shape_btn_gray_line_white_bg" />
+                    android:layout_height="@dimen/dp120"
+                    android:background="@color/white"
+                    android:gravity="center_vertical|bottom">
 
-                <TextView
-                    android:id="@+id/submit"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="@dimen/dp8"
-                    android:background="@drawable/shape_btn_green_bg"
-                    android:onClick="@{click.submit}"
-                    android:padding="@dimen/dp3"
-                    android:text="@string/text_send"
-                    android:textColor="@color/white" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/dp65"
+                        android:layout_alignParentBottom="true"
+                        android:background="@color/bg_f0"
+                      >
 
-            </LinearLayout>
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/px1"
+                            android:layout_alignParentBottom="true"
+                            android:src="@color/line_view" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/send_voice"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:orientation="vertical"
+                        android:gravity="center">
+
+                        <ImageView
+                            android:layout_width="@dimen/dp92"
+                            android:layout_height="@dimen/dp92"
+                            android:src="@mipmap/icon_huatong" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="@dimen/dp3"
+                            android:text="@string/text_send"
+                            android:textColor="@color/textcolor_dhr" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/dp65"
+                        android:layout_alignParentBottom="true"
+                        android:onClick="@{click.showEdit}"
+                        android:layout_toLeftOf="@+id/send_voice"
+                        android:gravity="center">
+
+                        <ImageView
+                            android:layout_width="@dimen/dp48"
+                            android:layout_height="@dimen/dp48"
+                            android:src="@mipmap/icon_jp" />
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/dp65"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_toRightOf="@+id/send_voice"
+                        android:gravity="center">
+
+                        <ImageView
+                            android:layout_width="@dimen/dp48"
+                            android:layout_height="@dimen/dp48"
+                            android:src="@mipmap/icon_yuyinjilu" />
+                    </LinearLayout>
+
+                </RelativeLayout>
+
+
+                <LinearLayout
+                    android:id="@+id/lay_edit"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp48"
+                    android:gravity="center_vertical"
+                    android:visibility="gone">
+
+
+                    <ImageView
+                        android:id="@+id/keyboard"
+                        android:layout_width="@dimen/dp36"
+                        android:layout_height="@dimen/dp36"
+                        android:layout_marginLeft="@dimen/dp14"
+                        android:onClick="@{click.keyboardShow}"
+
+                        android:src="@mipmap/icon_jp" />
+
+                    <ImageView
+                        android:id="@+id/iv_voice"
+                        android:layout_width="@dimen/dp36"
+                        android:layout_height="@dimen/dp36"
+                        android:layout_marginLeft="@dimen/dp8"
+                        android:onClick="@{click.showVoice}"
+                        android:src="@mipmap/icon_yy" />
+
+                    <EditText
+                        android:id="@+id/et_content"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginBottom="@dimen/dp5"
+                        android:layout_marginLeft="@dimen/dp8"
+                        android:layout_marginRight="@dimen/dp8"
+                        android:layout_marginTop="@dimen/dp5"
+                        android:layout_weight="1"
+                        android:background="@drawable/shape_btn_gray_line_white_bg" />
+
+                    <TextView
+                        android:id="@+id/submit"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="@dimen/dp8"
+                        android:background="@drawable/shape_btn_green_bg"
+                        android:onClick="@{click.submit}"
+                        android:padding="@dimen/dp3"
+                        android:text="@string/text_send"
+                        android:textColor="@color/white" />
+
+                </LinearLayout>
+
+            </RelativeLayout>
+
         </LinearLayout>
     </com.netphone.view.InputMethodLayout>
 

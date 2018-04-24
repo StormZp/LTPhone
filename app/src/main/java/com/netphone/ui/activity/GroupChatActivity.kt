@@ -152,5 +152,23 @@ open class GroupChatActivity : BaseActivity<ActivityChatGroupBinding>() {
             }
         }
 
+        open fun showEdit(view: View) {
+            binding.layEdit.visibility = View.VISIBLE
+            binding.layVoice.visibility = View.GONE
+
+            binding.keyboard.setImageResource(R.mipmap.icon_jp2)
+            isShowKeyBoard = true
+            AppUtil.openKeyboard(binding.etContent, context)
+        }
+
+        open fun showVoice(view: View) {
+            binding.layEdit.visibility = View.GONE
+            binding.layVoice.visibility = View.VISIBLE
+
+            AppUtil.closeKeyboard(context)
+            isShowKeyBoard = false
+            binding.keyboard.setImageResource(R.mipmap.icon_jp)
+        }
+
     }
 }
