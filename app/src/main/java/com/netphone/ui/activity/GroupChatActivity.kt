@@ -64,7 +64,7 @@ open class GroupChatActivity : BaseActivity<ActivityChatGroupBinding>() {
                 InputMethodLayout.KEYBOARD_STATE_HIDE -> {
                     AppUtil.closeKeyboard(context)
                     isShowKeyBoard = false
-                    binding.keyboard.setImageResource(R.mipmap.icon_jp)
+//                    binding.keyboard.setImageResource(R.mipmap.icon_jp)
                 }
             }
         }
@@ -140,23 +140,12 @@ open class GroupChatActivity : BaseActivity<ActivityChatGroupBinding>() {
             binding.etContent.setText("")
         }
 
-        open fun keyboardShow(view: View) {
-            if (isShowKeyBoard) {
-                AppUtil.closeKeyboard(context)
-                isShowKeyBoard = false
-                binding.keyboard.setImageResource(R.mipmap.icon_jp)
-            } else {
-                binding.keyboard.setImageResource(R.mipmap.icon_jp2)
-                isShowKeyBoard = true
-                AppUtil.openKeyboard(binding.etContent, context)
-            }
-        }
 
         open fun showEdit(view: View) {
             binding.layEdit.visibility = View.VISIBLE
             binding.layVoice.visibility = View.GONE
 
-            binding.keyboard.setImageResource(R.mipmap.icon_jp2)
+//            binding.keyboard.setImageResource(R.mipmap.icon_jp2)
             isShowKeyBoard = true
             AppUtil.openKeyboard(binding.etContent, context)
         }
@@ -167,7 +156,7 @@ open class GroupChatActivity : BaseActivity<ActivityChatGroupBinding>() {
 
             AppUtil.closeKeyboard(context)
             isShowKeyBoard = false
-            binding.keyboard.setImageResource(R.mipmap.icon_jp)
+//            binding.keyboard.setImageResource(R.mipmap.icon_jp)
         }
 
     }

@@ -185,17 +185,9 @@
                         android:layout_width="@dimen/dp36"
                         android:layout_height="@dimen/dp36"
                         android:layout_marginLeft="@dimen/dp14"
-                        android:onClick="@{click.keyboardShow}"
-
+                        android:onClick="@{click.showVoice}"
                         android:src="@mipmap/icon_jp" />
 
-                    <ImageView
-                        android:id="@+id/iv_voice"
-                        android:layout_width="@dimen/dp36"
-                        android:layout_height="@dimen/dp36"
-                        android:layout_marginLeft="@dimen/dp8"
-                        android:onClick="@{click.showVoice}"
-                        android:src="@mipmap/icon_yy" />
 
                     <EditText
                         android:id="@+id/et_content"
@@ -215,6 +207,7 @@
                         android:layout_marginRight="@dimen/dp8"
                         android:background="@drawable/shape_btn_green_bg"
                         android:onClick="@{click.submit}"
+
                         android:padding="@dimen/dp3"
                         android:text="@string/text_send"
                         android:textColor="@color/white" />
