@@ -2,6 +2,7 @@ package com.netphone.ui.activity
 
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
+import android.text.TextUtils
 import android.view.View
 import com.netphone.R
 import com.netphone.adapter.FriendChatAdapter
@@ -70,6 +71,10 @@ open class FriendChatActivity : BaseActivity<ActivityChatFriendBinding>() {
     inner class OnClick {
         open fun submit(view: View) {
             var toString = binding.etContent.text.toString()
+            if (TextUtils.isEmpty(toString)) {
+                toasts(context.resources.getString(R.string.message_not_null))
+                return
+            }
             LTApi.newInstance().sendFriendMessage(user.userId, toString)
             binding.etContent.setText("")
         }

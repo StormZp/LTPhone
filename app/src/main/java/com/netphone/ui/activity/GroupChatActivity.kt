@@ -2,6 +2,7 @@ package com.netphone.ui.activity
 
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
+import android.text.TextUtils
 import android.view.View
 import com.netphone.R
 import com.netphone.adapter.GroupChatAdapter
@@ -13,7 +14,6 @@ import com.netphone.netsdk.bean.GroupChatMsgBean
 import com.netphone.netsdk.bean.GroupInfoBean
 import com.netphone.netsdk.bean.UserInfoBean
 import com.netphone.utils.AppUtil
-import com.netphone.utils.GroupUtil
 import com.netphone.utils.LTListener
 import com.netphone.view.InputMethodLayout
 import com.storm.tool.base.BaseActivity
@@ -41,11 +41,11 @@ open class GroupChatActivity : BaseActivity<ActivityChatGroupBinding>() {
 
 
         var groupChatMessage = LTApi.newInstance().getGroupChatMessage(groupInfo.groupID)
-        groupChatMessage = GroupUtil.getSortReverseList(groupChatMessage)
+//        groupChatMessage = GroupUtil.getSortReverseList(groupChatMessage)
         adapter = GroupChatAdapter(context, groupChatMessage)
         binding.recycle.adapter = adapter
-        binding.recycle.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, true)
-
+        binding.recycle.layoutManager = LinearLayoutManager(context)
+        binding.recycle.smoothScrollToPosition(adapter.itemCount - 1);
         LTListener.newInstance().joinGroupListener(groupInfo.groupID)
     }
 
@@ -136,6 +136,10 @@ open class GroupChatActivity : BaseActivity<ActivityChatGroupBinding>() {
 
         open fun submit(view: View) {
             var toString = binding.etContent.text.toString()
+            if (TextUtils.isEmpty(toString)) {
+                toasts(context.resources.getString(R.string.message_not_null))
+                return
+            }
             LTApi.newInstance().sendGroupMessage(groupInfo.groupID, toString)
             binding.etContent.setText("")
         }
@@ -147,7 +151,7 @@ open class GroupChatActivity : BaseActivity<ActivityChatGroupBinding>() {
 
 //            binding.keyboard.setImageResource(R.mipmap.icon_jp2)
             isShowKeyBoard = true
-            AppUtil.openKeyboard(binding.etContent, context)
+//            AppUtil.openKeyboard(binding.etContent, context)
         }
 
         open fun showVoice(view: View) {

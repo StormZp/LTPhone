@@ -21,6 +21,7 @@ import android.provider.Settings;
 import android.support.v4.content.FileProvider;
 import android.telephony.TelephonyManager;
 import android.util.DisplayMetrics;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
@@ -220,6 +221,16 @@ public class AppUtil {
         if(imm != null) {imm.hideSoftInputFromWindow(((Activity)context).getWindow().getDecorView().getWindowToken(),
                 0);
         }
+    }
+
+    /**
+     * EditText获取焦点并显示软键盘
+     */
+    public static void showSoftInputFromWindow(Activity activity, EditText editText) {
+        editText.setFocusable(true);
+        editText.setFocusableInTouchMode(true);
+        editText.requestFocus();
+        activity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
     }
 
     /**

@@ -43,7 +43,7 @@ public class GroupChatAdapter extends RecyclerView.Adapter<GroupChatAdapter.View
     }
 
     public void addMsg(GroupChatMsgBean msgBean) {
-        mDatas.add(0, msgBean);
+        mDatas.add( msgBean);
         notifyDataSetChanged();
     }
 
