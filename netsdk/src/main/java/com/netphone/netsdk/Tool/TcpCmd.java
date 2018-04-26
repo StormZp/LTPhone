@@ -33,6 +33,7 @@ import com.netphone.netsdk.utils.SharedPreferenceUtil;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
+import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Arrays;
 import java.util.List;
@@ -567,6 +568,18 @@ public class TcpCmd {
                     conncetBeatCount++;
                     byte[] heart = CmdUtils.getInstance().sendHeratPackage();
                     TcpSocket.getInstance().addData(heart);//定时发送心跳包
+                }
+                if (conncetBeatCount>10){
+                    Socket socket = TcpSocket.getInstance().getSocket();
+                    if (socket!=null){
+                        try {
+                            socket.close();
+                            socket = null;
+                            TcpSocket.getInstance().connect();
+                        } catch (IOException e) {
+                            LogUtil.error("TcpCmd", "578\trun()\n" , e);
+                        }
+                    }
                 }
                 SystemClock.sleep(10 * 1000);
             }

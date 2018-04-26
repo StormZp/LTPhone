@@ -108,6 +108,7 @@
             android:layout_marginRight="@dimen/dp14"
             android:shadowColor="@color/white"
             android:text="@string/auto_login"
+            android:textSize="@dimen/dp18"
             android:textColor="@color/white" />
 
         <ImageView

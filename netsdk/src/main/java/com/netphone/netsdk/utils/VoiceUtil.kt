@@ -1,6 +1,5 @@
 package com.netphone.netsdk.utils
 
-import android.app.Activity
 import android.media.*
 import android.media.audiofx.AcousticEchoCanceler
 import android.media.audiofx.NoiseSuppressor
@@ -40,7 +39,6 @@ class VoiceUtil {
             track = AudioTrack(AudioManager.STREAM_VOICE_CALL, 8000, AudioFormat.CHANNEL_CONFIGURATION_MONO, AudioFormat.ENCODING_PCM_16BIT,
                     getBufferSize(), AudioTrack.MODE_STREAM)
             track!!.play()
-
             return track!!
         }
 
@@ -58,23 +56,6 @@ class VoiceUtil {
             return bufferSize
         }
 
-        open fun setSpeakerphoneOn(on: Boolean, activity: Activity, audioManager: AudioManager) {
-            if (on) {
-                // 为true打开喇叭扩音器；为false关闭喇叭扩音器.
-                audioManager.setSpeakerphoneOn(true)
-                // 添加的代码，恢复系统声音设置
-                audioManager.setMode(AudioManager.STREAM_SYSTEM)
-                activity.volumeControlStream = AudioManager.USE_DEFAULT_STREAM_TYPE
-                LogUtil.error("true打开喇叭扩音器")
-            } else {
-                audioManager.setSpeakerphoneOn(false)//关闭扬声器
-                audioManager.setRouting(AudioManager.MODE_NORMAL, AudioManager.ROUTE_EARPIECE, AudioManager.ROUTE_ALL)
-                activity.volumeControlStream = AudioManager.STREAM_VOICE_CALL
-                //把声音设定成Earpiece（听筒）出来，设定为正在通话中
-                audioManager.setMode(AudioManager.MODE_IN_COMMUNICATION)
-                LogUtil.error("关闭扬声器")
-            }
-        }
 
     }
 

@@ -1,5 +1,8 @@
 package com.netphone.ui.activity
 
+import android.app.Activity
+import android.content.Context
+import android.media.AudioManager
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.text.TextUtils
@@ -14,6 +17,7 @@ import com.netphone.netsdk.base.AppBean
 import com.netphone.netsdk.bean.GroupChatMsgBean
 import com.netphone.netsdk.bean.GroupInfoBean
 import com.netphone.netsdk.bean.UserInfoBean
+import com.netphone.netsdk.utils.LogUtil
 import com.netphone.utils.AppUtil
 import com.netphone.utils.LTListener
 import com.netphone.view.InputMethodLayout
@@ -49,6 +53,7 @@ open class GroupChatActivity : BaseActivity<ActivityChatGroupBinding>() {
         if (adapter.itemCount != 0)
             binding.recycle.smoothScrollToPosition(adapter.itemCount - 1);
         LTListener.newInstance().joinGroupListener(groupInfo.groupID)
+        setSpeakerphoneOn(true,activity,getSystemService(Context.AUDIO_SERVICE) as AudioManager)
     }
 
     override fun initListener() {
@@ -185,6 +190,23 @@ open class GroupChatActivity : BaseActivity<ActivityChatGroupBinding>() {
             isShowKeyBoard = false
 //            binding.keyboard.setImageResource(R.mipmap.icon_jp)
         }
+    }
 
+    open fun setSpeakerphoneOn(on: Boolean, activity: Activity, audioManager: AudioManager) {
+        if (on) {
+            // 为true打开喇叭扩音器；为false关闭喇叭扩音器.
+            audioManager.setSpeakerphoneOn(true)
+            // 添加的代码，恢复系统声音设置
+            audioManager.setMode(AudioManager.STREAM_SYSTEM)
+            activity.volumeControlStream = AudioManager.USE_DEFAULT_STREAM_TYPE
+            LogUtil.error("true打开喇叭扩音器")
+        } else {
+            audioManager.setSpeakerphoneOn(false)//关闭扬声器
+            audioManager.setRouting(AudioManager.MODE_NORMAL, AudioManager.ROUTE_EARPIECE, AudioManager.ROUTE_ALL)
+            activity.volumeControlStream = AudioManager.STREAM_VOICE_CALL
+            //把声音设定成Earpiece（听筒）出来，设定为正在通话中
+            audioManager.setMode(AudioManager.MODE_IN_COMMUNICATION)
+            LogUtil.error("关闭扬声器")
+        }
     }
 }
