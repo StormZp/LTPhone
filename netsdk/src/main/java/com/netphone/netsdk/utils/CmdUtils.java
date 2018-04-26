@@ -76,12 +76,15 @@ public class CmdUtils {
         //CRC16校验,取2位
         int    crc16    = CRC16.calcCrc16(cmds, 1, cmds.length - 1);
         byte[] crcBytes = ByteIntUtils.int2byte(crc16);
-        cmds[packageLength - 3] = crcBytes[0];
-        cmds[packageLength - 2] = crcBytes[1];
+        if (cmds.length>=packageLength){
+            cmds[packageLength - 3] = crcBytes[0];
+            cmds[packageLength - 2] = crcBytes[1];
 //        cmds[packageLength - 3] = 0X5E;
 //        cmds[packageLength - 2] = 0X5E;
-        // 帧尾
-        cmds[packageLength - 1] = 0x7F;
+            // 帧尾
+            cmds[packageLength - 1] = 0x7F;
+        }
+
         return cmds;
     }
 

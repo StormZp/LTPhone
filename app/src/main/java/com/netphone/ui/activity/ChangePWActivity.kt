@@ -79,7 +79,7 @@ class ChangePWActivity : BaseActivity<ActivityChangePwBinding>() {
 
 
 
-            LTApi.newInstance().changePassword(oldPW, newPW, object : OnChangePasswordListener {
+            LTApi.getInstance().changePassword(oldPW, newPW, object : OnChangePasswordListener {
                 override fun onSuccess() {
                     activity.runOnUiThread {
                         toasts(context.getResources().getString(R.string.change_seccess))

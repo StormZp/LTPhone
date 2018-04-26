@@ -26,13 +26,13 @@ class SessionFragment : BaseFragment<FragmentSessionBinding>() {
 
     override fun onResume() {
         super.onResume()
-        adapter.setDatas(LTApi.newInstance().getSessionList())
+        adapter.setDatas(LTApi.getInstance().getSessionList())
     }
 
     override fun receiveEvent(appBean: AppBean<Any>) {
         when (appBean.code) {
             EventConfig.FRIEND_SEND_MSG -> {
-                adapter.setDatas(LTApi.newInstance().getSessionList())
+                adapter.setDatas(LTApi.getInstance().getSessionList())
             }
         }
     }
@@ -46,7 +46,7 @@ class SessionFragment : BaseFragment<FragmentSessionBinding>() {
     override fun initData() {
         binding.title.back.visibility = View.INVISIBLE
         binding.title.title.text = context.resources.getString(R.string.message)
-        adapter = ReplyAdapter(context, LTApi.newInstance().getSessionList())
+        adapter = ReplyAdapter(context, LTApi.getInstance().getSessionList())
         binding.recycle.adapter = adapter
         binding.recycle.layoutManager = LinearLayoutManager(context)
 

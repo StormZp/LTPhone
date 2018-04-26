@@ -44,6 +44,7 @@
     <string name="Handset">听筒</string>
     <string name="calling">呼叫中</string>
     <string name="Setting_up_call">正在建立通话</string>
+    <string name="stop_call">结束通话</string>
     <string name="called_line_off">对方不在线</string>
     <string name="text_accepted">接受</string>
     <string name="text_hands_free">免提</string>

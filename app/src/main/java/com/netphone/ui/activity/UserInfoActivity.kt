@@ -30,7 +30,7 @@ open class UserInfoActivity : BaseActivity<ActivityUserInfoBinding>() {
     override fun initData() {
         binding.title.title.text = context.resources.getString(R.string.user_info)
 
-        var currentInfo = LTApi.newInstance().currentInfo
+        var currentInfo = LTApi.getInstance().currentInfo
         binding.account.setText(currentInfo.realName)
         binding.sex.setText(currentInfo.gender)
         Glide.with(context).load(TcpConfig.URL + currentInfo!!.headIcon).placeholder(R.mipmap.icon_defult_detail).error(R.mipmap.icon_defult_detail).transform(GlideCircleTransform(context)).into(binding.ivHead)
@@ -85,7 +85,7 @@ open class UserInfoActivity : BaseActivity<ActivityUserInfoBinding>() {
             }
             userInfoBean.gender = if (binding.sex.text.toString().equals("女")) "0" else "1"
             userInfoBean.description = binding.content.text.toString()
-            LTApi.newInstance().changeUserInfo(userInfoBean, object : OnChangeUserInfoListener {
+            LTApi.getInstance().changeUserInfo(userInfoBean, object : OnChangeUserInfoListener {
                 override fun onSuccess() {
                     activity.runOnUiThread {
                         toasts(context.getResources().getString(R.string.update_success));

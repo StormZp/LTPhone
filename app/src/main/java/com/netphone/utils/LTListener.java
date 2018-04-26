@@ -32,6 +32,7 @@ import com.netphone.netsdk.listener.OnReFreshListener;
 import com.netphone.netsdk.utils.EventBusUtil;
 import com.netphone.ui.activity.BigImageActivity;
 import com.netphone.ui.activity.BroadcastReceiveActivity;
+import com.netphone.ui.activity.FriendVoiceActivity;
 import com.netphone.ui.activity.MainActivity;
 import com.netphone.ui.activity.BroadcastSendActivity;
 import com.netphone.ui.dialog.MessageDialog;
@@ -162,7 +163,7 @@ public class LTListener {
     }
 
     public void setOnReFreshListener() {
-        LTApi.newInstance().setOnReFreshListener(new OnReFreshListener() {
+        LTApi.getInstance().setOnReFreshListener(new OnReFreshListener() {
             @Override
             public void onReFresh(UserListBean userListBean) {
                 com.netphone.netsdk.Tool.Constant.listBean = userListBean;
@@ -216,11 +217,21 @@ public class LTListener {
                 }
 
             }
+
+            @Override
+            public void onFriendVoice(UserInfoBean userBean) {
+                Intent intent = new Intent(MyApp.getContext(), FriendVoiceActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("bean", userBean);
+                bundle.putSerializable("state", 1);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                MyApp.getInstense().getContext().startActivity(intent.putExtras(bundle));
+            }
         });
     }
 
     public void setOnBroadcastListener() {
-        LTApi.newInstance().setOnBroadcastListener(new OnBroadcastListener() {
+        LTApi.getInstance().setOnBroadcastListener(new OnBroadcastListener() {
             @Override
             public void onSend() {
                 Intent intent = new Intent(MyApp.getContext(), BroadcastSendActivity.class);
@@ -277,10 +288,10 @@ public class LTListener {
     public void sendLocation(int type, OnLocationListener onLocationListener) {
         if (type == 0) {
 
-            LTApi.newInstance().sendLocation(onLocationListener);
+            LTApi.getInstance().sendLocation(onLocationListener);
         } else {
 
-            LTApi.newInstance().help(onLocationListener);
+            LTApi.getInstance().help(onLocationListener);
         }
     }
 }

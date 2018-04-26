@@ -39,7 +39,7 @@ public class FriendChatAdapter extends RecyclerView.Adapter<FriendChatAdapter.Vi
         mContext = context;
         mLayoutInflater = LayoutInflater.from(mContext);
         mGlideCircleTransform = new GlideCircleTransform(mContext);
-        mUserInfoBean = LTApi.newInstance().getCurrentInfo();
+        mUserInfoBean = LTApi.getInstance().getCurrentInfo();
     }
 
     public void addData(FriendChatMsgBean bean){

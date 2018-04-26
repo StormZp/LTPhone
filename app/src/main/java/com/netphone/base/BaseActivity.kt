@@ -131,7 +131,9 @@ open abstract class BaseActivity<T : ViewDataBinding> : AppCompatActivity() {
      * 提示
      */
     open fun toasts(content: String) {
-        ToastUtil.toasts(content)
+        activity.runOnUiThread {
+            ToastUtil.toasts(content)
+        }
     }
 
     open fun toastl(content: String) {

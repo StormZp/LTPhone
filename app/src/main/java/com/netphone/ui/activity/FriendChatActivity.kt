@@ -41,11 +41,11 @@ open class FriendChatActivity : BaseActivity<ActivityChatFriendBinding>() {
 
         binding.click = OnClick()
 
-        friendChatAdapter = FriendChatAdapter(context, LTApi.newInstance().getFriendChatMessage(user.userId))
+        friendChatAdapter = FriendChatAdapter(context, LTApi.getInstance().getFriendChatMessage(user.userId))
         binding.recycle.adapter = friendChatAdapter
         binding.recycle.layoutManager = LinearLayoutManager(context)
 
-        LTApi.newInstance().joinFriendChat(user.userId)
+        LTApi.getInstance().joinFriendChat(user.userId)
         registerEventBus()
     }
 
@@ -75,7 +75,7 @@ open class FriendChatActivity : BaseActivity<ActivityChatFriendBinding>() {
                 toasts(context.resources.getString(R.string.message_not_null))
                 return
             }
-            LTApi.newInstance().sendFriendMessage(user.userId, toString)
+            LTApi.getInstance().sendFriendMessage(user.userId, toString)
             binding.etContent.setText("")
         }
 

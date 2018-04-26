@@ -53,7 +53,7 @@ class MessageDialog : BaseActivity<DialogMessageBinding>() {
         open fun sure(view: View) {
             if (isCall) {//第二步
                 var toString = binding.content.text.toString()
-                LTApi.newInstance().sendFriendMessage(bean.fromUserId, toString)
+                LTApi.getInstance().sendFriendMessage(bean.fromUserId, toString)
                 finish()
             } else {//第一步
                 isCall = true

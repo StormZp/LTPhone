@@ -22,7 +22,7 @@ class ReceiverImageActivity : BaseActivity<ActivityReceiverImageBinding>() {
     }
 
     override fun initData() {
-        var receiverImages = LTApi.newInstance().getReceiverImages(Constant.info.userId)
+        var receiverImages = LTApi.getInstance().getReceiverImages(Constant.info.userId)
 
         binding.recycle.adapter = ImageAdapter(context, receiverImages)
         binding.recycle.layoutManager = LinearLayoutManager(context)

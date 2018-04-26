@@ -2,11 +2,13 @@
 <layout>
 
     <data>
+
         <variable
             name="click"
-            type="com.netphone.ui.activity.FriendVoiceActivity.OnClick"/>
+            type="com.netphone.ui.activity.FriendVoiceActivity.OnClick" />
 
     </data>
+
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -17,6 +19,7 @@
 
 
         <ImageView
+            android:id="@+id/iv_head"
             android:layout_width="68dp"
             android:layout_height="68dp"
             android:layout_marginTop="120dp"
@@ -62,7 +65,7 @@
                 android:layout_width="48dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
-                >
+                android:onClick="@{click.mute}">
 
                 <ImageView
                     android:id="@+id/iv_sound"
@@ -85,7 +88,8 @@
                 android:id="@+id/lay_refuse"
                 android:layout_width="48dp"
                 android:layout_height="wrap_content"
-                android:layout_margin="5dp">
+                android:layout_margin="5dp"
+                android:onClick="@{click.refuse}">
 
                 <ImageView
                     android:id="@+id/iv_refuse"
@@ -110,6 +114,7 @@
                 android:layout_width="48dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
+                android:onClick="@{click.down}"
                 android:visibility="visible">
 
                 <ImageView
@@ -133,14 +138,14 @@
                 android:id="@+id/lay_receive"
                 android:layout_width="48dp"
                 android:layout_height="wrap_content"
-
-                android:layout_margin="5dp">
+                android:layout_margin="5dp"
+                android:onClick="@{click.accept}">
 
                 <ImageView
                     android:id="@+id/iv_receive"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:background="@mipmap/icon_defult_detail" />
+                    android:background="@mipmap/icon_jieting" />
 
                 <Button
                     android:id="@+id/btn_receive"
@@ -158,6 +163,7 @@
                 android:layout_width="48dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
+                android:onClick="@{click.open}"
                 android:visibility="visible">
 
                 <ImageView

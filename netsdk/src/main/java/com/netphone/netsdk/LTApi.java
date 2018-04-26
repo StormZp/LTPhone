@@ -18,6 +18,7 @@ import com.netphone.netsdk.bean.UserInfoBean;
 import com.netphone.netsdk.listener.OnBroadcastListener;
 import com.netphone.netsdk.listener.OnChangePasswordListener;
 import com.netphone.netsdk.listener.OnChangeUserInfoListener;
+import com.netphone.netsdk.listener.OnFriendCallListener;
 import com.netphone.netsdk.listener.OnGetGroupMemberListener;
 import com.netphone.netsdk.listener.OnGroupChatListener;
 import com.netphone.netsdk.listener.OnGroupComeInListener;
@@ -51,7 +52,7 @@ public class LTApi {
     private static LTApi mApi;
     private SimpleDateFormat dateformat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
-    public static LTApi newInstance() {
+    public static LTApi getInstance() {
         if (mApi == null) {
             mApi = new LTApi();
         }
@@ -92,6 +93,7 @@ public class LTApi {
     public OnReFreshListener        onReFreshListener;
     public OnBroadcastListener      onBroadcastListener;
     public OnChangeUserInfoListener onChangeUserInfoListener;
+    public OnFriendCallListener     onFriendCallListener;
     public String                   groupId;
 
     /**
@@ -153,6 +155,41 @@ public class LTApi {
     }
 
     /**
+     * 给好友电话
+     *
+     * @param id
+     */
+    public void friendCall(String id, OnFriendCallListener onFriendCallListener) {
+        this.onFriendCallListener = onFriendCallListener;
+        byte[] words = CmdUtils.getInstance().sendCallRequest(id);
+        TcpSocket.getInstance().addData(words);
+    }
+
+    /**
+     * 拒绝好友电话
+     */
+    public void CallRefuse() {
+        byte[] words = CmdUtils.getInstance().handleCall(0);
+        TcpSocket.getInstance().addData(words);
+    }
+
+    /**
+     * 取消通话
+     */
+    public void turnOffCall() {
+        byte[] words = CmdUtils.getInstance().turnOffCall();
+        TcpSocket.getInstance().addData(words);
+    }
+
+    /**
+     * 接收好友电话
+     */
+    public void CallAccept() {
+        byte[] words = CmdUtils.getInstance().handleCall(1);
+        TcpSocket.getInstance().addData(words);
+    }
+
+    /**
      * 停止发送群聊语音
      */
     public void stopGroupVoice() {
@@ -179,8 +216,8 @@ public class LTApi {
         friendChatMsgBeanDao.insertOrReplace(bean);
         ReplyUtil.insertMsg(bean.getReceiveId(), bean.getUserId(), bean.getMsg(), true);
 
-        if (LTApi.newInstance().onReFreshListener != null) {
-            LTApi.newInstance().onReFreshListener.onFriendChatMsg(bean);
+        if (LTApi.getInstance().onReFreshListener != null) {
+            LTApi.getInstance().onReFreshListener.onFriendChatMsg(bean);
         }
         byte[] words = CmdUtils.getInstance().sendFriendCommonBeanApi(id, content, (byte) 0x00, (byte) 0x08);
         TcpSocket.getInstance().addData(words);

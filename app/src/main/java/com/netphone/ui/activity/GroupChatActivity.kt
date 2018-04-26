@@ -31,7 +31,7 @@ open class GroupChatActivity : BaseActivity<ActivityChatGroupBinding>() {
     private lateinit var adapter: GroupChatAdapter;
     private var isShowKeyBoard = false
 
-    private var userInfoBean = LTApi.newInstance().currentInfo
+    private var userInfoBean = LTApi.getInstance().currentInfo
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initBinding(R.layout.activity_chat_group)
@@ -45,7 +45,7 @@ open class GroupChatActivity : BaseActivity<ActivityChatGroupBinding>() {
         binding.title.menuDate.setImageResource(R.mipmap.icon_qz)
 
 
-        var groupChatMessage = LTApi.newInstance().getGroupChatMessage(groupInfo.groupID)
+        var groupChatMessage = LTApi.getInstance().getGroupChatMessage(groupInfo.groupID)
 //        groupChatMessage = GroupUtil.getSortReverseList(groupChatMessage)
         adapter = GroupChatAdapter(context, groupChatMessage)
         binding.recycle.adapter = adapter
@@ -79,13 +79,13 @@ open class GroupChatActivity : BaseActivity<ActivityChatGroupBinding>() {
 //            LogUtil.error("GroupChatActivity.kt", "74\tinitListener()\n" + event.action);
             when (event.action) {
                 MotionEvent.ACTION_UP -> {
-                    LTApi.newInstance().stopGroupVoice()
+                    LTApi.getInstance().stopGroupVoice()
 
                 }
                 MotionEvent.ACTION_MOVE -> {
                 }
                 MotionEvent.ACTION_DOWN -> {
-                    LTApi.newInstance().sendGroupVoice()
+                    LTApi.getInstance().sendGroupVoice()
                 }
 
 
@@ -168,7 +168,7 @@ open class GroupChatActivity : BaseActivity<ActivityChatGroupBinding>() {
                 toasts(context.resources.getString(R.string.message_not_null))
                 return
             }
-            LTApi.newInstance().sendGroupMessage(groupInfo.groupID, toString)
+            LTApi.getInstance().sendGroupMessage(groupInfo.groupID, toString)
             binding.etContent.setText("")
         }
 

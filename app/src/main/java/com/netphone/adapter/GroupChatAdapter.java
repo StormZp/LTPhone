@@ -37,7 +37,7 @@ public class GroupChatAdapter extends RecyclerView.Adapter<GroupChatAdapter.View
         mContext = context;
         mLayoutInflater = LayoutInflater.from(mContext);
         mGlideCircleTransform = new GlideCircleTransform(mContext);
-        mUserInfoBean = LTApi.newInstance().getCurrentInfo();
+        mUserInfoBean = LTApi.getInstance().getCurrentInfo();
     }
 
     public void addMsg(GroupChatMsgBean msgBean) {

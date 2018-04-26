@@ -134,8 +134,35 @@ public class TcpCmd {
                         }
                         break;
                     case 0x02://主动发起语音通话的回复
+                        LogUtil.error("TcpCmd", "137\tcmdExplore()0x02\n" + bodyBytes[0]);
+                        if (LTApi.getInstance().onFriendCallListener != null)
+                            switch (bodyBytes[0]) {
+                                case 0x00:
+                                    LTApi.getInstance().onFriendCallListener.onCallAccept();
+                                    break;//Setting_call_connection
+                                case 0x01:
+                                    LTApi.getInstance().onFriendCallListener.onCallReject();
+                                    break;//refuse_class
+                                case 0x03:
+                                    LTApi.getInstance().onFriendCallListener.onCallFail(0x03, LTConfigure.getInstance().getContext().getResources().getString(R.string.called_calling));
+                                    LTApi.getInstance().onFriendCallListener = null;
+                                    break;//called_calling
+                                case 0x04:
+                                    LTApi.getInstance().onFriendCallListener.onCallFail(0x03, LTConfigure.getInstance().getContext().getResources().getString(R.string.time_out_call));
+                                    LTApi.getInstance().onFriendCallListener = null;
+                                    break;//time_out_call
+                                case 0x05:
+                                    LTApi.getInstance().onFriendCallListener.onCallFail(0x03, LTConfigure.getInstance().getContext().getResources().getString(R.string.called_line_off));
+                                    LTApi.getInstance().onFriendCallListener = null;
+                                    break;//called_line_off
+                                case 0x07:
+                                    LTApi.getInstance().onFriendCallListener.onCallFail(0x03, LTConfigure.getInstance().getContext().getResources().getString(R.string.not_login));
+                                    LTApi.getInstance().onFriendCallListener = null;
+                                    break;//not_login
+                            }
                         break;
                     case 0x03://退出通话(挂断)
+
                         break;
                     case 0x04://收到加入群聊回复
                         if (LTConfigure.getInstance().getLtApi().groupComeInListener != null) {
@@ -150,9 +177,9 @@ public class TcpCmd {
                                     UdpSocket.Companion.getInstance().connect(port);
                                     UdpSocket.Companion.getInstance().play();
 
-                                    if (!TextUtils.isEmpty(LTApi.newInstance().groupId)) {
-                                        SharedPreferenceUtil.Companion.put(Constant.currentGroupId, LTApi.newInstance().groupId);
-                                        GroupInfoBean unique = mGroupInfoBeanDao.queryBuilder().where(GroupInfoBeanDao.Properties.GroupID.eq(LTApi.newInstance().groupId)).unique();
+                                    if (!TextUtils.isEmpty(LTApi.getInstance().groupId)) {
+                                        SharedPreferenceUtil.Companion.put(Constant.currentGroupId, LTApi.getInstance().groupId);
+                                        GroupInfoBean unique = mGroupInfoBeanDao.queryBuilder().where(GroupInfoBeanDao.Properties.GroupID.eq(LTApi.getInstance().groupId)).unique();
                                         if (unique != null) {
                                             Constant.currentGroupInfo = unique;
                                         }
@@ -249,13 +276,13 @@ public class TcpCmd {
                         }
                         break;
                     case 0x10://修改密码
-                        if (LTApi.newInstance().onChangePasswordListener != null) {
+                        if (LTApi.getInstance().onChangePasswordListener != null) {
                             if (bodyBytes[0] == 0x00) {
-                                LTApi.newInstance().onChangePasswordListener.onSuccess();
+                                LTApi.getInstance().onChangePasswordListener.onSuccess();
                             } else if (bodyBytes[0] == 0x01) {
-                                LTApi.newInstance().onChangePasswordListener.onFail(0x01, LTConfigure.getInstance().getContext().getResources().getString(R.string.old_password_fail));
+                                LTApi.getInstance().onChangePasswordListener.onFail(0x01, LTConfigure.getInstance().getContext().getResources().getString(R.string.old_password_fail));
                             } else if (bodyBytes[0] == 0x07) {
-                                LTApi.newInstance().onChangePasswordListener.onFail(0x07, LTConfigure.getInstance().getContext().getResources().getString(R.string.not_login));
+                                LTApi.getInstance().onChangePasswordListener.onFail(0x07, LTConfigure.getInstance().getContext().getResources().getString(R.string.not_login));
                             }
                         }
                         break;
@@ -327,7 +354,7 @@ public class TcpCmd {
                             LogUtil.error("TcpCmd", "255\tcmdExplore()\n" + body);
                             UserListBean       userListBean = mGson.fromJson(body, UserListBean.class);
                             List<UserInfoBean> userInfo     = userListBean.getUserInfo();
-                            UserInfoBean       currentInfo  = LTApi.newInstance().getCurrentInfo();
+                            UserInfoBean       currentInfo  = LTApi.getInstance().getCurrentInfo();
                             for (int i = 0; i < userInfo.size(); i++) {
                                 if (!currentInfo.getUserId().equals(userInfo.get(i).getUserId())) {
                                     mUserInfoBeanDao.insertOrReplace(userInfo.get(i));
@@ -348,10 +375,27 @@ public class TcpCmd {
 
                         break;
                     case 0x01://被叫语音通话
+                        body = ByteIntUtils.utfToString(bodyBytes);
+                        UserInfoBean unique = mUserInfoBeanDao.queryBuilder().where(UserInfoBeanDao.Properties.UserId.eq(body)).unique();
+                        if (unique != null && LTConfigure.getInstance().getLtApi().onReFreshListener != null) {
+                            LTConfigure.getInstance().getLtApi().onReFreshListener.onFriendVoice(unique);
+
+                        }
                         break;
                     case 0x02://开始语音通话
+//                        ByteUtil.getInt(bodyBytes, 0);//udp 端口
+                        port = ByteUtil.getInt(bodyBytes, 0);//udp端口,占4位
+
+                        UdpSocket.Companion.getInstance().connect(port);
+                        UdpSocket.Companion.getInstance().play();
+                        UdpSocket.Companion.getInstance().record();
                         break;
                     case 0x03://对方挂断语音通话
+                        if (LTApi.getInstance().onFriendCallListener != null) {
+                            LTApi.getInstance().onFriendCallListener.onCallFail(0x06,LTConfigure.getInstance().getContext().getResources().getString(R.string.stop_call));
+                            LTApi.getInstance().onFriendCallListener = null;
+                        }
+
                         break;
                     case 0x04://被叫视频通话
                         break;
@@ -375,8 +419,8 @@ public class TcpCmd {
                         mFriendChatMsgBeanDao.insertOrReplace(friendChatMsgBean);
 
                         ReplyUtil.insertMsg(friendChatMsgBean.getReceiveId(), friendChatMsgBean.getUserId(), friendChatMsgBean.getMsg());
-                        if (LTApi.newInstance().onReFreshListener != null) {
-                            LTApi.newInstance().onReFreshListener.onFriendChatMsg(friendChatMsgBean);
+                        if (LTApi.getInstance().onReFreshListener != null) {
+                            LTApi.getInstance().onReFreshListener.onFriendChatMsg(friendChatMsgBean);
                         }
                         break;
                     case 0x09://当有新的终端加入到当前的活动群聊中时
@@ -424,15 +468,15 @@ public class TcpCmd {
                     case 0x12://当前通话时,通话对象被遥弊,或遥晕
                         break;
                     case 0x13://当用户超出电子围栏范围时
-                        if (LTApi.newInstance().onReFreshListener != null) {
-                            LTApi.newInstance().onReFreshListener.onElectronWall();
+                        if (LTApi.getInstance().onReFreshListener != null) {
+                            LTApi.getInstance().onReFreshListener.onElectronWall();
                         }
                         break;
                     case 0x14://收到被挤下线指令
                         LTConfigure.getInstance().onDestory();
-                        if (LTApi.newInstance().onReFreshListener != null) {
-                            LTApi.newInstance().onReFreshListener.onSqueezeLine();
-                            LTApi.newInstance().onReFreshListener = null;
+                        if (LTApi.getInstance().onReFreshListener != null) {
+                            LTApi.getInstance().onReFreshListener.onSqueezeLine();
+                            LTApi.getInstance().onReFreshListener = null;
                         }
                         break;
                     case 0x15://强制加入群聊
@@ -443,8 +487,8 @@ public class TcpCmd {
                         bean.setDate(System.currentTimeMillis());
                         bean.setReceiveId(SharedPreferenceUtil.Companion.read(Constant.UserId, ""));
                         mImageBeanDao.insertOrReplace(bean);
-                        if (LTApi.newInstance().onReFreshListener != null) {
-                            LTApi.newInstance().onReFreshListener.onMultiMedia(bean);
+                        if (LTApi.getInstance().onReFreshListener != null) {
+                            LTApi.getInstance().onReFreshListener.onMultiMedia(bean);
                         }
 
 
@@ -463,24 +507,24 @@ public class TcpCmd {
                         break;
                     case 0x1F://从服务台发起广播(发起方) 收到端口号
 //                        port = ByteUtil.getInt(bodyBytes, 0);//udp 端口
-                        if (LTApi.newInstance().onBroadcastListener != null) {
-                            LTApi.newInstance().onBroadcastListener.onSend();
+                        if (LTApi.getInstance().onBroadcastListener != null) {
+                            LTApi.getInstance().onBroadcastListener.onSend();
                         }
                         break;
                     case 0x20://广播到达最大时长(发起方) 中断广播
-                        if (LTApi.newInstance().onBroadcastListener != null) {
-                            LTApi.newInstance().onBroadcastListener.onStop();
+                        if (LTApi.getInstance().onBroadcastListener != null) {
+                            LTApi.getInstance().onBroadcastListener.onStop();
                         }
                         break;
                     case 0x21://开始接收广播内容
                         //                        port = ByteUtil.getInt(bodyBytes, 0);//udp 端口
-                        if (LTApi.newInstance().onBroadcastListener != null) {
-                            LTApi.newInstance().onBroadcastListener.onReceiver();
+                        if (LTApi.getInstance().onBroadcastListener != null) {
+                            LTApi.getInstance().onBroadcastListener.onReceiver();
                         }
                         break;
                     case 0x22://停止接收广播内容
-                        if (LTApi.newInstance().onBroadcastListener != null) {
-                            LTApi.newInstance().onBroadcastListener.onStop();
+                        if (LTApi.getInstance().onBroadcastListener != null) {
+                            LTApi.getInstance().onBroadcastListener.onStop();
                         }
                         break;
                     case 0x23://开始播放监听内容
@@ -499,16 +543,16 @@ public class TcpCmd {
                         GroupChatMsgBeanDao groupInfoBeanDao = LTConfigure.getInstance().getDaoSession().getGroupChatMsgBeanDao();
                         groupInfoBeanDao.insertOrReplace(msg);
 
-                        if (LTApi.newInstance().groupChatListener != null) {
-                            LTApi.newInstance().groupChatListener.onReceiverListener(msg);
+                        if (LTApi.getInstance().groupChatListener != null) {
+                            LTApi.getInstance().groupChatListener.onReceiverListener(msg);
                         }
                         break;
                     case 0x27://收到文字广播
                         body = ByteIntUtils.utfToString(bodyBytes);
                         LogUtil.error("TcpCmd", "435\tcmdExplore()\n" + body);
                         BroadcastBean msg2 = mGson.fromJson(body, BroadcastBean.class);
-                        if (LTApi.newInstance().onReFreshListener != null) {
-                            LTApi.newInstance().onReFreshListener.onWordBroadcast(msg2);
+                        if (LTApi.getInstance().onReFreshListener != null) {
+                            LTApi.getInstance().onReFreshListener.onWordBroadcast(msg2);
                         }
                         break;
                 }
@@ -559,9 +603,9 @@ public class TcpCmd {
                     DatagramPacket packet = new DatagramPacket(enmy, 0, enmy.length, addr, port);
                     try {
                         TcpSocket.getInstance().getClient().send(packet);
-                        LogUtil.error("TcpCmd", "364\tonTick()\n" + "群聊心跳包addr:"+addr+"\tport:"+port);
+                        LogUtil.error("TcpCmd", "364\tonTick()\n" + "群聊心跳包addr:" + addr + "\tport:" + port);
                     } catch (IOException e) {
-                        LogUtil.error("563\trun()\n" ,e);
+                        LogUtil.error("563\trun()\n", e);
                     }
                 }
                 if (isConnectBeat) {
@@ -569,15 +613,15 @@ public class TcpCmd {
                     byte[] heart = CmdUtils.getInstance().sendHeratPackage();
                     TcpSocket.getInstance().addData(heart);//定时发送心跳包
                 }
-                if (conncetBeatCount>10){
+                if (conncetBeatCount > 10) {
                     Socket socket = TcpSocket.getInstance().getSocket();
-                    if (socket!=null){
+                    if (socket != null) {
                         try {
                             socket.close();
                             socket = null;
                             TcpSocket.getInstance().connect();
                         } catch (IOException e) {
-                            LogUtil.error("TcpCmd", "578\trun()\n" , e);
+                            LogUtil.error("TcpCmd", "578\trun()\n", e);
                         }
                     }
                 }

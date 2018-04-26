@@ -52,7 +52,7 @@ public class LTConfigure {
         initSocket();
         setDatabase();
         SharedPreferenceUtil.Companion.init(mContext);
-        ltApi = LTApi.newInstance();
+        ltApi = LTApi.getInstance();
         isInit = true;
     }
 

@@ -42,6 +42,7 @@
     <string name="Setting_call_connection">Setting up a call connection</string>
     <string name="refuse_class">The other side refused to speak</string>
     <string name="called_calling">The other person is on the phone</string>
+    <string name="stop_call">Stop Call</string>
     <string name="time_out_call">Overtime unanswered</string>
     <string name="Handset">Handset</string>
     <string name="calling">calling</string>

@@ -54,7 +54,7 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>() {
             val pathList = data!!.getStringArrayListExtra(ImageSelectorActivity.EXTRA_RESULT)
             for (path in pathList) {
 //                Log.i("ImagePathList", path)
-                LTApi.newInstance().upImage(path, object : OnUpFileListener {
+                LTApi.getInstance().upImage(path, object : OnUpFileListener {
                     override fun upFail() {
                         activity.runOnUiThread {
                             toasts(context.getResources().getString(R.string.update_fail))
@@ -81,9 +81,9 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>() {
         binding.click = onClick()
         binding.onlineSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
             if (isChecked) {
-                LTApi.newInstance().onLine(context.applicationContext)
+                LTApi.getInstance().onLine(context.applicationContext)
             } else {
-                LTApi.newInstance().offLine()
+                LTApi.getInstance().offLine()
             }
         }
     }
