@@ -10,13 +10,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.google.gson.Gson;
 import com.netphone.R;
 import com.netphone.netsdk.LTApi;
 import com.netphone.netsdk.Tool.TcpConfig;
 import com.netphone.netsdk.bean.GroupChatMsgBean;
 import com.netphone.netsdk.bean.UserInfoBean;
-import com.netphone.netsdk.utils.LogUtil;
 import com.netphone.utils.ChatTimeUtil;
 import com.netphone.utils.GlideCircleTransform;
 
@@ -83,7 +81,7 @@ public class GroupChatAdapter extends RecyclerView.Adapter<GroupChatAdapter.View
         }
 
 
-        LogUtil.error("GroupChatAdapter", "57\tonBindViewHolder()\n" + new Gson().toJson(bean));
+//        LogUtil.error("GroupChatAdapter", "57\tonBindViewHolder()\n" + new Gson().toJson(bean));
     }
 
     @Override

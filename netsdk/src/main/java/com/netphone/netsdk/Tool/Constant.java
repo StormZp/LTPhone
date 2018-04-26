@@ -27,6 +27,8 @@ public class Constant {
 
     public static final String currentGroupId = "currentGroupId";
 
+    public static final int VOICE_DATA_HEARD = 10;//音频数据头
+
     public static UserInfoBean info;
     public static UserListBean listBean;
     public static GroupInfoBean currentGroupInfo;

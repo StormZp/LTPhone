@@ -145,6 +145,22 @@ public class LTApi {
     }
 
     /**
+     * 发送群聊语音
+     */
+    public void sendGroupVoice() {
+        byte[] words = CmdUtils.getInstance().commonApi2((byte) 0x00, (byte) 0x0B);
+        TcpSocket.getInstance().addData(words);
+    }
+
+    /**
+     * 停止发送群聊语音
+     */
+    public void stopGroupVoice() {
+        byte[] words = CmdUtils.getInstance().commonApi2((byte) 0x00, (byte) 0x0C);
+        TcpSocket.getInstance().addData(words);
+    }
+
+    /**
      * 发送单聊信息
      *
      * @param id
@@ -170,11 +186,21 @@ public class LTApi {
         TcpSocket.getInstance().addData(words);
     }
 
+    /**
+     * 好友聊天
+     *
+     * @param id
+     */
     public void joinFriendChat(String id) {
         ReplyUtil.read(id, Constant.info.getUserId());
 
     }
 
+    /**
+     * 获取会话列表
+     *
+     * @return
+     */
     public ArrayList<ReplyMsgBean> getSessionList() {
         ArrayList<ReplyMsgBean> replyMsgBeans = new ArrayList<>();
         replyMsgBeans.addAll(ReplyUtil.getList(Constant.info.getUserId()));
@@ -383,7 +409,6 @@ public class LTApi {
 
     /**
      * 设置广播监听
-     *
      *
      * @param onBroadcastListener
      */

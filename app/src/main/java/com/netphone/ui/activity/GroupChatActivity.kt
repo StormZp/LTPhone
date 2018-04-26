@@ -3,6 +3,7 @@ package com.netphone.ui.activity
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.text.TextUtils
+import android.view.MotionEvent
 import android.view.View
 import com.netphone.R
 import com.netphone.adapter.GroupChatAdapter
@@ -45,7 +46,8 @@ open class GroupChatActivity : BaseActivity<ActivityChatGroupBinding>() {
         adapter = GroupChatAdapter(context, groupChatMessage)
         binding.recycle.adapter = adapter
         binding.recycle.layoutManager = LinearLayoutManager(context)
-        binding.recycle.smoothScrollToPosition(adapter.itemCount - 1);
+        if (adapter.itemCount != 0)
+            binding.recycle.smoothScrollToPosition(adapter.itemCount - 1);
         LTListener.newInstance().joinGroupListener(groupInfo.groupID)
     }
 
@@ -67,6 +69,26 @@ open class GroupChatActivity : BaseActivity<ActivityChatGroupBinding>() {
 //                    binding.keyboard.setImageResource(R.mipmap.icon_jp)
                 }
             }
+        }
+        binding.sendVoice.setOnTouchListener { v, event ->
+//            LogUtil.error("GroupChatActivity.kt", "74\tinitListener()\n" + event.action);
+            when (event.action) {
+                MotionEvent.ACTION_UP -> {
+                    LTApi.newInstance().stopGroupVoice()
+
+                }
+                MotionEvent.ACTION_MOVE -> {
+                }
+                MotionEvent.ACTION_DOWN -> {
+                    LTApi.newInstance().sendGroupVoice()
+                }
+
+
+                else -> {
+                }
+            }
+            true
+
         }
     }
 
@@ -123,7 +145,8 @@ open class GroupChatActivity : BaseActivity<ActivityChatGroupBinding>() {
                 adapter.addMsg(groupChatMsgBean)
             }
         }
-        binding.recycle.smoothScrollToPosition(adapter.itemCount - 1);
+        if (adapter.itemCount != 0)
+            binding.recycle.smoothScrollToPosition(adapter.itemCount - 1);
     }
 
     override fun receiveStickyEvent(appBean: AppBean<Any>) {

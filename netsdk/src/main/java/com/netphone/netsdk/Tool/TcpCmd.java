@@ -21,6 +21,7 @@ import com.netphone.netsdk.bean.ImageBean;
 import com.netphone.netsdk.bean.UserInfoBean;
 import com.netphone.netsdk.bean.UserListBean;
 import com.netphone.netsdk.socket.TcpSocket;
+import com.netphone.netsdk.socket.UdpSocket;
 import com.netphone.netsdk.utils.ByteIntUtils;
 import com.netphone.netsdk.utils.ByteUtil;
 import com.netphone.netsdk.utils.CmdUtils;
@@ -144,6 +145,10 @@ public class TcpCmd {
                                 case 0x00:
                                     port = ByteUtil.getInt(bodyBytes, 1);//udp端口,占4位
                                     isGroupBeat = true;
+
+                                    UdpSocket.Companion.getInstance().connect(port);
+                                    UdpSocket.Companion.getInstance().play();
+
                                     if (!TextUtils.isEmpty(LTApi.newInstance().groupId)) {
                                         SharedPreferenceUtil.Companion.put(Constant.currentGroupId, LTApi.newInstance().groupId);
                                         GroupInfoBean unique = mGroupInfoBeanDao.queryBuilder().where(GroupInfoBeanDao.Properties.GroupID.eq(LTApi.newInstance().groupId)).unique();
@@ -152,6 +157,7 @@ public class TcpCmd {
                                         }
                                         LTConfigure.getInstance().getLtApi().groupComeInListener.onComeInSuccess();
                                     }
+
                                     break;
                                 case 0x01:
                                     LTConfigure.getInstance().getLtApi().groupComeInListener.onComeInFail(0x02, LTConfigure.getInstance().getContext().getResources().getString(R.string.add_fail));
@@ -189,6 +195,7 @@ public class TcpCmd {
                             switch (bodyBytes[0]) {
                                 case 0x00:
                                     LTConfigure.getInstance().getLtApi().groupStateListener.onGrabWheatSuccess();
+                                    UdpSocket.Companion.getInstance().record();
                                     break;
                                 case 0x01:
                                     LTConfigure.getInstance().getLtApi().groupStateListener.onGrabWheatFail(0x01, LTConfigure.getInstance().getContext().getResources().getString(R.string.preemption) + LTConfigure.getInstance().getContext().getResources().getString(R.string.fail));
@@ -211,6 +218,7 @@ public class TcpCmd {
                             switch (bodyBytes[0]) {
                                 case 0x00:
                                     LTConfigure.getInstance().getLtApi().groupStateListener.onRelaxedMacSuccess();
+                                    UdpSocket.Companion.getInstance().stopRecord();
                                     break;
                                 case 0x01:
                                     LTConfigure.getInstance().getLtApi().groupStateListener.onRelaxedMacFail(0x01, LTConfigure.getInstance().getContext().getResources().getString(R.string.release) + LTConfigure.getInstance().getContext().getResources().getString(R.string.fail));
@@ -550,8 +558,9 @@ public class TcpCmd {
                     DatagramPacket packet = new DatagramPacket(enmy, 0, enmy.length, addr, port);
                     try {
                         TcpSocket.getInstance().getClient().send(packet);
-//                        LogUtil.error("TcpCmd", "364\tonTick()\n" + "群聊心跳包");
+                        LogUtil.error("TcpCmd", "364\tonTick()\n" + "群聊心跳包addr:"+addr+"\tport:"+port);
                     } catch (IOException e) {
+                        LogUtil.error("563\trun()\n" ,e);
                     }
                 }
                 if (isConnectBeat) {

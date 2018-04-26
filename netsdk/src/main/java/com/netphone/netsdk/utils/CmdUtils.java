@@ -5,6 +5,7 @@ import android.text.TextUtils;
 
 import com.google.gson.Gson;
 import com.netphone.netsdk.LTConfigure;
+import com.netphone.netsdk.Tool.Constant;
 
 import java.nio.charset.Charset;
 import java.util.HashMap;
@@ -17,7 +18,7 @@ import java.util.Map;
 
 public class CmdUtils {
     private final String TAG = CmdUtils.class.getCanonicalName();
-    private static byte[] cmds;
+    private static byte[]   cmds;
     private static CmdUtils mInstance;
     private int serialNo = 0;
 
@@ -66,14 +67,14 @@ public class CmdUtils {
         cmds[7] = cmdId;
         cmds[8] = cmdId2;
         //数据长度，2个字节
-        int length = byteArray.length;
-        byte[] bytes = ByteIntUtils.int2byte(length);
+        int    length = byteArray.length;
+        byte[] bytes  = ByteIntUtils.int2byte(length);
         cmds[9] = bytes[0];
         cmds[10] = bytes[1];
         //数据内容
         System.arraycopy(byteArray, 0, cmds, 11, byteArray.length);
         //CRC16校验,取2位
-        int crc16 = CRC16.calcCrc16(cmds, 1, cmds.length - 1);
+        int    crc16    = CRC16.calcCrc16(cmds, 1, cmds.length - 1);
         byte[] crcBytes = ByteIntUtils.int2byte(crc16);
         cmds[packageLength - 3] = crcBytes[0];
         cmds[packageLength - 2] = crcBytes[1];
@@ -112,8 +113,8 @@ public class CmdUtils {
         cmds[7] = cmdId;
         cmds[8] = cmdId2;
         //body长度，2个字节
-        int length = byteArray.length + fileArray.length + 2;//body包含三部分
-        byte[] bytes = ByteIntUtils.int2byte(length);
+        int    length = byteArray.length + fileArray.length + 2;//body包含三部分
+        byte[] bytes  = ByteIntUtils.int2byte(length);
         cmds[9] = bytes[0];
         cmds[10] = bytes[1];
         //body里面部分
@@ -147,11 +148,12 @@ public class CmdUtils {
 
     /**
      * 发送登录
+     *
      * @param account
      * @param password
      * @return
      */
-    public byte[] sendLogin( String account, String password) {
+    public byte[] sendLogin(String account, String password) {
 //        this.context = context;
 //        this.context = MyApp.app.mContext;
         Map<String, Object> map = new HashMap<String, Object>();
@@ -161,15 +163,16 @@ public class CmdUtils {
         //再进行UTF8编码
         byte[] byteArray = json.getBytes(Charset.forName("utf-8"));
 //        Log2Util.debug(json + "");
-        byte cmdId = 0x00;
-        byte cmdId2 = 0x00;
-        byte[] temp = sendCmds(cmdId, cmdId2, byteArray);
+        byte   cmdId  = 0x00;
+        byte   cmdId2 = 0x00;
+        byte[] temp   = sendCmds(cmdId, cmdId2, byteArray);
         return temp;
     }
 
 
     /**
      * 发送群聊心跳包
+     *
      * @return
      */
     public byte[] sendGroupBeat() {
@@ -199,9 +202,9 @@ public class CmdUtils {
         String json = new Gson().toJson(map);
         //再进行UTF8编码
         byte[] byteArray = json.getBytes(Charset.forName("utf-8"));
-        byte cmdId = (byte) 0x00;
-        byte cmdId2 = (byte) 0x10;
-        byte[] temp = sendCmds(cmdId, cmdId2, byteArray);
+        byte   cmdId     = (byte) 0x00;
+        byte   cmdId2    = (byte) 0x10;
+        byte[] temp      = sendCmds(cmdId, cmdId2, byteArray);
         return temp;
     }
 
@@ -209,8 +212,8 @@ public class CmdUtils {
      * 收到用户列表推送
      */
     public byte[] notifServerRececivedUserList() {
-        byte cmdId = 0x01;
-        byte cmdId2 = 0x00;
+        byte   cmdId     = 0x01;
+        byte   cmdId2    = 0x00;
         byte[] byteArray = new byte[1];
         byteArray[0] = 0x00;
         byte[] temp = sendCmds(cmdId, cmdId2, byteArray);
@@ -221,11 +224,11 @@ public class CmdUtils {
      * 发起通话请求
      */
     public byte[] sendCallRequest(String userId) {
-        byte cmdId = 0x00;
+        byte cmdId  = 0x00;
         byte cmdId2 = 0x02;
         //再进行UTF8编码
         byte[] byteArray = userId.getBytes(Charset.forName("utf-8"));
-        byte[] temp = sendCmds(cmdId, cmdId2, byteArray);
+        byte[] temp      = sendCmds(cmdId, cmdId2, byteArray);
         return temp;
     }
 
@@ -233,11 +236,11 @@ public class CmdUtils {
      * 发起视频请求
      */
     public byte[] sendLookRequest(String userId) {
-        byte cmdId = 0x00;
+        byte cmdId  = 0x00;
         byte cmdId2 = 0x06;
         //再进行UTF8编码
         byte[] byteArray = userId.getBytes(Charset.forName("utf-8"));
-        byte[] temp = sendCmds(cmdId, cmdId2, byteArray);
+        byte[] temp      = sendCmds(cmdId, cmdId2, byteArray);
         return temp;
     }
 
@@ -245,8 +248,8 @@ public class CmdUtils {
      * 处理通话
      */
     public byte[] handleCall(int voiceflag) {
-        byte cmdId = 0x01;
-        byte cmdId2 = 0x01;
+        byte   cmdId     = 0x01;
+        byte   cmdId2    = 0x01;
         byte[] byteArray = new byte[1];
         if (voiceflag == 0) {
             byteArray[0] = 0x01; //拒绝通话
@@ -261,8 +264,8 @@ public class CmdUtils {
      * 处理视频
      */
     public byte[] handleLook(int voiceflag) {
-        byte cmdId = 0x01;
-        byte cmdId2 = 0x04;
+        byte   cmdId     = 0x01;
+        byte   cmdId2    = 0x04;
         byte[] byteArray = new byte[1];
         if (voiceflag == 0) {
             byteArray[0] = 0x01; //拒绝通话
@@ -277,8 +280,8 @@ public class CmdUtils {
      * 主动挂断通话
      */
     public byte[] turnOffCall() {
-        byte cmdId = 0x00;
-        byte cmdId2 = 0x03;
+        byte   cmdId     = 0x00;
+        byte   cmdId2    = 0x03;
         byte[] byteArray = new byte[1];
         byteArray[0] = 0x00; //没有内容，随意写一个
         byte[] temp = sendCmds(cmdId, cmdId2, byteArray);
@@ -289,8 +292,8 @@ public class CmdUtils {
      * 主动挂断视频
      */
     public byte[] turnOffLook() {
-        byte cmdId = 0x00;
-        byte cmdId2 = 0x07;
+        byte   cmdId     = 0x00;
+        byte   cmdId2    = 0x07;
         byte[] byteArray = new byte[1];
         byteArray[0] = 0x00; //没有内容，随意写一个
         byte[] temp = sendCmds(cmdId, cmdId2, byteArray);
@@ -301,8 +304,8 @@ public class CmdUtils {
      * 收到对方挂断通话
      */
     public byte[] replyTurnOffOthers() {
-        byte cmdId = 0x01;
-        byte cmdId2 = 0x03;
+        byte   cmdId     = 0x01;
+        byte   cmdId2    = 0x03;
         byte[] byteArray = new byte[1];
         byteArray[0] = 0x00; //没有内容，随意写一个
         byte[] temp = sendCmds(cmdId, cmdId2, byteArray);
@@ -310,14 +313,38 @@ public class CmdUtils {
     }
 
     /**
+     * 获取音频录音数据包
+     */
+    public byte[] getRecordVoiceData(byte[] audios, byte[] idBytes) {
+//            LogUtil.error("获取音频录音数据包");
+        byte[] data = new byte[audios.length + Constant.VOICE_DATA_HEARD];
+        //帧头
+        data[0] = (byte) 0xff;
+        byte[] bytes = ByteIntUtils.int2byte(audios.length + 2);
+        //语音长度
+        data[1] = bytes[0];
+        data[2] = bytes[1];
+        //用于识别,取终端ID前四位
+        data[3] = idBytes[0];
+        data[4] = idBytes[1];
+        data[5] = idBytes[2];
+        data[6] = idBytes[3];
+
+        System.arraycopy(audios, 0, data, Constant.VOICE_DATA_HEARD - 1, audios.length);
+        //帧尾
+        data[audios.length + Constant.VOICE_DATA_HEARD - 1] = (byte) 0xff;
+        return data;
+    }
+
+    /**
      * 取消呼叫
      */
     public byte[] cancelVoiceCall(String userId) {
-        byte cmdId = 0x00;
+        byte cmdId  = 0x00;
         byte cmdId2 = 0x09;
         //再进行UTF8编码
         byte[] byteArray = userId.getBytes(Charset.forName("utf-8"));
-        byte[] temp = sendCmds(cmdId, cmdId2, byteArray);
+        byte[] temp      = sendCmds(cmdId, cmdId2, byteArray);
         return temp;
     }
 
@@ -325,19 +352,20 @@ public class CmdUtils {
      * 发送心跳包
      */
     public byte[] sendHeratPackage() {
-        byte cmdId = 0x02;
-        byte cmdId2 = 0x00;
+        byte   cmdId     = 0x02;
+        byte   cmdId2    = 0x00;
         byte[] byteArray = new byte[1];
         byteArray[0] = 0x00; //没有内容，随意写一个
         byte[] temp = sendCmds(cmdId, cmdId2, byteArray);
         return temp;
     }
- /**
+
+    /**
      * 发送取消强制广播
      */
     public byte[] sendCancelForce() {
-        byte cmdId = 0x00;
-        byte cmdId2 = 0x19;
+        byte   cmdId     = 0x00;
+        byte   cmdId2    = 0x19;
         byte[] byteArray = new byte[1];
         byteArray[0] = 0x00; //没有内容，随意写一个
         byte[] temp = sendCmds(cmdId, cmdId2, byteArray);
@@ -357,12 +385,13 @@ public class CmdUtils {
         String json = new Gson().toJson(map);
         //再进行UTF8编码
         byte[] byteArray = json.getBytes(Charset.forName("utf-8"));
-        byte cmdId = 0x00;
-        byte cmdId2 = 0x01;
-        byte[] temp = sendCmds(cmdId, cmdId2, byteArray);
+        byte   cmdId     = 0x00;
+        byte   cmdId2    = 0x01;
+        byte[] temp      = sendCmds(cmdId, cmdId2, byteArray);
         return temp;
     }
- /**
+
+    /**
      * 一键呼救
      *
      * @param longitude
@@ -375,9 +404,9 @@ public class CmdUtils {
         String json = new Gson().toJson(map);
         //再进行UTF8编码
         byte[] byteArray = json.getBytes(Charset.forName("utf-8"));
-        byte cmdId = 0x00;
-        byte cmdId2 = 0x18;
-        byte[] temp = sendCmds(cmdId, cmdId2, byteArray);
+        byte   cmdId     = 0x00;
+        byte   cmdId2    = 0x18;
+        byte[] temp      = sendCmds(cmdId, cmdId2, byteArray);
         return temp;
     }
 
@@ -394,10 +423,11 @@ public class CmdUtils {
         String json = new Gson().toJson(map);
         //再进行UTF8编码
         byte[] byteArray = json.getBytes(Charset.forName("utf-8"));
-        byte[] temp = sendCmds(cmdId, cmdId2, byteArray);
+        byte[] temp      = sendCmds(cmdId, cmdId2, byteArray);
         return temp;
     }
- /**
+
+    /**
      * 发送好友消息
      *
      * @param ReceiveId
@@ -410,7 +440,7 @@ public class CmdUtils {
         String json = new Gson().toJson(map);
         //再进行UTF8编码
         byte[] byteArray = json.getBytes(Charset.forName("utf-8"));
-        byte[] temp = sendCmds(cmdId, cmdId2, byteArray);
+        byte[] temp      = sendCmds(cmdId, cmdId2, byteArray);
         return temp;
     }
 
@@ -421,7 +451,7 @@ public class CmdUtils {
         String json = new Gson().toJson(map);
         //再进行UTF8编码
         byte[] byteArray = json.getBytes(Charset.forName("utf-8"));
-        byte[] temp = sendFileCmds(cmdId, cmdId2, byteArray, fileArray);
+        byte[] temp      = sendFileCmds(cmdId, cmdId2, byteArray, fileArray);
         return temp;
     }
 
@@ -432,7 +462,7 @@ public class CmdUtils {
         if (TextUtils.isEmpty(id))
             return null;
         byte[] byteArray = id.getBytes(Charset.forName("utf-8"));
-        byte[] temp = sendCmds(cmdId, cmdId2, byteArray);
+        byte[] temp      = sendCmds(cmdId, cmdId2, byteArray);
         return temp;
     }
 
@@ -459,7 +489,7 @@ public class CmdUtils {
         String json = new Gson().toJson(map);
         //再进行UTF8编码
         byte[] byteArray = json.getBytes(Charset.forName("utf-8"));
-        byte[] temp = sendCmds(cmdId, cmdId2, byteArray);
+        byte[] temp      = sendCmds(cmdId, cmdId2, byteArray);
         return temp;
     }
 
@@ -473,7 +503,7 @@ public class CmdUtils {
         }
         //再进行UTF8编码
         byte[] byteArray = json.getBytes(Charset.forName("utf-8"));
-        byte[] temp = sendCmds(cmdId, cmdId2, byteArray);
+        byte[] temp      = sendCmds(cmdId, cmdId2, byteArray);
         return temp;
     }
 }

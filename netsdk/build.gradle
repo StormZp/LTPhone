@@ -36,26 +36,23 @@ greendao {
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'com.android.support:appcompat-v7:23.0.1'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
-
     //数据库
     compile 'org.greenrobot:greendao:3.2.2'
     //事件总线
     compile 'org.greenrobot:eventbus:3.0.0'
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-
     compile 'com.google.code.gson:gson:2.6.2'
     compile 'com.google.guava:guava:23.0-android'
     compile 'com.belerweb:pinyin4j:2.5.1'
     compile 'com.bigkoo:alertview:1.0.3'
     //图片压缩框架
     compile 'com.zxy.android:tiny:0.0.6'
-
+    implementation project(':voicelib')
 }
 repositories {
     mavenCentral()
