@@ -2,6 +2,7 @@ package com.netphone.netsdk;
 
 import android.content.Context;
 import android.os.SystemClock;
+import android.text.TextUtils;
 
 import com.google.gson.Gson;
 import com.netphone.gen.FriendChatMsgBeanDao;
@@ -161,8 +162,10 @@ public class LTApi {
      */
     public void friendCall(String id, OnFriendCallListener onFriendCallListener) {
         this.onFriendCallListener = onFriendCallListener;
-        byte[] words = CmdUtils.getInstance().sendCallRequest(id);
-        TcpSocket.getInstance().addData(words);
+        if (!TextUtils.isEmpty(id)){
+            byte[] words = CmdUtils.getInstance().sendCallRequest(id);
+            TcpSocket.getInstance().addData(words);
+        }
     }
 
     /**

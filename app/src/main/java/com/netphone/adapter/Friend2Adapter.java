@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.netphone.R;
+import com.netphone.netsdk.LTApi;
 import com.netphone.netsdk.Tool.TcpConfig;
 import com.netphone.netsdk.bean.UserInfoBean;
 import com.netphone.ui.activity.FriendChatActivity;
@@ -30,6 +31,7 @@ public class Friend2Adapter extends RecyclerView.Adapter<Friend2Adapter.ViewHold
     private List<UserInfoBean> list = null;
     private Context mContext;
     private LayoutInflater mLayoutInflater = null;
+    private UserInfoBean   curr            = LTApi.getInstance().getCurrentInfo();
 
 
     public Friend2Adapter(Context mContext, List<UserInfoBean> list) {
@@ -72,6 +74,9 @@ public class Friend2Adapter extends RecyclerView.Adapter<Friend2Adapter.ViewHold
 //        LogUtil.error("Friend2Adapter", "74\tonBindViewHolder()\n" + user.getIsOnLine());
         viewHolder.online.setText(aTrue ? mContext.getResources().getString(R.string.off_line) : mContext.getResources().getString(R.string.onLine));
         viewHolder.online.setTextColor(aTrue ? mContext.getResources().getColor(R.color.text_gray) : mContext.getResources().getColor(R.color.text_black));
+        if (user.getUserId().equals(curr.getUserId())) {
+            viewHolder.online.setText(mContext.getResources().getString(R.string.self));
+        }
         viewHolder.name.setTextColor(aTrue ? mContext.getResources().getColor(R.color.text_gray) : mContext.getResources().getColor(R.color.text_black));
         Glide.with(mContext).load(TcpConfig.URL + user.getHeadIcon()).placeholder(R.mipmap.icon_defult_detail).error(R.mipmap.icon_defult_detail).transform(mGlideCircleTransform).into(viewHolder.head);
 

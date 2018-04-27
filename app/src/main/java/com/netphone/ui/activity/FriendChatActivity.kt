@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.text.TextUtils
 import android.view.View
+import com.google.gson.Gson
 import com.netphone.R
 import com.netphone.adapter.FriendChatAdapter
 import com.netphone.config.EventConfig
@@ -12,6 +13,7 @@ import com.netphone.netsdk.LTApi
 import com.netphone.netsdk.base.AppBean
 import com.netphone.netsdk.bean.FriendChatMsgBean
 import com.netphone.netsdk.bean.UserInfoBean
+import com.netphone.netsdk.utils.LogUtil
 import com.netphone.utils.AppUtil
 import com.storm.tool.base.BaseActivity
 
@@ -36,6 +38,15 @@ open class FriendChatActivity : BaseActivity<ActivityChatFriendBinding>() {
         binding.title.menuDate.setImageResource(R.mipmap.icon_tel)
         binding.title.menuDate.visibility = View.VISIBLE
         binding.title.menuDate.setOnClickListener {
+            LogUtil.error("FriendChatActivity.kt","39\tinitData()\n"+Gson().toJson(user));
+            if (user.isOnLine.equals("0")||user.isOnLine.equals("false")) {
+                toasts( context.getResources().getString(R.string.user_line_off));
+                return@setOnClickListener;
+            }
+            if (user.userId.equals(LTApi.getInstance().currentInfo)) {
+                toasts( context.getResources().getString(R.string.chat_with_u));
+                return@setOnClickListener;
+            }
             jump(FriendVoiceActivity::class.java, intent.extras)
         }
 

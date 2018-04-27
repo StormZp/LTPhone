@@ -9,6 +9,8 @@ public interface OnFriendCallListener {
 
     void onCallReject();
 
+    void onCallStart();
+
     void onCallFail(int state, String message);
 
 }

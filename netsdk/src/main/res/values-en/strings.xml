@@ -88,6 +88,7 @@
     <string name="down_fail"> Download failed. Please download again！</string>
     <string name="Updating"> Updating</string>
     <string name="latest_version"> It\'s the latest version</string>
+    <string name="self">self</string>
     <string name="needs_search"> What needs to be searched is</string>
     <string name="back"> back</string>
     <string name="send_address_success"> Transmission location was successful</string>

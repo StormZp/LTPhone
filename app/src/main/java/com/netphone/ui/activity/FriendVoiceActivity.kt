@@ -50,25 +50,31 @@ class FriendVoiceActivity : BaseActivity<ActivityVoiceFriendBinding>() {
         binding.tvName.text = userInfoBean.realName
         Glide.with(activity).load(TcpConfig.URL + userInfoBean.headIcon).error(R.mipmap.icon_defult_detail).transform(GlideCircleTransform(context)).into(binding.ivHead)
 
+        var id = ""
         if (state == 0) {//请求拨打电话
-            LTApi.getInstance().friendCall(userInfoBean.userId, object : OnFriendCallListener {
-
-                override fun onCallAccept() {
-                    toasts(context.resources.getString(R.string.Setting_call_connection))
-                    showButton(2)
-                }
-
-                override fun onCallReject() {
-                    toasts(context.resources.getString(R.string.refuse_class))
-                    activity.finish()
-                }
-
-                override fun onCallFail(state: Int, message: String?) {
-                    toasts(message!!)
-                    activity.finish()
-                }
-            })
+            id = userInfoBean.userId
         }
+        LTApi.getInstance().friendCall(id, object : OnFriendCallListener {
+            override fun onCallStart() {
+                toasts(context.resources.getString(R.string.start_voice))
+            }
+
+            override fun onCallAccept() {
+                toasts(context.resources.getString(R.string.Setting_call_connection))
+                showButton(2)
+            }
+
+            override fun onCallReject() {
+                toasts(context.resources.getString(R.string.refuse_class))
+                activity.finish()
+            }
+
+            override fun onCallFail(state: Int, message: String?) {
+                toasts(message!!)
+                activity.finish()
+            }
+        })
+
     }
 
     private fun showButton(state: Int) {
@@ -130,6 +136,7 @@ class FriendVoiceActivity : BaseActivity<ActivityVoiceFriendBinding>() {
 
         open fun accept(view: View) {
             LTApi.getInstance().CallAccept()
+            showButton(2)
         }
 
         open fun open(view: View) {

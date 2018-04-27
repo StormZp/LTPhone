@@ -160,7 +160,10 @@ public class TcpCmd {
                             }
                         break;
                     case 0x03://退出通话(挂断)
-
+                        if (LTApi.getInstance().onFriendCallListener != null) {
+                            LTApi.getInstance().onFriendCallListener.onCallFail(0x06, LTConfigure.getInstance().getContext().getResources().getString(R.string.stop_call));
+                            LTApi.getInstance().onFriendCallListener = null;
+                        }
                         break;
                     case 0x04://收到加入群聊回复
                         if (LTConfigure.getInstance().getLtApi().groupComeInListener != null) {
@@ -384,6 +387,9 @@ public class TcpCmd {
                         }
                         break;
                     case 0x02://开始语音通话
+                        if (LTApi.getInstance().onFriendCallListener != null) {
+                            LTApi.getInstance().onFriendCallListener.onCallAccept();
+                        }
 //                        ByteUtil.getInt(bodyBytes, 0);//udp 端口
                         port = ByteUtil.getInt(bodyBytes, 0);//udp端口,占4位
 

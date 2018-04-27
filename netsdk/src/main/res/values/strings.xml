@@ -138,6 +138,7 @@
     <string name="old_password_fail">原密码验证出错</string>
     <string name="not_null">不能为空</string>
     <string name="old_passowrd">旧密码</string>
+    <string name="self">本人</string>
 
     <string name="new_passowrd">新密码:</string>
     <string name="input_again">请再次输入</string>

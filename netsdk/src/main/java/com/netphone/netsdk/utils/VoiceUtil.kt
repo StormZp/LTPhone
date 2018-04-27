@@ -4,7 +4,6 @@ import android.media.*
 import android.media.audiofx.AcousticEchoCanceler
 import android.media.audiofx.NoiseSuppressor
 import android.os.Environment
-import com.meidp.voicelib.ADPCM
 import java.io.File
 
 
@@ -17,7 +16,6 @@ class VoiceUtil {
     companion object {
         var file: File = File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/reverseme.pcm")
         var isRecording = false;
-        private var adpcm: ADPCM = ADPCM()
         private lateinit var listener: RecordVoice
         //16K采集率
         val frequency = 8000
@@ -85,10 +83,10 @@ class VoiceUtil {
         while (isRecording && audioRecord != null) {
             val bufferReadResult = audioRecord!!.read(buffer, 0, bufferSize)
             //编码后的数据
-            adpcm.adpcm_thirdparty_reset()
-            var decode = ByteArray(buffer.size / 2)
-            decode = adpcm.adpcm_coder(buffer, decode, buffer.size)
-            listener.onRecordDataListener(decode)
+//            adpcm.adpcm_thirdparty_reset()
+//            var decode = ByteArray(buffer.size / 2)
+//            decode = adpcm.adpcm_coder(buffer, decode, buffer.size)
+//            listener.onRecordDataListener(decode)
         }
     }
 

@@ -1,7 +1,6 @@
 package com.netphone.netsdk.socket
 
 import com.google.gson.Gson
-import com.meidp.voicelib.ADPCM
 import com.netphone.netsdk.LTConfigure
 import com.netphone.netsdk.Tool.Constant
 import com.netphone.netsdk.Tool.TcpConfig
@@ -90,7 +89,7 @@ class UdpSocket {
     open fun play() {
         isPlayVoice = true
         thread {
-            var adpcm = ADPCM()
+//            var adpcm = ADPCM()
             val recvBuf = ByteArray(VoiceUtil.getBufferSize() / 2 + Constant.VOICE_DATA_HEARD)
             val recvPacket = DatagramPacket(recvBuf, recvBuf.size)
             var playPerpare = VoiceUtil.playPerpare()
@@ -114,10 +113,10 @@ class UdpSocket {
                 var voice = ByteArray(data.size - Constant.VOICE_DATA_HEARD)
                 LogUtil.error("SocketManageService.kt", "478\n" + "有收到消息\t端口号$recordPort")
                 System.arraycopy(data, Constant.VOICE_DATA_HEARD - 1, voice, 0, data.size - Constant.VOICE_DATA_HEARD)
-                adpcm.adpcm_thirdparty_reset()
-                var decode = ShortArray(voice.size * 2)
-                decode = adpcm.adpcm_decoder(voice, decode, voice.size)
-                playPerpare.write(decode, 0, decode.size)
+//                adpcm.adpcm_thirdparty_reset()
+//                var decode = ShortArray(voice.size * 2)
+//                decode = adpcm.adpcm_decoder(voice, decode, voice.size)
+//                playPerpare.write(decode, 0, decode.size)
             }
         }
     }
