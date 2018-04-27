@@ -51,7 +51,7 @@ class GroupsFragment : BaseFragment<FragmentGroupsBinding>() {
         binding.title.back.visibility = View.INVISIBLE
         binding.title.title.text = context.resources.getString(R.string.groups)
 
-        currentGroup = LTConfigure.getInstance().currentGroup
+        currentGroup = LTConfigure.getInstance().ltApi.currentGroupInfo
 
         if (currentGroup == null) {
             binding.layCurrent.visibility = View.GONE

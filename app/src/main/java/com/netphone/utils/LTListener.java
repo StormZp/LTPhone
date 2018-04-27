@@ -31,7 +31,6 @@ import com.netphone.netsdk.listener.OnNetworkListener;
 import com.netphone.netsdk.listener.OnReFreshListener;
 import com.netphone.netsdk.utils.EventBusUtil;
 import com.netphone.ui.activity.BigImageActivity;
-import com.netphone.ui.activity.BroadcastReceiveActivity;
 import com.netphone.ui.activity.FriendVoiceActivity;
 import com.netphone.ui.activity.MainActivity;
 import com.netphone.ui.activity.BroadcastSendActivity;
@@ -206,16 +205,12 @@ public class LTListener {
 
             @Override
             public void onBroadcastCome(int state) {
-                if (state == 0) {
-                    Intent intent = new Intent(MyApp.getContext(), BroadcastReceiveActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    MyApp.getInstense().getContext().startActivity(intent);
-                } else if (state == 1) {
-                    Intent intent = new Intent(MyApp.getContext(), BroadcastSendActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    MyApp.getInstense().getContext().startActivity(intent);
-                }
-
+                Intent intent = new Intent(MyApp.getContext(), BroadcastSendActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putInt("state", state);
+                intent.putExtras(bundle);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                MyApp.getInstense().getContext().startActivity(intent);
             }
 
             @Override
@@ -246,7 +241,10 @@ public class LTListener {
 
             @Override
             public void onReceiver() {
-                Intent intent = new Intent(MyApp.getContext(), BroadcastReceiveActivity.class);
+                Intent intent = new Intent(MyApp.getContext(), BroadcastSendActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putInt("state", 0);
+                intent.putExtras(bundle);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 MyApp.getInstense().getContext().startActivity(intent);
             }

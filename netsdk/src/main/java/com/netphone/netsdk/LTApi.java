@@ -5,11 +5,13 @@ import android.os.SystemClock;
 import android.text.TextUtils;
 
 import com.google.gson.Gson;
+import com.netphone.gen.CurrentGroupBeanDao;
 import com.netphone.gen.FriendChatMsgBeanDao;
 import com.netphone.gen.GroupChatMsgBeanDao;
 import com.netphone.gen.ImageBeanDao;
 import com.netphone.gen.UserInfoBeanDao;
 import com.netphone.netsdk.Tool.Constant;
+import com.netphone.netsdk.bean.CurrentGroupBean;
 import com.netphone.netsdk.bean.FriendChatMsgBean;
 import com.netphone.netsdk.bean.GroupChatMsgBean;
 import com.netphone.netsdk.bean.GroupInfoBean;
@@ -118,6 +120,11 @@ public class LTApi {
         //发送成员获取
         byte[] temp = CmdUtils.getInstance().commonApi((byte) 0x00, (byte) 0x1B, groupID);
         TcpSocket.getInstance().addData(temp);
+
+        CurrentGroupBean    bean                = new CurrentGroupBean(getCurrentInfo().getUserId(), groupID);
+        CurrentGroupBeanDao currentGroupBeanDao = LTConfigure.getInstance().getDaoSession().getCurrentGroupBeanDao();
+        currentGroupBeanDao.insertOrReplace(bean);
+        LogUtil.error("LTApi", "127\tjoinGroup()\n" + new Gson().toJson(bean));
     }
 
     /**
@@ -162,7 +169,7 @@ public class LTApi {
      */
     public void friendCall(String id, OnFriendCallListener onFriendCallListener) {
         this.onFriendCallListener = onFriendCallListener;
-        if (!TextUtils.isEmpty(id)){
+        if (!TextUtils.isEmpty(id)) {
             byte[] words = CmdUtils.getInstance().sendCallRequest(id);
             TcpSocket.getInstance().addData(words);
         }
@@ -208,6 +215,7 @@ public class LTApi {
         byte[] words = CmdUtils.getInstance().sendCancelForce();
         TcpSocket.getInstance().addData(words);
     }
+
     /**
      * 发送单聊信息
      *
@@ -360,7 +368,13 @@ public class LTApi {
      * @return
      */
     public GroupInfoBean getCurrentGroupInfo() {
-        return Constant.currentGroupInfo;
+
+        CurrentGroupBeanDao currentGroupBeanDao = LTConfigure.getInstance().getDaoSession().getCurrentGroupBeanDao();
+        CurrentGroupBean    unique              = currentGroupBeanDao.queryBuilder().where(CurrentGroupBeanDao.Properties.UserId.eq(getCurrentInfo().getUserId())).build().unique();
+        if (unique == null)
+            return null;
+        LogUtil.error("LTApi", "375\tgetCurrentGroupInfo()\n" + new Gson().toJson(unique));
+        return unique.getGroupBean();
     }
 
     /**

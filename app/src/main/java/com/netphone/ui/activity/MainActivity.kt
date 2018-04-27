@@ -6,7 +6,6 @@ import android.os.Build
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentPagerAdapter
-import android.text.TextUtils
 import android.view.KeyEvent
 import android.view.View
 import android.widget.Toast
@@ -18,10 +17,8 @@ import com.netphone.config.MyApp
 import com.netphone.databinding.ActivityMainBinding
 import com.netphone.netsdk.LTApi
 import com.netphone.netsdk.LTConfigure
-import com.netphone.netsdk.Tool.Constant
 import com.netphone.netsdk.base.AppBean
 import com.netphone.netsdk.listener.OnErrorListener
-import com.netphone.netsdk.utils.SharedPreferenceUtil
 import com.netphone.ui.dialog.PermissionDialog
 import com.netphone.ui.fragment.FriendsFragment
 import com.netphone.ui.fragment.GroupsFragment
@@ -70,10 +67,9 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     override fun initData() {
         binding.click = OnClick()
         registerEventBus()
-
-        val currentId = SharedPreferenceUtil.read(Constant.currentGroupId, "")
-        if (!TextUtils.isEmpty(currentId)) {
-            LTListener.newInstance().joinGroupListener(currentId)
+        var currentGroupInfo = LTApi.getInstance().currentGroupInfo
+        if (currentGroupInfo != null) {
+            LTListener.newInstance().joinGroupListener(currentGroupInfo.groupID)
         }
 
         binding.tabSession.isChecked = true

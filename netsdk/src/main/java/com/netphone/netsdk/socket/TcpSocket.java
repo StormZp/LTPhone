@@ -330,15 +330,8 @@ public class TcpSocket {
 
     private void reConnet() {
         if (conncetBeatCount > 20) {
-            if (mSocket != null) {
-                try {
-                    mSocket.close();
-                    mSocket = null;
-                    connect();
-                } catch (IOException e) {
-                    LogUtil.error("TcpCmd", "578\trun()\n", e);
-                }
-            }
+            disconnect();
+            connect();
         }
     }
 

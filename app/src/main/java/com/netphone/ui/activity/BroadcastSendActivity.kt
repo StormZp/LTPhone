@@ -11,6 +11,7 @@ import com.netphone.databinding.ActivityBroadcastSendBinding
 import com.netphone.netsdk.LTApi
 import com.netphone.netsdk.base.AppBean
 import com.storm.tool.base.BaseActivity
+import java.text.SimpleDateFormat
 
 /**
  * Created by XYSM on 2018/4/23.
@@ -30,7 +31,16 @@ class BroadcastSendActivity : BaseActivity<ActivityBroadcastSendBinding>() {
     }
 
     override fun initData() {
-        binding.click = OnClick()
+        var extras = intent.extras
+        var state = extras.getInt("state", 0)
+        if (state == 0) {//接收方
+            binding.submit.visibility = View.GONE
+        } else {//广播方
+            binding.click = OnClick()
+            binding.submit.visibility = View.VISIBLE
+//            binding.tv
+        }
+
         var timeTask = TimeTask()
         timeTask.execute(0)
         registerEventBus()
@@ -57,6 +67,8 @@ class BroadcastSendActivity : BaseActivity<ActivityBroadcastSendBinding>() {
         }
     }
 
+    private val formatter = SimpleDateFormat("HH:mm:ss")
+
     inner class TimeTask : AsyncTask<Int?, Int?, Int?>() {
         private var count = 0
 
@@ -75,7 +87,7 @@ class BroadcastSendActivity : BaseActivity<ActivityBroadcastSendBinding>() {
 
         override fun onProgressUpdate(vararg values: Int?) {
             super.onProgressUpdate(*values)
-            binding.time.setText(values[0].toString()+"")
+            binding.time.text = formatter.format((values[0]!! - 8 * 60 * 60) * 1000)
         }
 
         override fun onPreExecute() {

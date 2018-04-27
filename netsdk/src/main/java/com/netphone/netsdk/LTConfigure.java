@@ -7,10 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.netphone.gen.DaoMaster;
 import com.netphone.gen.DaoSession;
-import com.netphone.gen.GroupInfoBeanDao;
-import com.netphone.netsdk.Tool.Constant;
 import com.netphone.netsdk.Tool.TcpCmd;
-import com.netphone.netsdk.bean.GroupInfoBean;
 import com.netphone.netsdk.listener.OnErrorListener;
 import com.netphone.netsdk.listener.OnNetworkListener;
 import com.netphone.netsdk.service.LocationService;
@@ -184,13 +181,13 @@ public class LTConfigure {
         return mDaoSession;
     }
 
-
-    public GroupInfoBean getCurrentGroup() {
-        String           currentId        = SharedPreferenceUtil.Companion.read(Constant.currentGroupId, "");
-        GroupInfoBeanDao groupInfoBeanDao = getDaoSession().getGroupInfoBeanDao();
-        GroupInfoBean    unique           = groupInfoBeanDao.queryBuilder().where(GroupInfoBeanDao.Properties.GroupID.eq(currentId)).build().unique();
-        return unique;
-    }
+//
+//    public GroupInfoBean getCurrentGroup() {
+//        String           currentId        = SharedPreferenceUtil.Companion.read(Constant.currentGroupId, "");
+//        GroupInfoBeanDao groupInfoBeanDao = getDaoSession().getGroupInfoBeanDao();
+//        GroupInfoBean    unique           = groupInfoBeanDao.queryBuilder().where(GroupInfoBeanDao.Properties.GroupID.eq(currentId)).build().unique();
+//        return unique;
+//    }
 
     public void setCurrentGroup() {
 
