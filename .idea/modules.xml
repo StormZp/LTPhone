@@ -5,7 +5,6 @@
       <module fileurl="file://$PROJECT_DIR$/NetPhoneSdk.iml" filepath="$PROJECT_DIR$/NetPhoneSdk.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/netsdk/netsdk.iml" filepath="$PROJECT_DIR$/netsdk/netsdk.iml" />
-      <module fileurl="file://$PROJECT_DIR$/voicelib/voicelib.iml" filepath="$PROJECT_DIR$/voicelib/voicelib.iml" />
     </modules>
   </component>
 </project>

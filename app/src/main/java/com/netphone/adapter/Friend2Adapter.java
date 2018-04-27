@@ -12,11 +12,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.google.gson.Gson;
 import com.netphone.R;
 import com.netphone.netsdk.Tool.TcpConfig;
 import com.netphone.netsdk.bean.UserInfoBean;
-import com.netphone.netsdk.utils.LogUtil;
 import com.netphone.ui.activity.FriendChatActivity;
 import com.netphone.utils.GlideCircleTransform;
 
@@ -59,7 +57,7 @@ public class Friend2Adapter extends RecyclerView.Adapter<Friend2Adapter.ViewHold
         final UserInfoBean user = list.get(position);
         //根据position获取首字母作为目录catalog
         String catalog = list.get(position).getFirstLetter();
-        LogUtil.error("Friend2Adapter", "52\tonBindViewHolder()\n" + new Gson().toJson(user));
+//        LogUtil.error("Friend2Adapter", "52\tonBindViewHolder()\n" + new Gson().toJson(user));
         //如果当前位置等于该分类首字母的Char的位置 ，则认为是第一次出现
         if (position == getPositionForSection(catalog)) {
             viewHolder.catalog.setVisibility(View.VISIBLE);
@@ -71,7 +69,7 @@ public class Friend2Adapter extends RecyclerView.Adapter<Friend2Adapter.ViewHold
         viewHolder.name.setText(this.list.get(position).getRealName());
         viewHolder.catalog.setText(user.getFirstLetter().toUpperCase());
         boolean aTrue = !TextUtils.isEmpty(user.getIsOnLine()) && (user.getIsOnLine().equals("0") || user.getIsOnLine().equals("true"));
-        LogUtil.error("Friend2Adapter", "74\tonBindViewHolder()\n" + user.getIsOnLine());
+//        LogUtil.error("Friend2Adapter", "74\tonBindViewHolder()\n" + user.getIsOnLine());
         viewHolder.online.setText(aTrue ? mContext.getResources().getString(R.string.off_line) : mContext.getResources().getString(R.string.onLine));
         viewHolder.online.setTextColor(aTrue ? mContext.getResources().getColor(R.color.text_gray) : mContext.getResources().getColor(R.color.text_black));
         viewHolder.name.setTextColor(aTrue ? mContext.getResources().getColor(R.color.text_gray) : mContext.getResources().getColor(R.color.text_black));

@@ -1,8 +1,14 @@
 package com.netphone.netsdk.bean;
 
+import com.netphone.gen.DaoSession;
+import com.netphone.gen.GroupInfoBeanDao;
+import com.netphone.gen.UserInfoBeanDao;
+
+import org.greenrobot.greendao.DaoException;
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Id;
+import org.greenrobot.greendao.annotation.ToOne;
 import org.greenrobot.greendao.annotation.Transient;
 
 import java.io.Serializable;
@@ -29,82 +35,138 @@ public class GroupInfoBean implements Serializable {
      */
     static final long serialVersionUID = 42L;
     @Id
-    private String GroupID;
-    private String GroupName;
-    private String HeadIcon;
-    private int AllCount;
-    private int OnLineCount;
+    private String             GroupID;
+    private String             GroupName;
+    private String             HeadIcon;
+    private int                AllCount;
+    private int                OnLineCount;
+    private String             userId;//用户的id
     @Transient
-    private UserInfoBean Micer;
+    private UserInfoBean       Micer;
     @Transient
     private List<UserInfoBean> GroupChilds;
-
-    @Generated(hash = 881559806)
-    public GroupInfoBean(String GroupID, String GroupName, String HeadIcon, int AllCount, int OnLineCount) {
+    @ToOne(joinProperty = "userId")
+    private UserInfoBean       userBean;//用户的id
+    /** Used to resolve relations */
+    @Generated(hash = 2040040024)
+    private transient DaoSession daoSession;
+    /** Used for active entity operations. */
+    @Generated(hash = 2020276714)
+    private transient GroupInfoBeanDao myDao;
+    @Generated(hash = 1432798415)
+    public GroupInfoBean(String GroupID, String GroupName, String HeadIcon, int AllCount, int OnLineCount, String userId) {
         this.GroupID = GroupID;
         this.GroupName = GroupName;
         this.HeadIcon = HeadIcon;
         this.AllCount = AllCount;
         this.OnLineCount = OnLineCount;
+        this.userId = userId;
     }
-
     @Generated(hash = 1490267550)
     public GroupInfoBean() {
     }
-
     public String getGroupID() {
-        return GroupID;
+        return this.GroupID;
     }
-
-    public void setGroupID(String groupID) {
-        GroupID = groupID;
+    public void setGroupID(String GroupID) {
+        this.GroupID = GroupID;
     }
-
     public String getGroupName() {
-        return GroupName;
+        return this.GroupName;
     }
-
-    public void setGroupName(String groupName) {
-        GroupName = groupName;
+    public void setGroupName(String GroupName) {
+        this.GroupName = GroupName;
     }
-
     public String getHeadIcon() {
-        return HeadIcon;
+        return this.HeadIcon;
     }
-
-    public void setHeadIcon(String headIcon) {
-        HeadIcon = headIcon;
+    public void setHeadIcon(String HeadIcon) {
+        this.HeadIcon = HeadIcon;
     }
-
     public int getAllCount() {
-        return AllCount;
+        return this.AllCount;
     }
-
-    public void setAllCount(int allCount) {
-        AllCount = allCount;
+    public void setAllCount(int AllCount) {
+        this.AllCount = AllCount;
     }
-
     public int getOnLineCount() {
-        return OnLineCount;
+        return this.OnLineCount;
     }
-
-    public void setOnLineCount(int onLineCount) {
-        OnLineCount = onLineCount;
+    public void setOnLineCount(int OnLineCount) {
+        this.OnLineCount = OnLineCount;
     }
-
-    public UserInfoBean getMicer() {
-        return Micer;
+    public String getUserId() {
+        return this.userId;
     }
-
-    public void setMicer(UserInfoBean micer) {
-        Micer = micer;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
-
-    public List<UserInfoBean> getGroupChilds() {
-        return GroupChilds;
+    @Generated(hash = 1618597290)
+    private transient String userBean__resolvedKey;
+    /** To-one relationship, resolved on first access. */
+    @Generated(hash = 1082844326)
+    public UserInfoBean getUserBean() {
+        String __key = this.userId;
+        if (userBean__resolvedKey == null || userBean__resolvedKey != __key) {
+            final DaoSession daoSession = this.daoSession;
+            if (daoSession == null) {
+                throw new DaoException("Entity is detached from DAO context");
+            }
+            UserInfoBeanDao targetDao = daoSession.getUserInfoBeanDao();
+            UserInfoBean userBeanNew = targetDao.load(__key);
+            synchronized (this) {
+                userBean = userBeanNew;
+                userBean__resolvedKey = __key;
+            }
+        }
+        return userBean;
     }
-
-    public void setGroupChilds(List<UserInfoBean> groupChilds) {
-        GroupChilds = groupChilds;
+    /** called by internal mechanisms, do not call yourself. */
+    @Generated(hash = 699074777)
+    public void setUserBean(UserInfoBean userBean) {
+        synchronized (this) {
+            this.userBean = userBean;
+            userId = userBean == null ? null : userBean.getUserId();
+            userBean__resolvedKey = userId;
+        }
+    }
+    /**
+     * Convenient call for {@link org.greenrobot.greendao.AbstractDao#delete(Object)}.
+     * Entity must attached to an entity context.
+     */
+    @Generated(hash = 128553479)
+    public void delete() {
+        if (myDao == null) {
+            throw new DaoException("Entity is detached from DAO context");
+        }
+        myDao.delete(this);
+    }
+    /**
+     * Convenient call for {@link org.greenrobot.greendao.AbstractDao#refresh(Object)}.
+     * Entity must attached to an entity context.
+     */
+    @Generated(hash = 1942392019)
+    public void refresh() {
+        if (myDao == null) {
+            throw new DaoException("Entity is detached from DAO context");
+        }
+        myDao.refresh(this);
+    }
+    /**
+     * Convenient call for {@link org.greenrobot.greendao.AbstractDao#update(Object)}.
+     * Entity must attached to an entity context.
+     */
+    @Generated(hash = 713229351)
+    public void update() {
+        if (myDao == null) {
+            throw new DaoException("Entity is detached from DAO context");
+        }
+        myDao.update(this);
+    }
+    /** called by internal mechanisms, do not call yourself. */
+    @Generated(hash = 1885503356)
+    public void __setDaoSession(DaoSession daoSession) {
+        this.daoSession = daoSession;
+        myDao = daoSession != null ? daoSession.getGroupInfoBeanDao() : null;
     }
 }

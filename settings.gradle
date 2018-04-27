@@ -1,1 +1,1 @@
-include ':app', ':netsdk', ':voicelib'
+include ':app', ':netsdk'
