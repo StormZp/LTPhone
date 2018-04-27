@@ -135,7 +135,9 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
                         OnItemClickListener { o, position ->
                             if (position == 0) {
                                 AppManager.appManager.finishAllActivity()
-                                MyApp.getContext().startActivity(Intent(MyApp.getContext(), LoginActivity::class.java))
+                                var intent = Intent(MyApp.getContext(), LoginActivity::class.java)
+                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                                MyApp.getContext().startActivity(intent)
                             }
                         }).show()
             }

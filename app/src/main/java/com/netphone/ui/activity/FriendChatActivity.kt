@@ -70,6 +70,7 @@ open class FriendChatActivity : BaseActivity<ActivityChatFriendBinding>() {
                 if (appBean.msg.equals(user.userId)) {
                     var friendChatMsgBean = appBean.data as FriendChatMsgBean
                     friendChatAdapter.addData(friendChatMsgBean)
+                    LTApi.getInstance().joinFriendChat(user.userId)
                 }
             }
         }

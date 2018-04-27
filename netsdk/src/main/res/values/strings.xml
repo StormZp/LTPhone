@@ -38,6 +38,7 @@
     <string name="text_refuse">拒绝</string>
     <string name="text_hang_up">挂断</string>
     <string name="Setting_call_connection">正在建立通话连接</string>
+    <string name="calling_now">正在通话</string>
     <string name="refuse_class">对方拒绝通话</string>
     <string name="called_calling">对方正在通话中</string>
     <string name="time_out_call">超时无人接听</string>

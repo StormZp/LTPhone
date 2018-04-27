@@ -46,6 +46,7 @@
     <string name="time_out_call">Overtime unanswered</string>
     <string name="Handset">Handset</string>
     <string name="calling">calling</string>
+    <string name="calling_now">On the phone</string>
     <string name="Setting_up_call">Setting up a call</string>
     <string name="called_line_off">They\'re not online.</string>
     <string name="text_accepted">accept</string>

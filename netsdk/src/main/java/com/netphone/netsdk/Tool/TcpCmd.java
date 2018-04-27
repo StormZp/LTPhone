@@ -388,7 +388,7 @@ public class TcpCmd {
                         break;
                     case 0x02://开始语音通话
                         if (LTApi.getInstance().onFriendCallListener != null) {
-                            LTApi.getInstance().onFriendCallListener.onCallAccept();
+                            LTApi.getInstance().onFriendCallListener.onCallStart();
                         }
 //                        ByteUtil.getInt(bodyBytes, 0);//udp 端口
                         port = ByteUtil.getInt(bodyBytes, 0);//udp端口,占4位
