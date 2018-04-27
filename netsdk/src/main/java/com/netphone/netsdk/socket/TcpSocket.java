@@ -115,8 +115,6 @@ public class TcpSocket {
     };
 
 
-
-
     public DatagramSocket getClient() {
         if (client == null || client.isClosed())
             try {
@@ -206,8 +204,7 @@ public class TcpSocket {
                     } catch (SocketException es) {
                         break;
                     }
-
-
+                    conncetBeatCount = 0;
                     if (red > 0) {
                         realBytes = new byte[red];
                         System.arraycopy(cmdOrvoice, 0, realBytes, 0, red);
@@ -311,6 +308,8 @@ public class TcpSocket {
     }
 
 
+    private int conncetBeatCount;//联网心跳包发送次数,超过3次不归0,即认定socket断了，需要重连。
+
     //添加发送数据
     public void addData(byte[] datas) {
         new Thread(new Runnable() {
@@ -324,6 +323,23 @@ public class TcpSocket {
         ));
         if (datas != null && mSocket != null)
             addLinkQueue(datas);
+        conncetBeatCount++;
+        reConnet();
+    }
+
+
+    private void reConnet() {
+        if (conncetBeatCount > 20) {
+            if (mSocket != null) {
+                try {
+                    mSocket.close();
+                    mSocket = null;
+                    connect();
+                } catch (IOException e) {
+                    LogUtil.error("TcpCmd", "578\trun()\n", e);
+                }
+            }
+        }
     }
 
     //先放进来，线程安全，这样一个个取传出去再发送

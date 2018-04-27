@@ -56,7 +56,7 @@ class GroupsFragment : BaseFragment<FragmentGroupsBinding>() {
         if (currentGroup == null) {
             binding.layCurrent.visibility = View.GONE
         } else {
-        LogUtil.error("GroupsFragment.kt", "50\tinitData()\n" + currentGroup!!.groupID);
+            LogUtil.error("GroupsFragment.kt", "50\tinitData()\n" + currentGroup!!.groupID);
             binding.layCurrent.visibility = View.VISIBLE
             binding.tvCurrent.setText(currentGroup!!.groupName)
             Glide.with(context).load(TcpConfig.URL + currentGroup!!.headIcon).placeholder(R.mipmap.icon_defult_detail).error(R.mipmap.icon_defult_detail).transform(GlideCircleTransform(context)).into(binding.ivCurrent)
@@ -71,7 +71,8 @@ class GroupsFragment : BaseFragment<FragmentGroupsBinding>() {
 
         if (currentGroup != null) {
             var arrss: ArrayList<GroupInfoBean> = arrayListOf<GroupInfoBean>()
-            if (Constant.listBean != null && Constant.listBean.groupInfo != null) {
+            if (Constant.listBean != null && Constant.listBean.groupInfo != null && Constant.listBean.groupInfo.size != 0) {
+                binding.catalog2.visibility = View.VISIBLE
                 for (i in 0 until Constant.listBean.groupInfo.size) {
                     if (!TextUtils.isEmpty(currentGroup!!.groupID) && currentGroup!!.groupID.equals(Constant.listBean.groupInfo[i].groupID)) {
                         continue
@@ -83,8 +84,15 @@ class GroupsFragment : BaseFragment<FragmentGroupsBinding>() {
 
                 binding.recycle.layoutManager = LinearLayoutManager(context)
                 binding.recycle.adapter = groupAdapter
+            } else {
+                binding.catalog2.visibility = View.GONE
             }
         } else {
+            if (Constant.listBean != null && Constant.listBean.groupInfo != null && Constant.listBean.groupInfo.size != 0) {
+                binding.catalog2.visibility = View.VISIBLE
+            } else {
+                binding.catalog2.visibility = View.GONE
+            }
             groupAdapter = GroupAdapter(context, Constant.listBean.groupInfo)
 
             binding.recycle.layoutManager = LinearLayoutManager(context)

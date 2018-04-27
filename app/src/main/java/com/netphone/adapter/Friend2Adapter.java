@@ -31,6 +31,7 @@ public class Friend2Adapter extends RecyclerView.Adapter<Friend2Adapter.ViewHold
     private List<UserInfoBean> list = null;
     private Context mContext;
     private LayoutInflater mLayoutInflater = null;
+    private boolean        isOnline        = true;
     private UserInfoBean   curr            = LTApi.getInstance().getCurrentInfo();
 
 
@@ -47,6 +48,12 @@ public class Friend2Adapter extends RecyclerView.Adapter<Friend2Adapter.ViewHold
         Collections.sort(this.list); // 对list进行排序，需要让User实现Comparable接口重写compareTo方法
         notifyDataSetChanged();
     }
+
+    public void setOnline(boolean online) {
+        isOnline = online;
+        notifyDataSetChanged();
+    }
+
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -91,6 +98,11 @@ public class Friend2Adapter extends RecyclerView.Adapter<Friend2Adapter.ViewHold
                 mContext.startActivity(intent);
             }
         });
+        if (!isOnline) {
+            viewHolder.online.setTextColor(mContext.getResources().getColor(R.color.text_gray));
+            viewHolder.name.setTextColor(mContext.getResources().getColor(R.color.text_gray));
+        }
+
     }
 
 

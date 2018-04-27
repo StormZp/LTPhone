@@ -32,7 +32,6 @@ import com.netphone.netsdk.utils.SharedPreferenceUtil;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
-import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Arrays;
 import java.util.List;
@@ -365,6 +364,7 @@ public class TcpCmd {
                             for (int i = 0; i < userListBean.getGroupInfo().size(); i++) {
                                 userListBean.getGroupInfo().get(i).setUserId(currentInfo.getUserId());
                             }
+
                             mGroupInfoBeanDao.insertOrReplaceInTx(userListBean.getGroupInfo());
                             if (LTConfigure.getInstance().getLtApi().mOnLoginListener != null) {
                                 LTConfigure.getInstance().getLtApi().mOnLoginListener.onComplete(userListBean);
@@ -568,7 +568,6 @@ public class TcpCmd {
                 if (LTConfigure.getInstance().mOnErrorListener != null)
                     switch (pagBytes[8]) {
                         case 0x00://收到服务端心跳包回复
-                            conncetBeatCount = 0;
                             LTConfigure.getInstance().mOnErrorListener.onError();
                             break;
                         case 0x01://指令不正确
@@ -593,7 +592,7 @@ public class TcpCmd {
     public static boolean isGroupBeat   = false;//群聊心跳包
     public static boolean isConnectBeat = false;//联网心跳包
 
-    private int conncetBeatCount;//联网心跳包发送次数,超过3次不归0,即认定socket断了，需要重连。
+
 
     Thread startBeat = new Thread(new Runnable() {
         @Override
@@ -624,22 +623,10 @@ public class TcpCmd {
                     }
                 }
                 if (isConnectBeat) {
-                    conncetBeatCount++;
                     byte[] heart = CmdUtils.getInstance().sendHeratPackage();
                     TcpSocket.getInstance().addData(heart);//定时发送心跳包
                 }
-                if (conncetBeatCount > 10) {
-                    Socket socket = TcpSocket.getInstance().getSocket();
-                    if (socket != null) {
-                        try {
-                            socket.close();
-                            socket = null;
-                            TcpSocket.getInstance().connect();
-                        } catch (IOException e) {
-                            LogUtil.error("TcpCmd", "578\trun()\n", e);
-                        }
-                    }
-                }
+
                 SystemClock.sleep(10 * 1000);
             }
         }

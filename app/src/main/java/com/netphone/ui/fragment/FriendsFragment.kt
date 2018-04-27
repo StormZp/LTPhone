@@ -30,6 +30,18 @@ class FriendsFragment : BaseFragment<FragmentFriendsBinding>() {
         when (appBean.code) {
             EventConfig.REFRESH_FRIEND -> {
                 friend2Adapter.setList(Constant.listBean.userInfo)
+                friend2Adapter.setOnline(true)
+
+            }
+            EventConfig.LINE_STATE -> {
+                var state = appBean.data as Int
+                friend2Adapter.setList(Constant.listBean.userInfo)
+                if (state == 0) {
+                    friend2Adapter.setOnline(true)
+                } else {
+                    friend2Adapter.setOnline(false)
+                }
+
             }
         }
     }
@@ -56,7 +68,6 @@ class FriendsFragment : BaseFragment<FragmentFriendsBinding>() {
                 }
             }
         });
-        registerEventBus()
 
     }
 
@@ -65,7 +76,7 @@ class FriendsFragment : BaseFragment<FragmentFriendsBinding>() {
     override fun initData() {
         binding.title.back.visibility = View.INVISIBLE
         binding.title.title.text = context.resources.getString(R.string.fridends)
-
+        registerEventBus()
         if (Constant.listBean.userInfo != null) {
             Collections.sort(Constant.listBean.userInfo); // 对list进行排序，需要让User实现Comparable接口重写compareTo方法
             friend2Adapter = Friend2Adapter(context, Constant.listBean.userInfo)

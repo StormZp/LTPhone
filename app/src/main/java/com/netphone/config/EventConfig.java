@@ -23,4 +23,5 @@ public class EventConfig {
     public static final int FRIEND_SEND_MSG     = 16;//好友发送消息
     public static final int REFRESH_FRIEND      = 17;//刷新好友列表
     public static final int BROADCAST_OVER      = 18;//广播结束
+    public static final int LINE_STATE          = 19;//在线状态 0 在线 1 不在线
 }

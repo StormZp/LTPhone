@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import com.bumptech.glide.Glide
 import com.netphone.BuildConfig
 import com.netphone.R
+import com.netphone.config.EventConfig
 import com.netphone.databinding.FragmentSettingBinding
 import com.netphone.listener.PermissionListener
 import com.netphone.netsdk.LTApi
@@ -20,6 +21,7 @@ import com.netphone.netsdk.base.AppBean
 import com.netphone.netsdk.bean.ImageBean
 import com.netphone.netsdk.listener.OnLocationListener
 import com.netphone.netsdk.listener.OnUpFileListener
+import com.netphone.netsdk.utils.EventBusUtil
 import com.netphone.ui.activity.*
 import com.netphone.utils.GlideCircleTransform
 import com.netphone.utils.GlideLoader
@@ -82,8 +84,12 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>() {
         binding.onlineSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
             if (isChecked) {
                 LTApi.getInstance().onLine(context.applicationContext)
+                EventBusUtil.sendEvent(AppBean(EventConfig.LINE_STATE, 0))
+                binding.onlineState.text = context.resources.getString(R.string.onLine)
             } else {
                 LTApi.getInstance().offLine()
+                EventBusUtil.sendEvent(AppBean(EventConfig.LINE_STATE, 1))
+                binding.onlineState.text = context.resources.getString(R.string.off_line)
             }
         }
     }

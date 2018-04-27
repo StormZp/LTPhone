@@ -6,6 +6,7 @@ import android.os.Build
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentPagerAdapter
+import android.text.TextUtils
 import android.view.KeyEvent
 import android.view.View
 import android.widget.Toast
@@ -17,8 +18,10 @@ import com.netphone.config.MyApp
 import com.netphone.databinding.ActivityMainBinding
 import com.netphone.netsdk.LTApi
 import com.netphone.netsdk.LTConfigure
+import com.netphone.netsdk.Tool.Constant
 import com.netphone.netsdk.base.AppBean
 import com.netphone.netsdk.listener.OnErrorListener
+import com.netphone.netsdk.utils.SharedPreferenceUtil
 import com.netphone.ui.dialog.PermissionDialog
 import com.netphone.ui.fragment.FriendsFragment
 import com.netphone.ui.fragment.GroupsFragment
@@ -68,6 +71,11 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         binding.click = OnClick()
         registerEventBus()
 
+        val currentId = SharedPreferenceUtil.read(Constant.currentGroupId, "")
+        if (!TextUtils.isEmpty(currentId)) {
+            LTListener.newInstance().joinGroupListener(currentId)
+        }
+
         binding.tabSession.isChecked = true
         binding.viewpage.adapter = object : FragmentPagerAdapter(supportFragmentManager) {
             override fun getItem(position: Int): Fragment {
@@ -90,6 +98,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
                 return 5
             }
         }
+        binding.viewpage.offscreenPageLimit = 4//缓存页数
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
             getRxPermissions().shouldShowRequestPermissionRationale(activity, Manifest.permission.RECORD_AUDIO, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.READ_EXTERNAL_STORAGE).subscribe(object : Consumer<Boolean> {
                 override fun accept(t: Boolean?) {
@@ -100,7 +109,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
                     }
                 }
             })
-
         LTListener.newInstance().setOnReFreshListener()
         LTListener.newInstance().setOnBroadcastListener()
     }
