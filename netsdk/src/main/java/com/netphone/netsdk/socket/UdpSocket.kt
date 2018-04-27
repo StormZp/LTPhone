@@ -121,6 +121,9 @@ class UdpSocket {
             }
         }
     }
+    open fun stopPlay(){
+        VoiceUtil.playClose()
+    }
 
     open fun record() {
         isRecordVoice = true

@@ -52,10 +52,6 @@ class FriendVoiceActivity : BaseActivity<ActivityVoiceFriendBinding>() {
 
         if (state == 0) {//请求拨打电话
             LTApi.getInstance().friendCall(userInfoBean.userId, object : OnFriendCallListener {
-                override fun onDown() {
-                    toasts(context.resources.getString(R.string.finish))
-                    activity.finish()
-                }
 
                 override fun onCallAccept() {
                     toasts(context.resources.getString(R.string.Setting_call_connection))

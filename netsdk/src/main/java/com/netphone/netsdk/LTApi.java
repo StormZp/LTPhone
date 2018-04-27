@@ -197,6 +197,14 @@ public class LTApi {
         TcpSocket.getInstance().addData(words);
     }
 
+
+    /**
+     * 停止发送广播
+     */
+    public void stopBroadcastSend() {
+        byte[] words = CmdUtils.getInstance().sendCancelForce();
+        TcpSocket.getInstance().addData(words);
+    }
     /**
      * 发送单聊信息
      *

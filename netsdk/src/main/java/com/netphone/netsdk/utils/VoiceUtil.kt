@@ -59,7 +59,7 @@ class VoiceUtil {
 
     }
 
-
+    @Synchronized
     open fun record() {
 
 

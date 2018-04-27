@@ -318,6 +318,7 @@ public class TcpCmd {
                         }
                         break;
                     case 0x19://停止发送广播
+                        UdpSocket.Companion.getInstance().stopPlay();
                         break;
                     case 0x1A://设置呼叫转移
                         break;

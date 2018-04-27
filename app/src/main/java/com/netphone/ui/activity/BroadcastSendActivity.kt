@@ -8,6 +8,7 @@ import android.view.View
 import com.netphone.R
 import com.netphone.config.EventConfig
 import com.netphone.databinding.ActivityBroadcastSendBinding
+import com.netphone.netsdk.LTApi
 import com.netphone.netsdk.base.AppBean
 import com.storm.tool.base.BaseActivity
 
@@ -51,6 +52,7 @@ class BroadcastSendActivity : BaseActivity<ActivityBroadcastSendBinding>() {
 
     inner class OnClick {
         open fun back(view: View) {
+            LTApi.getInstance().stopBroadcastSend()
             finish()
         }
     }

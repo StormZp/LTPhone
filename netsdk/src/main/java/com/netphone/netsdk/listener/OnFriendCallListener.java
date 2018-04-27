@@ -11,5 +11,4 @@ public interface OnFriendCallListener {
 
     void onCallFail(int state, String message);
 
-    void onDown();
 }
