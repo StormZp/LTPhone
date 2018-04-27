@@ -62,6 +62,17 @@ open class FriendChatActivity : BaseActivity<ActivityChatFriendBinding>() {
 
     override fun initListener() {
         binding.title.back.setOnClickListener { finish() }
+        binding.etContent.setOnFocusChangeListener { v, hasFocus ->
+            if (!hasFocus) {
+                isShowKeyBoard = false
+                binding.keyboard.setImageResource(R.mipmap.icon_jp)
+//                binding.etContent.clearFocus();//失去焦点
+            } else {
+                binding.keyboard.setImageResource(R.mipmap.icon_jp2)
+                isShowKeyBoard = true
+//                binding.etContent.requestFocus();//获取焦点 光标出现
+            }
+        }
     }
 
     override fun receiveEvent(appBean: AppBean<Any>) {
@@ -96,10 +107,12 @@ open class FriendChatActivity : BaseActivity<ActivityChatFriendBinding>() {
                 AppUtil.closeKeyboard(context)
                 isShowKeyBoard = false
                 binding.keyboard.setImageResource(R.mipmap.icon_jp)
+                binding.etContent.clearFocus();//失去焦点
             } else {
                 binding.keyboard.setImageResource(R.mipmap.icon_jp2)
                 isShowKeyBoard = true
                 AppUtil.openKeyboard(binding.etContent, context)
+                binding.etContent.requestFocus();//获取焦点 光标出现
             }
         }
     }

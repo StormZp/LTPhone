@@ -8,10 +8,11 @@
             type="com.netphone.ui.activity.FriendChatActivity.OnClick" />
     </data>
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <com.netphone.view.InputMethodLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:focusableInTouchMode="true"
+        android:id="@+id/input_lay"
         android:background="@color/white"
         android:orientation="vertical">
 
@@ -19,16 +20,13 @@
             android:id="@+id/title"
             layout="@layout/titlebar" />
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recycle"
-            android:layout_width="match_parent"
-            android:layout_weight="1"
-            android:layout_height="match_parent"></android.support.v7.widget.RecyclerView>
+
 
         <LinearLayout
             android:id="@+id/lay_edit"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp48"
+            android:layout_alignParentBottom="true"
             android:gravity="center_vertical">
 
 
@@ -57,6 +55,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="@dimen/dp8"
+
                 android:background="@drawable/shape_btn_green_bg"
                 android:onClick="@{click.submit}"
                 android:padding="@dimen/dp3"
@@ -64,6 +63,13 @@
                 android:textColor="@color/white" />
 
         </LinearLayout>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycle"
+            android:layout_below="@+id/title"
+            android:layout_above="@+id/lay_edit"
+            android:layout_width="match_parent"
+            android:layout_weight="1"
+            android:layout_height="match_parent"></android.support.v7.widget.RecyclerView>
 
-    </LinearLayout>
+    </com.netphone.view.InputMethodLayout>
 </layout>
