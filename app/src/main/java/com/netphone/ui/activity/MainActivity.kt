@@ -118,6 +118,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
             override fun onNotLogin() {
                 activity.runOnUiThread {
                     ToastUtil.toasts(context.getResources().getString(R.string.not_login))
+                    AppManager.appManager.finishAllActivity()
+                    jump(LoginActivity::class.java)
                 }
             }
 

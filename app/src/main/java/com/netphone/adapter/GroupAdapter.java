@@ -11,11 +11,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.google.gson.Gson;
 import com.netphone.R;
+import com.netphone.netsdk.Tool.Constant;
 import com.netphone.netsdk.Tool.TcpConfig;
 import com.netphone.netsdk.bean.GroupInfoBean;
+import com.netphone.netsdk.utils.LogUtil;
 import com.netphone.ui.activity.GroupChatActivity;
 import com.netphone.utils.GlideCircleTransform;
+import com.netphone.utils.ToastUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,6 +42,16 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
         mGlideCircleTransform = new GlideCircleTransform(mContext);
     }
 
+    public void refresh(String groupId, int onLineCount) {
+        LogUtil.error("GroupAdapter", "45\trefresh()\n" + new Gson().toJson(datas));
+        LogUtil.error("GroupAdapter", "47\trefresh()\n" + "groupId:"+groupId);
+        for (int i = 0; i < datas.size(); i++) {
+            if (datas.get(i).getGroupID().equals(groupId)) {
+                datas.get(i).setOnLineCount(onLineCount);
+            }
+        }
+        notifyDataSetChanged();
+    }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -55,6 +69,10 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
         holder.getView().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (!Constant.isOnline) {
+                    ToastUtil.Companion.toasts(mContext.getResources().getString(R.string.already_line_off));
+                    return;
+                }
                 Intent intent = new Intent(mContext, GroupChatActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("bean", groupInfoBean);

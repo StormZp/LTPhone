@@ -340,6 +340,7 @@ public class LTApi {
      */
     public void offLine() {
         LTConfigure.getInstance().onDestory();
+        Constant.isOnline = false;
     }
 
     /**
@@ -359,7 +360,7 @@ public class LTApi {
                 login(username, password, null);
             }
         }).start();
-
+        Constant.isOnline = true;
     }
 
     /**
@@ -368,13 +369,14 @@ public class LTApi {
      * @return
      */
     public GroupInfoBean getCurrentGroupInfo() {
-
-        CurrentGroupBeanDao currentGroupBeanDao = LTConfigure.getInstance().getDaoSession().getCurrentGroupBeanDao();
-        CurrentGroupBean    unique              = currentGroupBeanDao.queryBuilder().where(CurrentGroupBeanDao.Properties.UserId.eq(getCurrentInfo().getUserId())).build().unique();
-        if (unique == null)
-            return null;
-        LogUtil.error("LTApi", "375\tgetCurrentGroupInfo()\n" + new Gson().toJson(unique));
-        return unique.getGroupBean();
+        if (getCurrentInfo() != null) {
+            CurrentGroupBeanDao currentGroupBeanDao = LTConfigure.getInstance().getDaoSession().getCurrentGroupBeanDao();
+            CurrentGroupBean    unique              = currentGroupBeanDao.queryBuilder().where(CurrentGroupBeanDao.Properties.UserId.eq(getCurrentInfo().getUserId())).build().unique();
+            if (unique == null)
+                return null;
+            return unique.getGroupBean();
+        }
+        return null;
     }
 
     /**

@@ -95,6 +95,7 @@ public class TcpCmd {
                                     LogUtil.error("user= " + user.toString());
                                 }
                                 isConnectBeat = true;
+                                Constant.isOnline = true;
                                 SharedPreferenceUtil.Companion.put(Constant.UserId, user.getUserId());
                                 new Thread(BeatRunnable).start();
                                 mUserInfoBeanDao.insertOrReplace(user);
@@ -558,8 +559,17 @@ public class TcpCmd {
                         body = ByteIntUtils.utfToString(bodyBytes);
                         LogUtil.error("TcpCmd", "435\tcmdExplore()\n" + body);
                         BroadcastBean msg2 = mGson.fromJson(body, BroadcastBean.class);
+
                         if (LTApi.getInstance().onReFreshListener != null) {
                             LTApi.getInstance().onReFreshListener.onWordBroadcast(msg2);
+                        }
+                        break;
+                    case 0x28://28
+                        body = ByteIntUtils.utfToString(bodyBytes);
+                        LogUtil.error("TcpCmd", "568\tcmdExplore()\n" + body);
+                        GroupInfoBean group = mGson.fromJson(body, GroupInfoBean.class);
+                        if (LTApi.getInstance().onReFreshListener != null) {
+                            LTApi.getInstance().onReFreshListener.onGroupReFresh(group);
                         }
                         break;
                 }
@@ -591,7 +601,6 @@ public class TcpCmd {
 
     public static boolean isGroupBeat   = false;//群聊心跳包
     public static boolean isConnectBeat = false;//联网心跳包
-
 
 
     Thread startBeat = new Thread(new Runnable() {

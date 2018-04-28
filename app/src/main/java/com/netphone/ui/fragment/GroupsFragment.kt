@@ -9,8 +9,9 @@ import android.view.ViewGroup
 import com.bumptech.glide.Glide
 import com.netphone.R
 import com.netphone.adapter.GroupAdapter
+import com.netphone.config.EventConfig
 import com.netphone.databinding.FragmentGroupsBinding
-import com.netphone.netsdk.LTConfigure
+import com.netphone.netsdk.LTApi
 import com.netphone.netsdk.Tool.Constant
 import com.netphone.netsdk.Tool.TcpConfig
 import com.netphone.netsdk.base.AppBean
@@ -36,6 +37,12 @@ class GroupsFragment : BaseFragment<FragmentGroupsBinding>() {
     }
 
     override fun receiveEvent(appBean: AppBean<Any>) {
+        when (appBean.code) {
+            EventConfig.GROUP_REFRESH -> {
+                var infoBean = appBean.data as GroupInfoBean
+                groupAdapter.refresh(infoBean.groupID, infoBean.onLineCount)
+            }
+        }
     }
 
     override fun receiveStickyEvent(appBean: AppBean<Any>) {
@@ -48,11 +55,14 @@ class GroupsFragment : BaseFragment<FragmentGroupsBinding>() {
     private var currentGroup: GroupInfoBean? = null;
 
     override fun initData() {
+        if (!Constant.isOnline)
+            return
         binding.title.back.visibility = View.INVISIBLE
         binding.title.title.text = context.resources.getString(R.string.groups)
 
-        currentGroup = LTConfigure.getInstance().ltApi.currentGroupInfo
+        currentGroup = LTApi.getInstance().currentGroupInfo
 
+        registerEventBus()
         if (currentGroup == null) {
             binding.layCurrent.visibility = View.GONE
         } else {

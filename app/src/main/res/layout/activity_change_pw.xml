@@ -95,6 +95,7 @@
                 android:background="@null"
                 android:hint="@string/new_passowrd_hint"
                 android:text=""
+                android:inputType="textPassword"
                 android:textColor="@color/textcolor_gray"
                 android:textSize="14dp" />
 
@@ -131,6 +132,7 @@
                 android:background="@null"
                 android:hint="@string/sure_passowrd_hint"
                 android:text=""
+                android:inputType="textPassword"
                 android:textColor="@color/textcolor_gray"
                 android:textSize="14dp" />
 

@@ -14,10 +14,12 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.netphone.R;
 import com.netphone.netsdk.LTApi;
+import com.netphone.netsdk.Tool.Constant;
 import com.netphone.netsdk.Tool.TcpConfig;
 import com.netphone.netsdk.bean.UserInfoBean;
 import com.netphone.ui.activity.FriendChatActivity;
 import com.netphone.utils.GlideCircleTransform;
+import com.netphone.utils.ToastUtil;
 
 import java.util.Collections;
 import java.util.List;
@@ -91,6 +93,10 @@ public class Friend2Adapter extends RecyclerView.Adapter<Friend2Adapter.ViewHold
         viewHolder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (!Constant.isOnline) {
+                    ToastUtil.Companion.toasts(mContext.getResources().getString(R.string.already_line_off));
+                    return;
+                }
                 Intent intent = new Intent(mContext, FriendChatActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("bean", user);

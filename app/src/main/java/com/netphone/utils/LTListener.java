@@ -18,6 +18,7 @@ import com.netphone.netsdk.base.AppBean;
 import com.netphone.netsdk.bean.BroadcastBean;
 import com.netphone.netsdk.bean.FriendChatMsgBean;
 import com.netphone.netsdk.bean.GroupChatMsgBean;
+import com.netphone.netsdk.bean.GroupInfoBean;
 import com.netphone.netsdk.bean.ImageBean;
 import com.netphone.netsdk.bean.UserInfoBean;
 import com.netphone.netsdk.bean.UserListBean;
@@ -31,9 +32,9 @@ import com.netphone.netsdk.listener.OnNetworkListener;
 import com.netphone.netsdk.listener.OnReFreshListener;
 import com.netphone.netsdk.utils.EventBusUtil;
 import com.netphone.ui.activity.BigImageActivity;
+import com.netphone.ui.activity.BroadcastSendActivity;
 import com.netphone.ui.activity.FriendVoiceActivity;
 import com.netphone.ui.activity.MainActivity;
-import com.netphone.ui.activity.BroadcastSendActivity;
 import com.netphone.ui.dialog.MessageDialog;
 
 import java.util.List;
@@ -167,6 +168,11 @@ public class LTListener {
             public void onReFresh(UserListBean userListBean) {
                 com.netphone.netsdk.Tool.Constant.listBean = userListBean;
                 EventBusUtil.sendEvent(new AppBean(EventConfig.REFRESH_FRIEND, null));
+            }
+
+            @Override
+            public void onGroupReFresh(GroupInfoBean bean) {
+                EventBusUtil.sendEvent(new AppBean(EventConfig.GROUP_REFRESH, bean));
             }
 
             @Override
