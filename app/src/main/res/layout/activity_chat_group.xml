@@ -31,6 +31,7 @@
                 android:src="@color/line_view" />
 
             <LinearLayout
+                android:id="@+id/lay_mic"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp65"
                 android:background="@color/white"

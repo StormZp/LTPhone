@@ -169,4 +169,12 @@ public class GroupInfoBean implements Serializable {
         this.daoSession = daoSession;
         myDao = daoSession != null ? daoSession.getGroupInfoBeanDao() : null;
     }
+
+    public UserInfoBean getMicer() {
+        return Micer;
+    }
+
+    public void setMicer(UserInfoBean micer) {
+        Micer = micer;
+    }
 }

@@ -564,12 +564,20 @@ public class TcpCmd {
                             LTApi.getInstance().onReFreshListener.onWordBroadcast(msg2);
                         }
                         break;
-                    case 0x28://28
+                    case 0x28://群组成员变更
                         body = ByteIntUtils.utfToString(bodyBytes);
                         LogUtil.error("TcpCmd", "568\tcmdExplore()\n" + body);
                         GroupInfoBean group = mGson.fromJson(body, GroupInfoBean.class);
                         if (LTApi.getInstance().onReFreshListener != null) {
                             LTApi.getInstance().onReFreshListener.onGroupReFresh(group);
+                        }
+                        break;
+                 case 0x29://群组麦权变更
+                        body = ByteIntUtils.utfToString(bodyBytes);
+                        LogUtil.error("TcpCmd", "568\tcmdExplore()\n" + body);
+                        GroupInfoBean group2 = mGson.fromJson(body, GroupInfoBean.class);
+                        if (LTApi.getInstance().onReFreshListener != null) {
+                            LTApi.getInstance().onReFreshListener.onGroupReFresh(group2);
                         }
                         break;
                 }

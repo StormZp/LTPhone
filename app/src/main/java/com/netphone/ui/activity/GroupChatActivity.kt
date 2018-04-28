@@ -53,7 +53,13 @@ open class GroupChatActivity : BaseActivity<ActivityChatGroupBinding>() {
         if (adapter.itemCount != 0)
             binding.recycle.smoothScrollToPosition(adapter.itemCount - 1);
         LTListener.newInstance().joinGroupListener(groupInfo.groupID)
-        setSpeakerphoneOn(true,activity,getSystemService(Context.AUDIO_SERVICE) as AudioManager)
+        setSpeakerphoneOn(true, activity, getSystemService(Context.AUDIO_SERVICE) as AudioManager)
+
+        if (groupInfo.micer != null) {
+            binding.layMic.visibility = View.VISIBLE
+        } else {
+            binding.layMic.visibility = View.GONE
+        }
     }
 
     override fun initListener() {
@@ -76,7 +82,7 @@ open class GroupChatActivity : BaseActivity<ActivityChatGroupBinding>() {
             }
         }
         binding.sendVoice.setOnTouchListener { v, event ->
-//            LogUtil.error("GroupChatActivity.kt", "74\tinitListener()\n" + event.action);
+            //            LogUtil.error("GroupChatActivity.kt", "74\tinitListener()\n" + event.action);
             when (event.action) {
                 MotionEvent.ACTION_UP -> {
                     LTApi.getInstance().stopGroupVoice()
@@ -148,6 +154,15 @@ open class GroupChatActivity : BaseActivity<ActivityChatGroupBinding>() {
                 var groupChatMsgBean = GroupChatMsgBean()
                 groupChatMsgBean.fromUserName = context.resources.getString(R.string.preemption) + context.resources.getString(R.string.success)
                 adapter.addMsg(groupChatMsgBean)
+            }
+            EventConfig.GROUP_REFRESH -> {//刷新
+                var infoBean = appBean.data as GroupInfoBean
+                if (infoBean.groupID.equals(groupInfo.groupID))
+                    if (infoBean.micer != null) {
+                        binding.layMic.visibility = View.VISIBLE
+                    } else {
+                        binding.layMic.visibility = View.GONE
+                    }
             }
         }
         if (adapter.itemCount != 0)
