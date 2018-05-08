@@ -68,6 +68,7 @@ class FriendVoiceActivity : BaseActivity<ActivityVoiceFriendBinding>() {
         LTApi.getInstance().friendCall(id, object : OnFriendCallListener {
             override fun onCallStart() {
                 activity.runOnUiThread {
+                    playStop()
                     binding.state.text = context.resources.getString(R.string.calling_now)
                     var timeTask = TimeTask()
                     timeTask.execute(0)

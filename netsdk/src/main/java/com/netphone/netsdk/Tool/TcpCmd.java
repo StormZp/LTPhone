@@ -21,6 +21,7 @@ import com.netphone.netsdk.bean.ImageBean;
 import com.netphone.netsdk.bean.UserInfoBean;
 import com.netphone.netsdk.bean.UserListBean;
 import com.netphone.netsdk.socket.TcpSocket;
+import com.netphone.netsdk.socket.UdpSocket;
 import com.netphone.netsdk.utils.ByteIntUtils;
 import com.netphone.netsdk.utils.ByteUtil;
 import com.netphone.netsdk.utils.CmdUtils;
@@ -164,6 +165,7 @@ public class TcpCmd {
                             LTApi.getInstance().onFriendCallListener.onCallFail(0x06, LTConfigure.getInstance().getContext().getResources().getString(R.string.stop_call));
                             LTApi.getInstance().onFriendCallListener = null;
                         }
+
                         break;
                     case 0x04://收到加入群聊回复
                         if (LTConfigure.getInstance().getLtApi().groupComeInListener != null) {
@@ -174,9 +176,9 @@ public class TcpCmd {
                                 case 0x00:
                                     port = ByteUtil.getInt(bodyBytes, 1);//udp端口,占4位
                                     isGroupBeat = true;
-
-//                                    UdpSocket.Companion.getInstance().connect(port);
-//                                    UdpSocket.Companion.getInstance().play();
+                                    LogUtil.error("TcpCmd", "177\tcmdExplore()\n" + "群聊端口号:"+port);
+                                    UdpSocket.Companion.getInstance().connect(port);
+                                    UdpSocket.Companion.getInstance().play();
 
                                     if (!TextUtils.isEmpty(LTApi.getInstance().groupId)) {
                                         SharedPreferenceUtil.Companion.put(Constant.currentGroupId, LTApi.getInstance().groupId);
@@ -224,7 +226,7 @@ public class TcpCmd {
                             switch (bodyBytes[0]) {
                                 case 0x00:
                                     LTConfigure.getInstance().getLtApi().groupStateListener.onGrabWheatSuccess();
-//                                    UdpSocket.Companion.getInstance().record();
+                                    UdpSocket.Companion.getInstance().record();
                                     break;
                                 case 0x01:
                                     LTConfigure.getInstance().getLtApi().groupStateListener.onGrabWheatFail(0x01, LTConfigure.getInstance().getContext().getResources().getString(R.string.preemption) + LTConfigure.getInstance().getContext().getResources().getString(R.string.fail));
@@ -243,11 +245,12 @@ public class TcpCmd {
                         }
                         break;
                     case 0x0C://主动释放麦回复
+                        UdpSocket.Companion.getInstance().stopRecord();
                         if (LTConfigure.getInstance().getLtApi().groupStateListener != null) {
                             switch (bodyBytes[0]) {
                                 case 0x00:
                                     LTConfigure.getInstance().getLtApi().groupStateListener.onRelaxedMacSuccess();
-//                                    UdpSocket.Companion.getInstance().stopRecord();
+
                                     break;
                                 case 0x01:
                                     LTConfigure.getInstance().getLtApi().groupStateListener.onRelaxedMacFail(0x01, LTConfigure.getInstance().getContext().getResources().getString(R.string.release) + LTConfigure.getInstance().getContext().getResources().getString(R.string.fail));
@@ -319,7 +322,7 @@ public class TcpCmd {
                         }
                         break;
                     case 0x19://停止发送广播
-//                        UdpSocket.Companion.getInstance().stopPlay();
+                        UdpSocket.Companion.getInstance().stopPlay();
                         break;
                     case 0x1A://设置呼叫转移
                         break;
@@ -393,17 +396,16 @@ public class TcpCmd {
                         }
 //                        ByteUtil.getInt(bodyBytes, 0);//udp 端口
                         port = ByteUtil.getInt(bodyBytes, 0);//udp端口,占4位
-
-//                        UdpSocket.Companion.getInstance().connect(port);
-//                        UdpSocket.Companion.getInstance().play();
-//                        UdpSocket.Companion.getInstance().record();
+                        UdpSocket.Companion.getInstance().connect(port);
+                        UdpSocket.Companion.getInstance().play();
+                        UdpSocket.Companion.getInstance().record();
                         break;
                     case 0x03://对方挂断语音通话
                         if (LTApi.getInstance().onFriendCallListener != null) {
                             LTApi.getInstance().onFriendCallListener.onCallFail(0x06, LTConfigure.getInstance().getContext().getResources().getString(R.string.stop_call));
                             LTApi.getInstance().onFriendCallListener = null;
                         }
-
+                        UdpSocket.Companion.getInstance().stopRecord();
                         break;
                     case 0x04://被叫视频通话
                         break;
