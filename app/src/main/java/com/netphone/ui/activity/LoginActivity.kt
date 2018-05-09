@@ -13,7 +13,6 @@ import com.netphone.netsdk.LTConfigure
 import com.netphone.netsdk.Tool.Constant
 import com.netphone.netsdk.base.AppBean
 import com.netphone.netsdk.bean.UserInfoBean
-import com.netphone.netsdk.bean.UserListBean
 import com.netphone.netsdk.listener.OnLoginListener
 import com.netphone.netsdk.listener.OnNetworkListener
 import com.netphone.netsdk.utils.LogUtil
@@ -111,6 +110,8 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>() {
                     Constant.info = bean;
                     activity.runOnUiThread {
                         ToastUtil.toasts(ToastUtil.context!!.resources.getString(R.string.text_login) + ToastUtil.context!!.resources.getString(R.string.success))
+                        jump(MainActivity::class.java)
+                        finish()
                     }
                     Constant.info = bean;
                 }
@@ -122,10 +123,6 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>() {
                     }
                 }
 
-                override fun onComplete(userListBean: UserListBean?) {
-                    Constant.listBean = userListBean;
-                    jump(MainActivity::class.java)
-                }
             })
         }
     }

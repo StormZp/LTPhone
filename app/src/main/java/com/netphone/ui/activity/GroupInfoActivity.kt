@@ -5,7 +5,6 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.View
 import com.bumptech.glide.Glide
 import com.netphone.R
-import com.netphone.adapter.Friend2Adapter
 import com.netphone.adapter.GroupMemberAdapter
 import com.netphone.config.Constant
 import com.netphone.databinding.ActivityInfoGroupBinding
@@ -33,7 +32,7 @@ open class GroupInfoActivity : BaseActivity<ActivityInfoGroupBinding>() {
 
         if (Constant.groupsMemberInfo != null) {
             binding.number.text = context.resources.getString(R.string.group_users) + ": "+Constant.groupsMemberInfo.size
-            var friend2Adapter = GroupMemberAdapter(context, com.netphone.netsdk.Tool.Constant.listBean.userInfo)
+            var friend2Adapter = GroupMemberAdapter(context,Constant.myFriendList)
             binding.recycle.layoutManager = LinearLayoutManager(context)
             binding.recycle.adapter = friend2Adapter
         }

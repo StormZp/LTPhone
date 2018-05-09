@@ -10,7 +10,6 @@
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/netsdk" />
-            <option value="$PROJECT_DIR$/webrtclib" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

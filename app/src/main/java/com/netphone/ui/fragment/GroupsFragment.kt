@@ -9,10 +9,10 @@ import android.view.ViewGroup
 import com.bumptech.glide.Glide
 import com.netphone.R
 import com.netphone.adapter.GroupAdapter
+import com.netphone.config.Constant
 import com.netphone.config.EventConfig
 import com.netphone.databinding.FragmentGroupsBinding
 import com.netphone.netsdk.LTApi
-import com.netphone.netsdk.Tool.Constant
 import com.netphone.netsdk.Tool.TcpConfig
 import com.netphone.netsdk.base.AppBean
 import com.netphone.netsdk.bean.GroupInfoBean
@@ -55,7 +55,7 @@ class GroupsFragment : BaseFragment<FragmentGroupsBinding>() {
     private var currentGroup: GroupInfoBean? = null;
 
     override fun initData() {
-        if (!Constant.isOnline)
+        if (!com.netphone.netsdk.Tool.Constant.isOnline)
             return
         binding.title.back.visibility = View.INVISIBLE
         binding.title.title.text = context.resources.getString(R.string.groups)
@@ -81,13 +81,13 @@ class GroupsFragment : BaseFragment<FragmentGroupsBinding>() {
 
         if (currentGroup != null) {
             var arrss: ArrayList<GroupInfoBean> = arrayListOf<GroupInfoBean>()
-            if (Constant.listBean != null && Constant.listBean.groupInfo != null && Constant.listBean.groupInfo.size != 0) {
+            if (Constant.myGroupList != null && Constant.myGroupList.size != 0) {
                 binding.catalog2.visibility = View.VISIBLE
-                for (i in 0 until Constant.listBean.groupInfo.size) {
-                    if (!TextUtils.isEmpty(currentGroup!!.groupID) && currentGroup!!.groupID.equals(Constant.listBean.groupInfo[i].groupID)) {
+                for (i in 0 until Constant.myGroupList.size) {
+                    if (!TextUtils.isEmpty(currentGroup!!.groupID) && currentGroup!!.groupID.equals(Constant.myGroupList[i].groupID)) {
                         continue
                     }
-                    arrss.add(Constant.listBean.groupInfo[i])
+                    arrss.add(Constant.myGroupList[i])
 
                 }
                 groupAdapter = GroupAdapter(context, arrss)
@@ -98,12 +98,12 @@ class GroupsFragment : BaseFragment<FragmentGroupsBinding>() {
                 binding.catalog2.visibility = View.GONE
             }
         } else {
-            if (Constant.listBean != null && Constant.listBean.groupInfo != null && Constant.listBean.groupInfo.size != 0) {
+            if (Constant.myGroupList != null && Constant.myGroupList.size != 0) {
                 binding.catalog2.visibility = View.VISIBLE
             } else {
                 binding.catalog2.visibility = View.GONE
             }
-            groupAdapter = GroupAdapter(context, Constant.listBean.groupInfo)
+            groupAdapter = GroupAdapter(context, Constant.myGroupList)
 
             binding.recycle.layoutManager = LinearLayoutManager(context)
             binding.recycle.adapter = groupAdapter

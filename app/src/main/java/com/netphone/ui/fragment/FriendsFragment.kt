@@ -8,9 +8,9 @@ import android.view.View
 import android.view.ViewGroup
 import com.netphone.R
 import com.netphone.adapter.Friend2Adapter
+import com.netphone.config.Constant
 import com.netphone.config.EventConfig
 import com.netphone.databinding.FragmentFriendsBinding
-import com.netphone.netsdk.Tool.Constant
 import com.netphone.netsdk.base.AppBean
 import com.storm.tool.base.BaseFragment
 import java.util.*
@@ -29,13 +29,13 @@ class FriendsFragment : BaseFragment<FragmentFriendsBinding>() {
     override fun receiveEvent(appBean: AppBean<Any>) {
         when (appBean.code) {
             EventConfig.REFRESH_FRIEND -> {
-                friend2Adapter.setList(Constant.listBean.userInfo)
+                friend2Adapter.setList(Constant.myFriendList)
                 friend2Adapter.setOnline(true)
 
             }
             EventConfig.LINE_STATE -> {
                 var state = appBean.data as Int
-                friend2Adapter.setList(Constant.listBean.userInfo)
+                friend2Adapter.setList(Constant.myFriendList)
                 if (state == 0) {
                     friend2Adapter.setOnline(true)
                 } else {
@@ -51,8 +51,8 @@ class FriendsFragment : BaseFragment<FragmentFriendsBinding>() {
 
     override fun initListener() {
         binding.sideBar.setOnStrSelectCallBack { index, selectStr ->
-            for (i in 0 until Constant.listBean.userInfo.size) {
-                if (selectStr.equals(Constant.listBean.userInfo.get(i).getFirstLetter())) {
+            for (i in 0 until Constant.myFriendList.size) {
+                if (selectStr.equals(Constant.myFriendList.get(i).getFirstLetter())) {
                     smoothMoveToPosition(binding.listView, i);// 选择到首字母出现的位置
                     break
                 }
@@ -77,9 +77,9 @@ class FriendsFragment : BaseFragment<FragmentFriendsBinding>() {
         binding.title.back.visibility = View.INVISIBLE
         binding.title.title.text = context.resources.getString(R.string.fridends)
         registerEventBus()
-        if (Constant.listBean.userInfo != null) {
-            Collections.sort(Constant.listBean.userInfo); // 对list进行排序，需要让User实现Comparable接口重写compareTo方法
-            friend2Adapter = Friend2Adapter(context, Constant.listBean.userInfo)
+        if (Constant.myFriendList != null) {
+            Collections.sort(Constant.myFriendList); // 对list进行排序，需要让User实现Comparable接口重写compareTo方法
+            friend2Adapter = Friend2Adapter(context, Constant.myFriendList)
             mLinearLayoutManager = LinearLayoutManager(context)
             binding.listView.layoutManager = mLinearLayoutManager
             binding.listView.adapter = friend2Adapter

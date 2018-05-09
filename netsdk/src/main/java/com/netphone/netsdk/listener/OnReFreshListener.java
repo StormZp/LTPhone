@@ -5,16 +5,24 @@ import com.netphone.netsdk.bean.FriendChatMsgBean;
 import com.netphone.netsdk.bean.GroupInfoBean;
 import com.netphone.netsdk.bean.ImageBean;
 import com.netphone.netsdk.bean.UserInfoBean;
-import com.netphone.netsdk.bean.UserListBean;
+
+import java.util.List;
 
 /**
  * Created by XYSM on 2018/4/13.
  */
 
 public interface OnReFreshListener {
-    void onReFresh(UserListBean userListBean);
 
-    void onGroupReFresh(GroupInfoBean bean);
+    void onReFriendsFresh(List<UserInfoBean> userListBean);//好友列表推送
+
+    void onReGroupsFresh(List<GroupInfoBean> groupListBean);//群列表推送
+
+    void onFriendsReFresh(UserInfoBean bean);//好友刷新
+    void onFriendsDel(UserInfoBean bean);//删除好友
+
+    void onGroupReFresh(GroupInfoBean bean);//群刷新
+    void onGroupDel(GroupInfoBean bean);//群删除
 
     void onWordBroadcast(BroadcastBean msgBean);
 

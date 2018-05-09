@@ -21,7 +21,6 @@ import com.netphone.netsdk.bean.GroupChatMsgBean;
 import com.netphone.netsdk.bean.GroupInfoBean;
 import com.netphone.netsdk.bean.ImageBean;
 import com.netphone.netsdk.bean.UserInfoBean;
-import com.netphone.netsdk.bean.UserListBean;
 import com.netphone.netsdk.listener.OnBroadcastListener;
 import com.netphone.netsdk.listener.OnGetGroupMemberListener;
 import com.netphone.netsdk.listener.OnGroupChatListener;
@@ -37,6 +36,7 @@ import com.netphone.ui.activity.FriendVoiceActivity;
 import com.netphone.ui.activity.MainActivity;
 import com.netphone.ui.dialog.MessageDialog;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -164,15 +164,85 @@ public class LTListener {
 
     public void setOnReFreshListener() {
         LTApi.getInstance().setOnReFreshListener(new OnReFreshListener() {
+//            @Override
+//            public void onReFresh(UserListBean userListBean) {
+//                com.netphone.netsdk.Tool.Constant.listBean = userListBean;
+//                EventBusUtil.sendEvent(new AppBean(EventConfig.REFRESH_FRIEND, null));
+//            }
+
             @Override
-            public void onReFresh(UserListBean userListBean) {
-                com.netphone.netsdk.Tool.Constant.listBean = userListBean;
+            public void onReFriendsFresh(List<UserInfoBean> userListBean) {
+                if (Constant.myFriendList == null) {
+                    Constant.myFriendList = new ArrayList<>();
+                }
+                Constant.myFriendList.clear();
+                Constant.myFriendList.addAll(userListBean);
                 EventBusUtil.sendEvent(new AppBean(EventConfig.REFRESH_FRIEND, null));
             }
 
             @Override
+            public void onReGroupsFresh(List<GroupInfoBean> groupListBean) {
+                if (Constant.myGroupList == null) {
+                    Constant.myGroupList = new ArrayList<>();
+                }
+                Constant.myGroupList.clear();
+                Constant.myGroupList.addAll(groupListBean);
+                EventBusUtil.sendEvent(new AppBean(EventConfig.GROUP_REFRESH, null));
+            }
+
+            @Override
+            public void onFriendsReFresh(UserInfoBean bean) {
+                if (Constant.myFriendList == null) {
+                    for (int i = 0; i < Constant.myFriendList.size(); i++) {
+                        if (Constant.myFriendList.get(i).getUserId().equals(bean.getUserId())) {
+                            Constant.myFriendList.set(i, bean);
+                            break;
+                        }
+                    }
+                    EventBusUtil.sendEvent(new AppBean(EventConfig.REFRESH_FRIEND, null));
+                }
+            }
+
+            @Override
+            public void onFriendsDel(UserInfoBean bean) {
+                if (Constant.myFriendList == null) {
+                    for (int i = 0; i < Constant.myFriendList.size(); i++) {
+                        if (Constant.myFriendList.get(i).getUserId().equals(bean.getUserId())) {
+                            Constant.myFriendList.remove(i);
+                            break;
+                        }
+                    }
+                    EventBusUtil.sendEvent(new AppBean(EventConfig.REFRESH_FRIEND, null));
+                }
+
+            }
+
+            @Override
             public void onGroupReFresh(GroupInfoBean bean) {
+                if (Constant.myGroupList == null) {
+                    for (int i = 0; i < Constant.myGroupList.size(); i++) {
+                        if (Constant.myGroupList.get(i).getGroupID().equals(bean.getGroupID())) {
+                            Constant.myGroupList.set(i, bean);
+//                            Constant.myGroupList.remove(i);
+                            break;
+                        }
+                    }
+                }
                 EventBusUtil.sendEvent(new AppBean(EventConfig.GROUP_REFRESH, bean));
+            }
+
+            @Override
+            public void onGroupDel(GroupInfoBean bean) {
+                if (Constant.myGroupList == null) {
+                    for (int i = 0; i < Constant.myGroupList.size(); i++) {
+                        if (Constant.myGroupList.get(i).getGroupID().equals(bean.getGroupID())) {
+                            Constant.myGroupList.remove(i);
+                            break;
+                        }
+                    }
+                }
+                EventBusUtil.sendEvent(new AppBean(EventConfig.GROUP_REFRESH, bean));
+
             }
 
             @Override

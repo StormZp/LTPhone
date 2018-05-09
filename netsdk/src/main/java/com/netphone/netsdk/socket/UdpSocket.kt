@@ -2,19 +2,13 @@ package com.netphone.netsdk.socket
 
 import com.google.gson.Gson
 import com.netphone.netsdk.LTConfigure
-import com.netphone.netsdk.Tool.Constant
 import com.netphone.netsdk.Tool.TcpConfig
 import com.netphone.netsdk.utils.CRC16
-import com.netphone.netsdk.utils.CmdUtils
 import com.netphone.netsdk.utils.LogUtil
-import com.netphone.netsdk.utils.VoiceUtil
-import com.test.jni.ADPCM
-
 import java.net.DatagramPacket
 import java.net.DatagramSocket
 import java.net.InetAddress
 import java.net.UnknownHostException
-import kotlin.concurrent.thread
 
 /**
  * Created by XYSM on 2018/4/24.
@@ -84,64 +78,21 @@ class UdpSocket {
 
     private var isRecordVoice = false;//是否录制音频
     private var isPlayVoice = false;//是否播放音频
-    private var voiceRecord: VoiceUtil? = null
 
     @Synchronized
     open fun play() {
-        isPlayVoice = true
-        thread {
-            var adpcm = ADPCM()
-            val recvBuf = ByteArray(VoiceUtil.getBufferSize() / 2 + Constant.VOICE_DATA_HEARD)
-            val recvPacket = DatagramPacket(recvBuf, recvBuf.size)
-            var playPerpare = VoiceUtil.playPerpare()
-            LogUtil.error("UdpSocket.kt", "88\tplay()\n" + "端口号" + recordPort);
-
-            while (isPlayVoice) {
-                if (udpSocket == null || udpSocket!!.isClosed) {
-                    //                    initClient()
-                    instance.connect()
-                    continue
-                }
-                try {
-                    udpSocket!!.receive(recvPacket);
-                } catch (e: Exception) {
-                    LogUtil.error("SocketManageService.kt${Gson().toJson(recvPacket.data)}", e)
-//                    initClient()
-                    instance
-                }
-
-                var data = recvPacket.data
-                var voice = ByteArray(data.size - Constant.VOICE_DATA_HEARD)
-                LogUtil.error("SocketManageService.kt", "478\n" + "有收到消息\t端口号$recordPort")
-                System.arraycopy(data, Constant.VOICE_DATA_HEARD - 1, voice, 0, data.size - Constant.VOICE_DATA_HEARD)
-                adpcm.adpcm_thirdparty_reset()
-                var decode = ShortArray(voice.size * 2)
-                decode = adpcm.adpcm_decoder(voice, decode, voice.size)
-                playPerpare.write(decode, 0, decode.size)
-            }
-        }
+        LogUtil.error("UdpSocket.kt","90\tplay()\n"+"开始播放");
     }
     open fun stopPlay(){
-        VoiceUtil.playClose()
+        LogUtil.error("UdpSocket.kt","93\tstopPlay()\n"+"停止播放");
     }
 
     open fun record() {
-        isRecordVoice = true
-        voiceRecord = VoiceUtil.newInstance(object : VoiceUtil.RecordVoice {
-            override fun onRecordDataListener(bytes: ByteArray) {
-                //  发送录音数据
-                LogUtil.error("UdpSocket.kt", "117\tonRecordDataListener()\n" + "有数据" + bytes.size + "端口号" + recordPort);
-                sendData(CmdUtils.getInstance().getRecordVoiceData(bytes, idBytes), 0)
-            }
-        })
-        thread { voiceRecord!!.record() }
+        LogUtil.error("UdpSocket.kt","97\trecord()\n"+"开始录制");
     }
 
     open fun stopRecord() {
-        isRecordVoice = false
-        if (voiceRecord != null)
-            voiceRecord!!.stopRecord()
-        voiceRecord = null;
+        LogUtil.error("UdpSocket.kt","95\tstopRecord()\n"+"停止录制");
     }
 
     /**

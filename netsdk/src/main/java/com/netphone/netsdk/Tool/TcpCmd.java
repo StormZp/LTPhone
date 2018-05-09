@@ -176,7 +176,7 @@ public class TcpCmd {
                                 case 0x00:
                                     port = ByteUtil.getInt(bodyBytes, 1);//udp端口,占4位
                                     isGroupBeat = true;
-                                    LogUtil.error("TcpCmd", "177\tcmdExplore()\n" + "群聊端口号:"+port);
+                                    LogUtil.error("TcpCmd", "177\tcmdExplore()\n" + "群聊端口号:" + port);
                                     UdpSocket.Companion.getInstance().connect(port);
                                     UdpSocket.Companion.getInstance().play();
 
@@ -202,11 +202,11 @@ public class TcpCmd {
                             }
                         }
                         break;
-                    case 0x05://注册用户
+                    case 0x05://注册用户--已过期
                         break;
-                    case 0x06://主动发起视频通话的回复
+                    case 0x06://todo 主动发起视频通话
                         break;
-                    case 0x07://挂断视频通话
+                    case 0x07://todo 挂断视频通话
                         break;
                     case 0x08://发送文字消息
                         body = ByteIntUtils.utfToString(bodyBytes);
@@ -324,7 +324,7 @@ public class TcpCmd {
                     case 0x19://停止发送广播
                         UdpSocket.Companion.getInstance().stopPlay();
                         break;
-                    case 0x1A://设置呼叫转移
+                    case 0x1A://todo 设置呼叫转移
                         break;
                     case 0x1B://获取群组成员信息
                         if (LTConfigure.getInstance().getLtApi().getGroupMemberListener != null) {
@@ -350,7 +350,7 @@ public class TcpCmd {
                 break;
             case 0x01://服务端>>终端指令列表
                 switch (pagBytes[8]) {
-                    case 0x00://推送用户列表信息,由于socket写在服务里原因，在主页没能正常停止服务，会导致服务一直开启，socket写入数据
+                    case 0x00://用户  群推送 --【已作废】
 
                         body = ByteIntUtils.utfToString(bodyBytes);
 //                            LogUtil.saveLog(LTConfigure.getInstance().getContext(), "127\tcmdExplore()\n" + body);
@@ -370,13 +370,11 @@ public class TcpCmd {
                             }
 
                             mGroupInfoBeanDao.insertOrReplaceInTx(userListBean.getGroupInfo());
-                            if (LTConfigure.getInstance().getLtApi().mOnLoginListener != null) {
-                                LTConfigure.getInstance().getLtApi().mOnLoginListener.onComplete(userListBean);
-                                LTConfigure.getInstance().getLtApi().mOnLoginListener = null;
-                            }
-                            if (LTConfigure.getInstance().getLtApi().onReFreshListener != null) {
-                                LTConfigure.getInstance().getLtApi().onReFreshListener.onReFresh(userListBean);
-                            }
+//                            if (LTConfigure.getInstance().getLtApi().mOnLoginListener != null) {
+//                                LTConfigure.getInstance().getLtApi().mOnLoginListener.onComplete(userListBean);
+//                                LTConfigure.getInstance().getLtApi().mOnLoginListener = null;
+//                            }
+
                         } catch (Exception e) {
                             LogUtil.error("TcpCmd", e);
                         }
@@ -407,13 +405,13 @@ public class TcpCmd {
                         }
                         UdpSocket.Companion.getInstance().stopRecord();
                         break;
-                    case 0x04://被叫视频通话
+                    case 0x04://todo 被叫视频通话
                         break;
                     case 0x05://
                         break;
-                    case 0x06://开始视频通话
+                    case 0x06://todo 开始视频通话
                         break;
-                    case 0x07://对方挂断视频通话
+                    case 0x07://todo 对方挂断视频通话
                         break;
                     case 0x08://收到文字消息
                         body = ByteIntUtils.utfToString(bodyBytes);
@@ -467,15 +465,15 @@ public class TcpCmd {
                             LTConfigure.getInstance().getLtApi().groupStateListener.onSystemReLaxedMac();
                         }
                         break;
-                    case 0x0E://被遥晕
+                    case 0x0E://todo被遥晕
                         break;
-                    case 0x0F://被取消遥晕
+                    case 0x0F://todo 被取消遥晕
                         break;
-                    case 0x10://被遥弊
+                    case 0x10://todo 被遥弊
                         break;
-                    case 0x11://被取消遥弊
+                    case 0x11://todo 被取消遥弊
                         break;
-                    case 0x12://当前通话时,通话对象被遥弊,或遥晕
+                    case 0x12://todo 当前通话时,通话对象被遥弊,或遥晕
                         break;
                     case 0x13://当用户超出电子围栏范围时
                         if (LTApi.getInstance().onReFreshListener != null) {
@@ -489,7 +487,7 @@ public class TcpCmd {
                             LTApi.getInstance().onReFreshListener = null;
                         }
                         break;
-                    case 0x15://强制加入群聊
+                    case 0x15://todo 强制加入群聊
                         break;
                     case 0x16://收到多媒体内容(图片,视频,文件等)
                         body = ByteIntUtils.utfToString(bodyBytes);
@@ -503,17 +501,17 @@ public class TcpCmd {
 
 
                         break;
-                    case 0x17://组呼中,被系统分配了权限
+                    case 0x17://todo 组呼中,被系统分配了权限
                         break;
-                    case 0x18://被发起主叫(从调度台)
+                    case 0x18://todo 被发起主叫(从调度台)
                         break;
-                    case 0x19://服务端发起监听(被监听)
+                    case 0x19://todo 服务端发起监听(被监听)
                         break;
-                    case 0x1A://服务端停止监听(被监听)
+                    case 0x1A://todo 服务端停止监听(被监听)
                         break;
-                    case 0x1D://正在监听终端(主动),是否d同步播放
+                    case 0x1D://todo 正在监听终端(主动),是否d同步播放
                         break;
-                    case 0x1E://监听(主动)已被中断
+                    case 0x1E://todo 监听(主动)已被中断
                         break;
                     case 0x1F://从服务台发起广播(发起方) 收到端口号
 //                        port = ByteUtil.getInt(bodyBytes, 0);//udp 端口
@@ -537,11 +535,11 @@ public class TcpCmd {
                             LTApi.getInstance().onBroadcastListener.onStop();
                         }
                         break;
-                    case 0x23://开始播放监听内容
+                    case 0x23://todo 开始播放监听内容
                         break;
-                    case 0x24://停止播放监听内容
+                    case 0x24://todo 停止播放监听内容
                         break;
-                    case 0x25://播放监听文件
+                    case 0x25://todo 播放监听文件
                         break;
                     case 0x26://收到群聊消息
                         body = ByteIntUtils.utfToString(bodyBytes);
@@ -574,7 +572,7 @@ public class TcpCmd {
                             LTApi.getInstance().onReFreshListener.onGroupReFresh(group);
                         }
                         break;
-                 case 0x29://群组麦权变更
+                    case 0x29://群组麦权变更
                         body = ByteIntUtils.utfToString(bodyBytes);
                         LogUtil.error("TcpCmd", "568\tcmdExplore()\n" + body);
                         GroupInfoBean group2 = mGson.fromJson(body, GroupInfoBean.class);
@@ -582,8 +580,166 @@ public class TcpCmd {
                             LTApi.getInstance().onReFreshListener.onGroupReFresh(group2);
                         }
                         break;
+                    case 0x30://todo 用户列表
+                        switch (bodyBytes[0]) {
+                            case 0x00:
+                                byte[] jsonBytes = new byte[bodyBytes.length - 1];
+                                System.arraycopy(bodyBytes, 1, jsonBytes, 0, bodyBytes.length - 1);
+                                body = ByteIntUtils.utfToString(jsonBytes);
+                                List<UserInfoBean> users = mGson.fromJson(body, new TypeToken<List<UserInfoBean>>() {
+                                }.getType());
+                                if (LTConfigure.getInstance().getLtApi().onReFreshListener != null) {
+                                    LTConfigure.getInstance().getLtApi().onReFreshListener.onReFriendsFresh(users);
+                                }
+                                break;
+                        }
+                        break;
+                    case 0x3A://todo 群组列表
+                        switch (bodyBytes[0]) {
+                            case 0x00:
+                                byte[] jsonBytes = new byte[bodyBytes.length - 1];
+                                System.arraycopy(bodyBytes, 1, jsonBytes, 0, bodyBytes.length - 1);
+                                body = ByteIntUtils.utfToString(jsonBytes);
+                                List<GroupInfoBean> users = mGson.fromJson(body, new TypeToken<List<GroupInfoBean>>() {
+                                }.getType());
+                                if (LTConfigure.getInstance().getLtApi().onReFreshListener != null) {
+                                    LTConfigure.getInstance().getLtApi().onReFreshListener.onReGroupsFresh(users);
+                                }
+                                break;
+                        }
+                        break;
+                    case 0x3B://todo 用户上线
+                        switch (bodyBytes[0]) {
+                            case 0x00:
+                                byte[] jsonBytes = new byte[bodyBytes.length - 1];
+                                System.arraycopy(bodyBytes, 1, jsonBytes, 0, bodyBytes.length - 1);
+                                body = ByteIntUtils.utfToString(jsonBytes);
+                                UserInfoBean users = mGson.fromJson(body, UserInfoBean.class);
+
+                                if (LTConfigure.getInstance().getLtApi().onReFreshListener != null) {
+                                    LTConfigure.getInstance().getLtApi().onReFreshListener.onFriendsReFresh(users);
+                                }
+                                break;
+                        }
+                        break;
+                    case 0x3C://todo 用户离线
+                        switch (bodyBytes[0]) {
+                            case 0x00:
+                                byte[] jsonBytes = new byte[bodyBytes.length - 1];
+                                System.arraycopy(bodyBytes, 1, jsonBytes, 0, bodyBytes.length - 1);
+                                body = ByteIntUtils.utfToString(jsonBytes);
+
+                                UserInfoBean users = mGson.fromJson(body, UserInfoBean.class);
+
+                                if (LTConfigure.getInstance().getLtApi().onReFreshListener != null) {
+                                    LTConfigure.getInstance().getLtApi().onReFreshListener.onFriendsReFresh(users);
+                                }
+                                break;
+                        }
+                        break;
+                    case 0x3D://todo 企业添加新用户
+                        switch (bodyBytes[0]) {
+                            case 0x00:
+                                byte[] jsonBytes = new byte[bodyBytes.length - 1];
+                                System.arraycopy(bodyBytes, 1, jsonBytes, 0, bodyBytes.length - 1);
+                                body = ByteIntUtils.utfToString(jsonBytes);
+                                UserInfoBean users = mGson.fromJson(body, UserInfoBean.class);
+
+                                if (LTConfigure.getInstance().getLtApi().onReFreshListener != null) {
+                                    LTConfigure.getInstance().getLtApi().onReFreshListener.onFriendsReFresh(users);
+                                }
+
+                                break;
+                        }
+                        break;
+                    case 0x3E://todo 企业删除用户
+                        switch (bodyBytes[0]) {
+                            case 0x00:
+                                byte[] jsonBytes = new byte[bodyBytes.length - 1];
+                                System.arraycopy(bodyBytes, 1, jsonBytes, 0, bodyBytes.length - 1);
+                                body = ByteIntUtils.utfToString(jsonBytes);
+                                UserInfoBean users = mGson.fromJson(body, UserInfoBean.class);
+
+                                if (LTConfigure.getInstance().getLtApi().onReFreshListener != null) {
+                                    LTConfigure.getInstance().getLtApi().onReFreshListener.onFriendsDel(users);
+                                }
+
+                                break;
+                        }
+                        break;
+                    case 0x3F://todo 好友信息被更新
+                        switch (bodyBytes[0]) {
+                            case 0x00:
+                                byte[] jsonBytes = new byte[bodyBytes.length - 1];
+                                System.arraycopy(bodyBytes, 1, jsonBytes, 0, bodyBytes.length - 1);
+                                body = ByteIntUtils.utfToString(jsonBytes);
+                                UserInfoBean users = mGson.fromJson(body, UserInfoBean.class);
+
+                                if (LTConfigure.getInstance().getLtApi().onReFreshListener != null) {
+                                    LTConfigure.getInstance().getLtApi().onReFreshListener.onFriendsReFresh(users);
+                                }
+                                break;
+                        }
+                        break;
+                    case 0x40://todo  现有群组被移除
+                        switch (bodyBytes[0]) {
+                            case 0x00:
+                                byte[] jsonBytes = new byte[bodyBytes.length - 1];
+                                System.arraycopy(bodyBytes, 1, jsonBytes, 0, bodyBytes.length - 1);
+                                body = ByteIntUtils.utfToString(jsonBytes);
+                                GroupInfoBean users = mGson.fromJson(body, GroupInfoBean.class);
+
+                                if (LTConfigure.getInstance().getLtApi().onReFreshListener != null) {
+                                    LTConfigure.getInstance().getLtApi().onReFreshListener.onGroupDel(users);
+                                }
+                                break;
+                        }
+                        break;
+                    case 0x41://todo  现有群组信息更新
+                        switch (bodyBytes[0]) {
+                            case 0x00:
+                                byte[] jsonBytes = new byte[bodyBytes.length - 1];
+                                System.arraycopy(bodyBytes, 1, jsonBytes, 0, bodyBytes.length - 1);
+                                body = ByteIntUtils.utfToString(jsonBytes);
+                                GroupInfoBean users = mGson.fromJson(body, GroupInfoBean.class);
+
+                                if (LTConfigure.getInstance().getLtApi().onReFreshListener != null) {
+                                    LTConfigure.getInstance().getLtApi().onReFreshListener.onGroupReFresh(users);
+                                }
+                                break;
+                        }
+                        break;
+                    case 0x42:// todo 加入了新的群组
+                        switch (bodyBytes[0]) {
+                            case 0x00:
+                                byte[] jsonBytes = new byte[bodyBytes.length - 1];
+                                System.arraycopy(bodyBytes, 1, jsonBytes, 0, bodyBytes.length - 1);
+                                body = ByteIntUtils.utfToString(jsonBytes);
+                                GroupInfoBean users = mGson.fromJson(body, GroupInfoBean.class);
+
+                                if (LTConfigure.getInstance().getLtApi().onReFreshListener != null) {
+                                    LTConfigure.getInstance().getLtApi().onReFreshListener.onGroupReFresh(users);
+                                }
+
+                                break;
+                        }
+                        break;
+                    case 0x43://todo 被移出现有群组
+                        switch (bodyBytes[0]) {
+                            case 0x00:
+                                byte[] jsonBytes = new byte[bodyBytes.length - 1];
+                                System.arraycopy(bodyBytes, 1, jsonBytes, 0, bodyBytes.length - 1);
+                                body = ByteIntUtils.utfToString(jsonBytes);
+                                GroupInfoBean users = mGson.fromJson(body, GroupInfoBean.class);
+
+                                if (LTConfigure.getInstance().getLtApi().onReFreshListener != null) {
+                                    LTConfigure.getInstance().getLtApi().onReFreshListener.onGroupDel(users);
+                                }
+                                break;
+                        }
+                        break;
                 }
-                break;
+
             case 0x02://服务端>>终端(其他)
                 if (LTConfigure.getInstance().mOnErrorListener != null)
                     switch (pagBytes[8]) {
@@ -607,6 +763,7 @@ public class TcpCmd {
                     }
                 break;
         }
+
     }
 
     public static boolean isGroupBeat   = false;//群聊心跳包

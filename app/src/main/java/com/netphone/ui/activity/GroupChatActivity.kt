@@ -157,7 +157,7 @@ open class GroupChatActivity : BaseActivity<ActivityChatGroupBinding>() {
             }
             EventConfig.GROUP_REFRESH -> {//刷新
                 var infoBean = appBean.data as GroupInfoBean
-                if (infoBean.groupID.equals(groupInfo.groupID))
+                if (infoBean==null&&!TextUtils.isEmpty(infoBean.groupID)&&infoBean.groupID.equals(groupInfo.groupID))
                     if (infoBean.micer != null) {
                         binding.layMic.visibility = View.VISIBLE
                     } else {
