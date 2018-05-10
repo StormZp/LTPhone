@@ -44,11 +44,19 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
 
     public void refresh(String groupId, int onLineCount) {
         LogUtil.error("GroupAdapter", "45\trefresh()\n" + new Gson().toJson(datas));
-        LogUtil.error("GroupAdapter", "47\trefresh()\n" + "groupId:"+groupId);
+        LogUtil.error("GroupAdapter", "47\trefresh()\n" + "groupId:" + groupId);
         for (int i = 0; i < datas.size(); i++) {
             if (datas.get(i).getGroupID().equals(groupId)) {
                 datas.get(i).setOnLineCount(onLineCount);
             }
+        }
+        notifyDataSetChanged();
+    }
+
+    public void setList( List<GroupInfoBean> datas){
+        if (datas!=null){
+            datas.clear();
+            datas.addAll(datas);
         }
         notifyDataSetChanged();
     }
@@ -85,7 +93,7 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
 
     @Override
     public int getItemCount() {
-        return datas.size();
+        return datas == null ? 0 : datas.size();
     }
 
     //自定义的ViewHolder，持有每个Item的的所有界面元素

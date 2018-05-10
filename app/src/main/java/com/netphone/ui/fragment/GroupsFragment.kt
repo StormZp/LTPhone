@@ -39,8 +39,12 @@ class GroupsFragment : BaseFragment<FragmentGroupsBinding>() {
     override fun receiveEvent(appBean: AppBean<Any>) {
         when (appBean.code) {
             EventConfig.GROUP_REFRESH -> {
-                var infoBean = appBean.data as GroupInfoBean
-                groupAdapter.refresh(infoBean.groupID, infoBean.onLineCount)
+                if (appBean.data != null) {
+                    var infoBean = appBean.data as GroupInfoBean
+                    groupAdapter.refresh(infoBean.groupID, infoBean.onLineCount)
+                } else {
+                    groupAdapter.setList(Constant.myGroupList)
+                }
             }
         }
     }
@@ -78,6 +82,11 @@ class GroupsFragment : BaseFragment<FragmentGroupsBinding>() {
             }
 
         }
+
+        if (Constant.myGroupList==null){
+            Constant.myGroupList = arrayListOf();
+        }
+//        LogUtil.error("GroupsFragment.kt", "86\tinitData()\n" + Constant.myGroupList.size);
 
         if (currentGroup != null) {
             var arrss: ArrayList<GroupInfoBean> = arrayListOf<GroupInfoBean>()

@@ -77,7 +77,13 @@ class FriendsFragment : BaseFragment<FragmentFriendsBinding>() {
         binding.title.back.visibility = View.INVISIBLE
         binding.title.title.text = context.resources.getString(R.string.fridends)
         registerEventBus()
+
+        if (Constant.myFriendList==null){
+            Constant.myFriendList = arrayListOf();
+        }
+
         if (Constant.myFriendList != null) {
+//            LogUtil.error("FriendsFragment.kt", "83\tinitData()\n" + Constant.myGroupList.size);
             Collections.sort(Constant.myFriendList); // 对list进行排序，需要让User实现Comparable接口重写compareTo方法
             friend2Adapter = Friend2Adapter(context, Constant.myFriendList)
             mLinearLayoutManager = LinearLayoutManager(context)
