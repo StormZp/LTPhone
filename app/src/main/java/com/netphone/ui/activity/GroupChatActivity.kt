@@ -8,17 +8,22 @@ import android.support.v7.widget.LinearLayoutManager
 import android.text.TextUtils
 import android.view.MotionEvent
 import android.view.View
+import com.bumptech.glide.Glide
+import com.google.gson.Gson
 import com.netphone.R
 import com.netphone.adapter.GroupChatAdapter
 import com.netphone.config.EventConfig
 import com.netphone.databinding.ActivityChatGroupBinding
 import com.netphone.netsdk.LTApi
+import com.netphone.netsdk.LTConfigure
+import com.netphone.netsdk.Tool.TcpConfig
 import com.netphone.netsdk.base.AppBean
 import com.netphone.netsdk.bean.GroupChatMsgBean
 import com.netphone.netsdk.bean.GroupInfoBean
 import com.netphone.netsdk.bean.UserInfoBean
 import com.netphone.netsdk.utils.LogUtil
 import com.netphone.utils.AppUtil
+import com.netphone.utils.GlideCircleTransform
 import com.netphone.utils.LTListener
 import com.netphone.view.InputMethodLayout
 import com.storm.tool.base.BaseActivity
@@ -30,6 +35,8 @@ open class GroupChatActivity : BaseActivity<ActivityChatGroupBinding>() {
     private lateinit var groupInfo: GroupInfoBean
     private lateinit var adapter: GroupChatAdapter;
     private var isShowKeyBoard = false
+    private var isSound = true
+    private lateinit var mGlideCircleTransform: GlideCircleTransform
 
     private var userInfoBean = LTApi.getInstance().currentInfo
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,6 +51,7 @@ open class GroupChatActivity : BaseActivity<ActivityChatGroupBinding>() {
         binding.title.menuDate.visibility = View.VISIBLE
         binding.title.menuDate.setImageResource(R.mipmap.icon_qz)
 
+        mGlideCircleTransform = GlideCircleTransform(context)
 
         var groupChatMessage = LTApi.getInstance().getGroupChatMessage(groupInfo.groupID)
 //        groupChatMessage = GroupUtil.getSortReverseList(groupChatMessage)
@@ -55,14 +63,19 @@ open class GroupChatActivity : BaseActivity<ActivityChatGroupBinding>() {
         LTListener.newInstance().joinGroupListener(groupInfo.groupID)
         setSpeakerphoneOn(true, activity, getSystemService(Context.AUDIO_SERVICE) as AudioManager)
 
-        if (groupInfo.micer != null) {
+        LogUtil.error("GroupChatActivity.kt", "65\tinitData()\n" + Gson().toJson(groupInfo));
+        if (groupInfo.micer != null && !TextUtils.isEmpty(groupInfo.micer.userId)) {
+            groupInfo.micer = LTApi.getInstance().getUserInfo(groupInfo.micer.userId)
             binding.layMic.visibility = View.VISIBLE
+            binding.tvCurrent.setText(groupInfo.micer.realName)
+            Glide.with(LTConfigure.mContext).load(TcpConfig.URL + groupInfo.micer.getHeadIcon()).placeholder(R.mipmap.icon_defult_detail).error(R.mipmap.icon_defult_detail).transform(mGlideCircleTransform).into(binding.ivCurrent)
         } else {
             binding.layMic.visibility = View.GONE
         }
     }
 
     override fun initListener() {
+
         binding.title.back.setOnClickListener { finish() }
         binding.title.menuDate.setOnClickListener { jump(GroupInfoActivity::class.java, intent.extras) }
         binding.click = OnClick()
@@ -77,7 +90,6 @@ open class GroupChatActivity : BaseActivity<ActivityChatGroupBinding>() {
                 InputMethodLayout.KEYBOARD_STATE_HIDE -> {
                     AppUtil.closeKeyboard(context)
                     isShowKeyBoard = false
-//                    binding.keyboard.setImageResource(R.mipmap.icon_jp)
                 }
             }
         }
@@ -136,33 +148,59 @@ open class GroupChatActivity : BaseActivity<ActivityChatGroupBinding>() {
                 }
             }
             EventConfig.MENBER_HAVE_MAC -> {
+                var userInfoBean1 = appBean.data as UserInfoBean
                 var groupChatMsgBean = GroupChatMsgBean()
-                groupChatMsgBean.fromUserName = (appBean.data as UserInfoBean).realName + context.resources.getString(R.string.have_mic)
+                groupChatMsgBean.fromUserName = userInfoBean1.realName + context.resources.getString(R.string.have_mic)
+                userInfoBean1 = LTApi.getInstance().getUserInfo(userInfoBean1.userId)
                 adapter.addMsg(groupChatMsgBean)
+                activity.runOnUiThread {
+                    binding.layMic.visibility = View.VISIBLE
+                    binding.tvCurrent.setText(userInfoBean1.realName)
+                    Glide.with(LTConfigure.mContext).load(TcpConfig.URL + userInfoBean1.getHeadIcon()).placeholder(R.mipmap.icon_defult_detail).error(R.mipmap.icon_defult_detail).transform(mGlideCircleTransform).into(binding.ivCurrent)
+                }
             }
             EventConfig.MEMBER_RELAXE_DMAC -> {
                 var groupChatMsgBean = GroupChatMsgBean()
-                groupChatMsgBean.fromUserName = (appBean.data as UserInfoBean).realName + context.resources.getString(R.string.have_relase_mic)
+                var userInfoBean1 = appBean.data as UserInfoBean
+                groupChatMsgBean.fromUserName = userInfoBean1.realName + context.resources.getString(R.string.have_relase_mic)
                 adapter.addMsg(groupChatMsgBean)
+                activity.runOnUiThread {
+
+                    binding.layMic.visibility = View.GONE
+
+                }
             }
             EventConfig.SYSTEM_RELAXED_MAC -> {
                 var groupChatMsgBean = GroupChatMsgBean()
                 groupChatMsgBean.fromUserName = context.resources.getString(R.string.system_relase_mic)
                 adapter.addMsg(groupChatMsgBean)
+
+                activity.runOnUiThread {
+                    binding.layMic.visibility = View.GONE
+                }
             }
             EventConfig.GRAB_WHEAT_SUCCESS -> {
                 var groupChatMsgBean = GroupChatMsgBean()
                 groupChatMsgBean.fromUserName = context.resources.getString(R.string.preemption) + context.resources.getString(R.string.success)
                 adapter.addMsg(groupChatMsgBean)
+                activity.runOnUiThread {
+                    binding.layMic.visibility = View.VISIBLE
+
+                }
+
             }
             EventConfig.GROUP_REFRESH -> {//刷新
                 var infoBean = appBean.data as GroupInfoBean
-                if (infoBean==null&&!TextUtils.isEmpty(infoBean.groupID)&&infoBean.groupID.equals(groupInfo.groupID))
-                    if (infoBean.micer != null) {
-                        binding.layMic.visibility = View.VISIBLE
-                    } else {
-                        binding.layMic.visibility = View.GONE
-                    }
+                activity.runOnUiThread {
+                    if (infoBean == null && !TextUtils.isEmpty(infoBean.groupID) && infoBean.groupID.equals(groupInfo.groupID))
+                        if (infoBean.micer != null) {
+                            binding.layMic.visibility = View.VISIBLE
+
+                        } else {
+                            binding.layMic.visibility = View.GONE
+                        }
+                }
+
             }
         }
         if (adapter.itemCount != 0)
@@ -175,6 +213,17 @@ open class GroupChatActivity : BaseActivity<ActivityChatGroupBinding>() {
     inner class OnClick {
         open fun back(view: View) {
 
+        }
+
+        open fun muted(view: View) {
+            isSound = !isSound
+            if (isSound) {
+                binding.ivMutedHint.setImageResource(R.mipmap.icon_sy)
+                binding.tvMutedHint.visibility = View.GONE
+            } else {
+                binding.ivMutedHint.setImageResource(R.mipmap.icon_jinyin)
+                binding.tvMutedHint.visibility = View.VISIBLE
+            }
         }
 
         open fun submit(view: View) {
@@ -192,9 +241,7 @@ open class GroupChatActivity : BaseActivity<ActivityChatGroupBinding>() {
             binding.layEdit.visibility = View.VISIBLE
             binding.layVoice.visibility = View.GONE
 
-//            binding.keyboard.setImageResource(R.mipmap.icon_jp2)
             isShowKeyBoard = true
-//            AppUtil.openKeyboard(binding.etContent, context)
         }
 
         open fun showVoice(view: View) {
@@ -224,4 +271,6 @@ open class GroupChatActivity : BaseActivity<ActivityChatGroupBinding>() {
             LogUtil.error("关闭扬声器")
         }
     }
+
+
 }

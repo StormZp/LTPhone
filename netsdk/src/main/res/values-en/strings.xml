@@ -56,6 +56,7 @@
     <string name="choose_communication_type">Please choose the mode of communication</string>
     <string name="input_query_key">Input query key</string>
     <string name="loudspeaker_mute">loudspeaker mute</string>
+    <string name="al_loudspeaker_mute">Muted</string>
     <string name="receiving_and_listening">Receiving listening</string>
     <string name="text_title">title</string>
     <string name="text_content">content</string>

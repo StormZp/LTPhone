@@ -53,6 +53,7 @@
     <string name="off_line">离线</string>
     <string name="input_query_key">输入查询关键字</string>
     <string name="loudspeaker_mute">静音</string>
+    <string name="al_loudspeaker_mute">已静音</string>
     <string name="receiving_and_listening">正在接收监听</string>
     <string name="text_title">标题</string>
     <string name="text_content">内容</string>

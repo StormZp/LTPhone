@@ -230,6 +230,8 @@ public class LTListener {
                         Constant.myGroupList.set(i, bean);
 //                            Constant.myGroupList.remove(i);
                         break;
+                    } else if (i == Constant.myGroupList.size() - 1) {
+                        Constant.myGroupList.add(bean);
                     }
                 }
                 EventBusUtil.sendEvent(new AppBean(EventConfig.GROUP_REFRESH, bean));

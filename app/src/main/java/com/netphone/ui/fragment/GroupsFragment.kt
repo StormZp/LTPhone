@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.bumptech.glide.Glide
+import com.google.gson.Gson
 import com.netphone.R
 import com.netphone.adapter.GroupAdapter
 import com.netphone.config.Constant
@@ -18,6 +19,7 @@ import com.netphone.netsdk.LTApi
 import com.netphone.netsdk.Tool.TcpConfig
 import com.netphone.netsdk.base.AppBean
 import com.netphone.netsdk.bean.GroupInfoBean
+import com.netphone.netsdk.bean.UserInfoBean
 import com.netphone.netsdk.utils.LogUtil
 import com.netphone.ui.activity.GroupChatActivity
 import com.netphone.utils.GlideCircleTransform
@@ -43,10 +45,20 @@ class GroupsFragment : BaseFragment<FragmentGroupsBinding>() {
             EventConfig.GROUP_REFRESH -> {
                 if (appBean.data != null) {
                     var infoBean = appBean.data as GroupInfoBean
-                    groupAdapter.refresh(infoBean.groupID, infoBean.onLineCount)
+                    if (groupAdapter != null && infoBean != null)
+                        groupAdapter!!.refresh(infoBean.groupID, infoBean.onLineCount)
+                    if (currentGroup != null && currentGroup!!.groupID.equals(infoBean.groupID)) {
+                        currentMic = LTApi.getInstance().getUserInfo(infoBean.micer.userId)
+                        currentGroup = infoBean;
+                    } else {
+                        currentMic = null;
+                        currentGroup!!.micer = null
+                    }
                 } else {
-                    groupAdapter.setList(Constant.myGroupList)
+                    initData()
                 }
+
+
             }
         }
     }
@@ -64,9 +76,7 @@ class GroupsFragment : BaseFragment<FragmentGroupsBinding>() {
                     binding.recycle.layoutManager = LinearLayoutManager(context)
                     binding.recycle.adapter = groupAdapter
                 } else {
-                    groupAdapter = GroupAdapter(context, Constant.myGroupList)
-                    binding.recycle.layoutManager = LinearLayoutManager(context)
-                    binding.recycle.adapter = groupAdapter
+                    initData()
                 }
             }
 
@@ -79,8 +89,9 @@ class GroupsFragment : BaseFragment<FragmentGroupsBinding>() {
         })
     }
 
-    lateinit var groupAdapter: GroupAdapter
+    var groupAdapter: GroupAdapter? = null
     private var currentGroup: GroupInfoBean? = null;
+    private var currentMic: UserInfoBean? = null;
 
     override fun initData() {
         if (!com.netphone.netsdk.Tool.Constant.isOnline)
@@ -89,6 +100,8 @@ class GroupsFragment : BaseFragment<FragmentGroupsBinding>() {
         binding.title.title.text = context.resources.getString(R.string.groups)
 
         currentGroup = LTApi.getInstance().currentGroupInfo
+
+        currentGroup!!.micer = currentMic
 
         registerEventBus()
         if (currentGroup == null) {
@@ -101,6 +114,7 @@ class GroupsFragment : BaseFragment<FragmentGroupsBinding>() {
 
             binding.layCurrent.setOnClickListener {
                 val bundle = Bundle()
+                LogUtil.error("GroupsFragment.kt", "111\tinitData()\n" + Gson().toJson(currentGroup));
                 bundle.putSerializable("bean", currentGroup)
                 jump(GroupChatActivity::class.java, bundle)
             }

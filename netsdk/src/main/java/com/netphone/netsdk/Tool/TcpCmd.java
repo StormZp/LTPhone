@@ -578,11 +578,12 @@ public class TcpCmd {
                         body = ByteIntUtils.utfToString(bodyBytes);
                         LogUtil.error("TcpCmd", "568\tcmdExplore()\n" + body);
                         GroupInfoBean group2 = mGson.fromJson(body, GroupInfoBean.class);
+
                         if (LTApi.getInstance().onReFreshListener != null) {
                             LTApi.getInstance().onReFreshListener.onGroupReFresh(group2);
                         }
                         break;
-                    case 0x30://todo 用户列表
+                    case 0x30:// 用户列表
 //                        switch (bodyBytes[0]) {
 //                            case 0x00:
                     {
@@ -604,7 +605,7 @@ public class TcpCmd {
                     //                                break;
 //                        }
                     break;
-                    case 0x3A://todo 群组列表
+                    case 0x3A:// 群组列表
                     {
                         byte[] jsonBytes = new byte[bodyBytes.length];
                         System.arraycopy(bodyBytes, 0, jsonBytes, 0, bodyBytes.length);
@@ -621,7 +622,7 @@ public class TcpCmd {
                         mGroupInfoBeanDao.insertOrReplaceInTx(groupReFreshBean.getList());
                     }
                     break;
-                    case 0x3B://todo 用户上线
+                    case 0x3B:// 用户上线
                     {
                         byte[] jsonBytes = new byte[bodyBytes.length];
                         System.arraycopy(bodyBytes, 0, jsonBytes, 0, bodyBytes.length);
@@ -634,7 +635,7 @@ public class TcpCmd {
 
                     }
                     break;
-                    case 0x3C://todo 用户离线
+                    case 0x3C:// 用户离线
                     {
                         byte[] jsonBytes = new byte[bodyBytes.length];
                         System.arraycopy(bodyBytes, 0, jsonBytes, 0, bodyBytes.length);
@@ -647,7 +648,7 @@ public class TcpCmd {
                         }
                     }
                     break;
-                    case 0x3D://todo 企业添加新用户
+                    case 0x3D:// 企业添加新用户
                     {
                         byte[] jsonBytes = new byte[bodyBytes.length];
                         System.arraycopy(bodyBytes, 0, jsonBytes, 0, bodyBytes.length);
@@ -660,7 +661,7 @@ public class TcpCmd {
 
                     }
                     break;
-                    case 0x3E://todo 企业删除用户
+                    case 0x3E:// 企业删除用户
                     {
                         byte[] jsonBytes = new byte[bodyBytes.length];
                         System.arraycopy(bodyBytes, 0, jsonBytes, 0, bodyBytes.length);
@@ -673,7 +674,7 @@ public class TcpCmd {
 
                     }
                     break;
-                    case 0x3F://todo 好友信息被更新
+                    case 0x3F:// 好友信息被更新
                     {
                         byte[] jsonBytes = new byte[bodyBytes.length];
                         System.arraycopy(bodyBytes, 0, jsonBytes, 0, bodyBytes.length);
@@ -685,7 +686,7 @@ public class TcpCmd {
                         }
                     }
                     break;
-                    case 0x40://todo  现有群组被移除
+                    case 0x40://  现有群组被移除
                     {
                         byte[] jsonBytes = new byte[bodyBytes.length];
                         System.arraycopy(bodyBytes, 0, jsonBytes, 0, bodyBytes.length);
@@ -697,7 +698,7 @@ public class TcpCmd {
                         }
                     }
                     break;
-                    case 0x41://todo  现有群组信息更新
+                    case 0x41://  现有群组信息更新
                     {
                         byte[] jsonBytes = new byte[bodyBytes.length];
                         System.arraycopy(bodyBytes, 0, jsonBytes, 0, bodyBytes.length);
@@ -709,7 +710,7 @@ public class TcpCmd {
                         }
                     }
                     break;
-                    case 0x42:// todo 加入了新的群组
+                    case 0x42://  加入了新的群组
                     {
                         byte[] jsonBytes = new byte[bodyBytes.length];
                         System.arraycopy(bodyBytes, 0, jsonBytes, 0, bodyBytes.length);
@@ -722,7 +723,7 @@ public class TcpCmd {
 
                     }
                     break;
-                    case 0x43://todo 被移出现有群组
+                    case 0x43:// 被移出现有群组
                     {
                         byte[] jsonBytes = new byte[bodyBytes.length];
                         System.arraycopy(bodyBytes, 0, jsonBytes, 0, bodyBytes.length);
