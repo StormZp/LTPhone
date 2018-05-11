@@ -8,6 +8,7 @@ import com.google.gson.Gson;
 import com.netphone.gen.CurrentGroupBeanDao;
 import com.netphone.gen.FriendChatMsgBeanDao;
 import com.netphone.gen.GroupChatMsgBeanDao;
+import com.netphone.gen.GroupInfoBeanDao;
 import com.netphone.gen.ImageBeanDao;
 import com.netphone.gen.ReplyMsgBeanDao;
 import com.netphone.gen.UserInfoBeanDao;
@@ -44,6 +45,7 @@ import com.zxy.tiny.callback.FileCallback;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -538,7 +540,32 @@ public class LTApi {
         ReplyMsgBeanDao         replyMsgBeanDao = LTConfigure.getInstance().getDaoSession().getReplyMsgBeanDao();
         replyMsgBeans.addAll(replyMsgBeanDao.queryBuilder().where(ReplyMsgBeanDao.Properties.UserId.eq(Constant.info.getUserId()), ReplyMsgBeanDao.Properties.ReceiveName.like("%" + key + "%")).orderDesc(ReplyMsgBeanDao.Properties.LastTime).list());
         return replyMsgBeans;
-//        replyMsgBeans.addAll(ReplyUtil.getList(Constant.info.getUserId()));
-//        return replyMsgBeans;
     }
+
+    /**
+     * 根据关键字查询好友
+     *
+     * @param key
+     * @return
+     */
+    public ArrayList<UserInfoBean> SearchFriend(String key) {
+        ArrayList<UserInfoBean> replyMsgBeans = new ArrayList<>();
+        replyMsgBeans.addAll(userInfoBeanDao.queryBuilder().where(UserInfoBeanDao.Properties.RealName.like("%" + key + "%")).list());
+        Collections.sort(replyMsgBeans); // 对list进行排序，需要让User实现Comparable接口重写compareTo方法
+        return replyMsgBeans;
+    }
+
+    /**
+     * 根据关键字查询群聊
+     *
+     * @param key
+     * @return
+     */
+    public ArrayList<GroupInfoBean> SearchGroup(String key) {
+        ArrayList<GroupInfoBean> replyMsgBeans = new ArrayList<>();
+        replyMsgBeans.addAll(LTConfigure.getInstance().getDaoSession().getGroupInfoBeanDao().queryBuilder().where(GroupInfoBeanDao.Properties.GroupName.like("%" + key + "%")).list());
+        return replyMsgBeans;
+    }
+
+
 }

@@ -3,6 +3,9 @@ package com.netphone.ui.fragment
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.text.Editable
+import android.text.TextUtils
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,6 +14,7 @@ import com.netphone.adapter.Friend2Adapter
 import com.netphone.config.Constant
 import com.netphone.config.EventConfig
 import com.netphone.databinding.FragmentFriendsBinding
+import com.netphone.netsdk.LTApi
 import com.netphone.netsdk.base.AppBean
 import com.storm.tool.base.BaseFragment
 import java.util.*
@@ -69,6 +73,31 @@ class FriendsFragment : BaseFragment<FragmentFriendsBinding>() {
             }
         });
 
+        binding.titleSearch.etSearch.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                var key = binding.titleSearch.etSearch.text.toString()
+                if (!TextUtils.isEmpty(key)){
+                    var friends = LTApi.getInstance().SearchFriend(key)
+//                    friend2Adapter.setDatas(searchSession)
+                    friend2Adapter = Friend2Adapter(context, friends)
+                    mLinearLayoutManager = LinearLayoutManager(context)
+                    binding.listView.layoutManager = mLinearLayoutManager
+                    binding.listView.adapter = friend2Adapter
+                }else{
+                    friend2Adapter = Friend2Adapter(context, Constant.myFriendList)
+                    mLinearLayoutManager = LinearLayoutManager(context)
+                    binding.listView.layoutManager = mLinearLayoutManager
+                    binding.listView.adapter = friend2Adapter
+                }
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+
+            }
+        })
     }
 
     private lateinit var mLinearLayoutManager: LinearLayoutManager

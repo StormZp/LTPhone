@@ -613,10 +613,12 @@ public class TcpCmd {
                         if (LTConfigure.getInstance().getLtApi().onReFreshListener != null) {
                             LTConfigure.getInstance().getLtApi().onReFreshListener.onReGroupsFresh(groupReFreshBean.getList());
                         }
+                        UserInfoBean currentInfo = LTApi.getInstance().getCurrentInfo();
                         LogUtil.error("TcpCmd", "609\tcmdExplore()\n" + "总包数" + groupReFreshBean.getCount() + "第" + groupReFreshBean.getIndex() + "包 内容" + groupReFreshBean.getList().size());
-//                        for (int i = 0; i < groupReFreshBean.getList().size(); i++) {
-//                            userListBean.getGroupInfo().get(i).setUserId(currentInfo.getUserId());
-//                        }
+                        for (int i = 0; i < groupReFreshBean.getList().size(); i++) {
+                            groupReFreshBean.getList().get(i).setUserId(currentInfo.getUserId());
+                        }
+                        mGroupInfoBeanDao.insertOrReplaceInTx(groupReFreshBean.getList());
                     }
                     break;
                     case 0x3B://todo 用户上线
