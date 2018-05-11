@@ -596,6 +596,10 @@ public class TcpCmd {
                         }
                         LogUtil.error("TcpCmd", "595\tcmdExplore()\n" + "总包数" + friendReFreshBean.getCount() + "第" + friendReFreshBean.getIndex() + "包 内容" + friendReFreshBean.getList().size());
 
+                        for (int i = 0; i < friendReFreshBean.getList().size(); i++) {
+                            mUserInfoBeanDao.insertOrReplace(friendReFreshBean.getList().get(i));
+                        }
+
                     }
                     //                                break;
 //                        }
@@ -610,7 +614,9 @@ public class TcpCmd {
                             LTConfigure.getInstance().getLtApi().onReFreshListener.onReGroupsFresh(groupReFreshBean.getList());
                         }
                         LogUtil.error("TcpCmd", "609\tcmdExplore()\n" + "总包数" + groupReFreshBean.getCount() + "第" + groupReFreshBean.getIndex() + "包 内容" + groupReFreshBean.getList().size());
-
+//                        for (int i = 0; i < groupReFreshBean.getList().size(); i++) {
+//                            userListBean.getGroupInfo().get(i).setUserId(currentInfo.getUserId());
+//                        }
                     }
                     break;
                     case 0x3B://todo 用户上线
@@ -671,7 +677,7 @@ public class TcpCmd {
                         System.arraycopy(bodyBytes, 0, jsonBytes, 0, bodyBytes.length);
                         body = ByteIntUtils.utfToString(jsonBytes);
                         UserInfoBean users = mGson.fromJson(body, UserInfoBean.class);
-
+                        LogUtil.error("TcpCmd", "680\tcmdExplore()\n" + body);
                         if (LTConfigure.getInstance().getLtApi().onReFreshListener != null) {
                             LTConfigure.getInstance().getLtApi().onReFreshListener.onFriendsReFresh(users);
                         }

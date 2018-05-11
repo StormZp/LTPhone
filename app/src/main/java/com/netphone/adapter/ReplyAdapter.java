@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.netphone.R;
+import com.netphone.netsdk.LTApi;
 import com.netphone.netsdk.Tool.Constant;
 import com.netphone.netsdk.Tool.TcpConfig;
 import com.netphone.netsdk.bean.ReplyMsgBean;
@@ -61,6 +62,9 @@ public class ReplyAdapter extends RecyclerView.Adapter<ReplyAdapter.ViewHolder> 
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
         final ReplyMsgBean user = list.get(position);
 
+        if (user.getReceiver() == null) {
+            user.setReceiver(LTApi.getInstance().getUserInfo(user.getReceiveID()));
+        }
         if (user.getReceiver() != null) {
             viewHolder.name.setText(user.getReceiver().getRealName());
             viewHolder.content.setText(user.getLastMsg());
@@ -69,11 +73,12 @@ public class ReplyAdapter extends RecyclerView.Adapter<ReplyAdapter.ViewHolder> 
             }
             if (user.getUnread() != 0) {
                 viewHolder.unread.setVisibility(View.VISIBLE);
-                viewHolder.unread.setText(user.getUnread()+"");
+                viewHolder.unread.setText(user.getUnread() + "");
             } else {
                 viewHolder.unread.setVisibility(View.INVISIBLE);
 
             }
+//            LogUtil.error("ReplyAdapter", "77\tonBindViewHolder()\n" + TcpConfig.URL + user.getReceiver().getHeadIcon());
             Glide.with(mContext).load(TcpConfig.URL + user.getReceiver().getHeadIcon()).placeholder(R.mipmap.icon_defult_detail).error(R.mipmap.icon_defult_detail).transform(mGlideCircleTransform).into(viewHolder.head);
 
             viewHolder.mView.setOnClickListener(new View.OnClickListener() {
@@ -91,6 +96,7 @@ public class ReplyAdapter extends RecyclerView.Adapter<ReplyAdapter.ViewHolder> 
                 }
             });
         }
+
 
     }
 

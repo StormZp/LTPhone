@@ -304,6 +304,15 @@ public class LTApi {
         return userInfoBeanDao.queryBuilder().where(UserInfoBeanDao.Properties.UserId.eq(SharedPreferenceUtil.Companion.read(Constant.UserId, ""))).unique();
     }
 
+    /**
+     * 获取某个用户的信息
+     * @param userId
+     * @return
+     */
+    public UserInfoBean getUserInfo(String userId){
+        return userInfoBeanDao.queryBuilder().where(UserInfoBeanDao.Properties.UserId.eq(userId)).unique();
+    }
+
 
     /**
      * 发送用户经纬度
@@ -505,5 +514,11 @@ public class LTApi {
     public List<ImageBean> getReceiverImages(String userId) {
         ImageBeanDao imageBeanDao = LTConfigure.getInstance().getDaoSession().getImageBeanDao();
         return imageBeanDao.queryBuilder().where(ImageBeanDao.Properties.ReceiveId.eq(userId)).list();
+    }
+
+    /**
+     * 退出登录app
+     */
+    public void exitLogin() {
     }
 }

@@ -38,13 +38,13 @@ open class FriendChatActivity : BaseActivity<ActivityChatFriendBinding>() {
         binding.title.menuDate.setImageResource(R.mipmap.icon_tel)
         binding.title.menuDate.visibility = View.VISIBLE
         binding.title.menuDate.setOnClickListener {
-            LogUtil.error("FriendChatActivity.kt","39\tinitData()\n"+Gson().toJson(user));
-            if (user.isOnLine.equals("0")||user.isOnLine.equals("false")) {
-                toasts( context.getResources().getString(R.string.user_line_off));
+            LogUtil.error("FriendChatActivity.kt", "39\tinitData()\n" + Gson().toJson(user));
+            if (user.isOnLine.equals("0") || user.isOnLine.equals("false")) {
+                toasts(context.getResources().getString(R.string.user_line_off));
                 return@setOnClickListener;
             }
             if (user.userId.equals(LTApi.getInstance().currentInfo)) {
-                toasts( context.getResources().getString(R.string.chat_with_u));
+                toasts(context.getResources().getString(R.string.chat_with_u));
                 return@setOnClickListener;
             }
             jump(FriendVoiceActivity::class.java, intent.extras)
@@ -56,6 +56,8 @@ open class FriendChatActivity : BaseActivity<ActivityChatFriendBinding>() {
         binding.recycle.adapter = friendChatAdapter
         binding.recycle.layoutManager = LinearLayoutManager(context)
 
+        if (friendChatAdapter.itemCount != 0)
+            binding.recycle.smoothScrollToPosition(friendChatAdapter.itemCount - 1);
         LTApi.getInstance().joinFriendChat(user.userId)
         registerEventBus()
     }

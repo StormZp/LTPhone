@@ -27,15 +27,16 @@ public class LocationService extends Service {
 
     private Context context;
     public static double distance = 0.01;//10m\
-    public static boolean isLocation;//是否有定位
-    public static boolean isNetLocation;//基站定位
-    private LocationManager locationManager;
-    private NotificationManager notificationManager;
+    public static boolean             isLocation;//是否有定位
+    public static boolean             isNetLocation;//基站定位
+    private       LocationManager     locationManager;
+    private       NotificationManager notificationManager;
+    private       long   currentTime = 0;
     // 纬度
-    public static double latitude = 0.0;
+    public static double latitude    = 0.0;
     // 经度
-    public static double longitude = 0.0;
-    private final String TAG = LocationService.class.getCanonicalName();
+    public static double longitude   = 0.0;
+    private final String TAG         = LocationService.class.getCanonicalName();
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -132,7 +133,7 @@ public class LocationService extends Service {
         isNetLocation = false;
     }
 
-    private void checkDistance(Location location) {
+    private synchronized void checkDistance(Location location) {
         if (location != null) {
             float[] results = new float[1];
             Location.distanceBetween(location.getLatitude(),
@@ -150,8 +151,15 @@ public class LocationService extends Service {
 
             if (longitude == 0.0 && latitude == 0.0)
                 return;
-            byte[] datas = CmdUtils.getInstance().uploadGPS(String.valueOf(longitude), String.valueOf(latitude));
-            TcpSocket.getInstance().addData(datas);
+            {
+                long l = System.currentTimeMillis();
+                if ((currentTime + 60 * 1000) < l) {
+                    currentTime = l;
+                    byte[] datas = CmdUtils.getInstance().uploadGPS(String.valueOf(longitude), String.valueOf(latitude));
+                    TcpSocket.getInstance().addData(datas);
+                }
+            }
+
         }
     }
 
@@ -169,7 +177,7 @@ public class LocationService extends Service {
             // for ActivityCompat#requestPermissions for more details.
             return;
         }
-        if (locationManager != null){
+        if (locationManager != null) {
             Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
             checkDistance(location);
         }

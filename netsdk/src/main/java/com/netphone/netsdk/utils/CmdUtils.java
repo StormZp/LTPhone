@@ -76,7 +76,7 @@ public class CmdUtils {
         //CRC16校验,取2位
         int    crc16    = CRC16.calcCrc16(cmds, 1, cmds.length - 1);
         byte[] crcBytes = ByteIntUtils.int2byte(crc16);
-        if (cmds.length>=packageLength){
+        if (cmds.length >= packageLength) {
             cmds[packageLength - 3] = crcBytes[0];
             cmds[packageLength - 2] = crcBytes[1];
 //        cmds[packageLength - 3] = 0X5E;
@@ -217,6 +217,18 @@ public class CmdUtils {
     public byte[] notifServerRececivedUserList() {
         byte   cmdId     = 0x01;
         byte   cmdId2    = 0x00;
+        byte[] byteArray = new byte[1];
+        byteArray[0] = 0x00;
+        byte[] temp = sendCmds(cmdId, cmdId2, byteArray);
+        return temp;
+    }
+
+    /**
+     * 获取当前用户信息
+     */
+    public byte[] getCurrentInfo() {
+        byte   cmdId     = 0x01;
+        byte   cmdId2    = 0x16;
         byte[] byteArray = new byte[1];
         byteArray[0] = 0x00;
         byte[] temp = sendCmds(cmdId, cmdId2, byteArray);

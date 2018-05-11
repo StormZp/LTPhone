@@ -54,10 +54,10 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
     }
 
     public void setList( List<GroupInfoBean> datas){
-        if (datas!=null){
-            datas.clear();
-            datas.addAll(datas);
-        }
+//        if (datas!=null){
+//            datas.clear();
+//            datas.addAll(datas);
+//        }
         notifyDataSetChanged();
     }
 

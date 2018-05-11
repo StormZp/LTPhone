@@ -65,7 +65,7 @@ public class FriendChatAdapter extends RecyclerView.Adapter<FriendChatAdapter.Vi
                 holder.layRight.setVisibility(View.VISIBLE);
                 if (bean.getUserInfoBean() != null) {
                     holder.RightContent.setText(bean.getMsg());
-                    Glide.with(mContext).load(TcpConfig.URL + bean.getUserInfoBean().getHeadIcon()).placeholder(R.mipmap.icon_defult_detail).error(R.mipmap.icon_defult_detail).transform(mGlideCircleTransform).into(holder.RightHead);
+                    Glide.with(mContext).load(TcpConfig.URL + mUserInfoBean.getHeadIcon()).placeholder(R.mipmap.icon_defult_detail).error(R.mipmap.icon_defult_detail).transform(mGlideCircleTransform).into(holder.RightHead);
                 }
             } else {//此时为其他用户发送的信息
                 holder.layLeft.setVisibility(View.VISIBLE);

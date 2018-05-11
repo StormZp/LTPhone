@@ -125,8 +125,13 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>() {
         }
 
         open fun exit(view: View) {
+            LTApi.getInstance().exitLogin()
+            com.netphone.config.Constant.myFriendList = null
+            com.netphone.config.Constant.myGroupList = null
+
             AppManager.appManager.finishAllActivity()
             jump(LoginActivity::class.java)
+
 
         }
 

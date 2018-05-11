@@ -45,8 +45,8 @@ public class Friend2Adapter extends RecyclerView.Adapter<Friend2Adapter.ViewHold
     }
 
     public void setList(List<UserInfoBean> list) {
-        this.list.clear();
-        this.list.addAll(list);
+//        this.list.clear();
+//        this.list.addAll(list);
         Collections.sort(this.list); // 对list进行排序，需要让User实现Comparable接口重写compareTo方法
         notifyDataSetChanged();
     }
