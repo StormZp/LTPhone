@@ -87,7 +87,8 @@ open class FriendChatActivity : BaseActivity<ActivityChatFriendBinding>() {
                 }
             }
         }
-        binding.recycle.smoothScrollToPosition(friendChatAdapter.itemCount - 1);
+        if (friendChatAdapter.itemCount != 0)
+            binding.recycle.smoothScrollToPosition(friendChatAdapter.itemCount - 1);
     }
 
     override fun receiveStickyEvent(appBean: AppBean<Any>) {

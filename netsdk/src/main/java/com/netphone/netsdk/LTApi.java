@@ -317,7 +317,17 @@ public class LTApi {
      * @return
      */
     public UserInfoBean getUserInfo(String userId) {
-        return userInfoBeanDao.queryBuilder().where(UserInfoBeanDao.Properties.UserId.eq(userId)).unique();
+        try {
+            UserInfoBean unique = userInfoBeanDao.queryBuilder().where(UserInfoBeanDao.Properties.UserId.eq(userId)).unique();
+            if (unique == null)
+                return new UserInfoBean();
+            else
+                return unique;
+        } catch (Exception e) {
+            LogUtil.error("LTApi", "323\tgetUserInfo()\n" + e);
+            return new UserInfoBean();
+        }
+
     }
 
 

@@ -101,7 +101,8 @@ class GroupsFragment : BaseFragment<FragmentGroupsBinding>() {
 
         currentGroup = LTApi.getInstance().currentGroupInfo
 
-        currentGroup!!.micer = currentMic
+        if (currentGroup != null)
+            currentGroup!!.micer = currentMic
 
         registerEventBus()
         if (currentGroup == null) {

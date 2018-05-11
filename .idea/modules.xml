@@ -5,6 +5,7 @@
       <module fileurl="file://$PROJECT_DIR$/NetPhoneSdk.iml" filepath="$PROJECT_DIR$/NetPhoneSdk.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/netsdk/netsdk.iml" filepath="$PROJECT_DIR$/netsdk/netsdk.iml" />
+      <module fileurl="file://$PROJECT_DIR$/webrtclib/webrtclib.iml" filepath="$PROJECT_DIR$/webrtclib/webrtclib.iml" />
     </modules>
   </component>
 </project>

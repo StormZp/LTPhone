@@ -394,7 +394,6 @@ public class TcpCmd {
                         if (LTApi.getInstance().onFriendCallListener != null) {
                             LTApi.getInstance().onFriendCallListener.onCallStart();
                         }
-//                        ByteUtil.getInt(bodyBytes, 0);//udp 端口
                         port = ByteUtil.getInt(bodyBytes, 0);//udp端口,占4位
                         UdpSocket.Companion.getInstance().connect(port);
                         UdpSocket.Companion.getInstance().play();
@@ -406,6 +405,7 @@ public class TcpCmd {
                             LTApi.getInstance().onFriendCallListener = null;
                         }
                         UdpSocket.Companion.getInstance().stopRecord();
+                        UdpSocket.Companion.getInstance().stopPlay();
                         break;
                     case 0x04://todo 被叫视频通话
                         break;
@@ -736,7 +736,7 @@ public class TcpCmd {
                     }
                     break;
                 }
-
+                break;
             case 0x02://服务端>>终端(其他)
                 if (LTConfigure.getInstance().mOnErrorListener != null)
                     switch (pagBytes[8]) {
