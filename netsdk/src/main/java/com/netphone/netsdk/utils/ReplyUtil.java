@@ -12,13 +12,14 @@ import java.util.List;
 
 public class ReplyUtil {
 
-    public static void insertMsg(String receiveId, String userId, String msg) {
+    public static void insertMsg(String receiveId,String receiveName, String userId, String msg) {
         ReplyMsgBeanDao replyMsgBeanDao = LTConfigure.getInstance().getDaoSession().getReplyMsgBeanDao();
         ReplyMsgBean    unique          = replyMsgBeanDao.queryBuilder().where(ReplyMsgBeanDao.Properties.ReceiveID.eq(receiveId), ReplyMsgBeanDao.Properties.UserId.eq(userId)).unique();
         if (unique == null) {
             unique= new ReplyMsgBean();
             unique.setReceiveID(receiveId);
             unique.setUserId(userId);
+            unique.setReceiveName(receiveName);
             unique.setLastMsg(msg);
             unique.setLastTime(System.currentTimeMillis());
             unique.setUnread(1);
@@ -27,18 +28,20 @@ public class ReplyUtil {
             unique.setLastMsg(msg);
             int unread = unique.getUnread();
             unique.setUnread(++unread);
+            unique.setReceiveName(receiveName);
             unique.setLastTime(System.currentTimeMillis());
             replyMsgBeanDao.insertOrReplace(unique);
         }
     }
 
-    public static void insertMsg(String receiveId, String userId, String msg, boolean ifRead) {
+    public static void insertMsg(String receiveId,String receiveName, String userId, String msg, boolean ifRead) {
         ReplyMsgBeanDao replyMsgBeanDao = LTConfigure.getInstance().getDaoSession().getReplyMsgBeanDao();
         ReplyMsgBean    unique          = replyMsgBeanDao.queryBuilder().where(ReplyMsgBeanDao.Properties.ReceiveID.eq(receiveId), ReplyMsgBeanDao.Properties.UserId.eq(userId)).unique();
         if (unique == null) {
             unique = new ReplyMsgBean();
             unique.setReceiveID(receiveId);
             unique.setUserId(userId);
+            unique.setReceiveName(receiveName);
             unique.setLastMsg(msg);
             unique.setLastTime(System.currentTimeMillis());
             replyMsgBeanDao.insertOrReplace(unique);
@@ -51,6 +54,7 @@ public class ReplyUtil {
                 unique.setUnread(++unread);
                 unique.setLastMsg(msg);
             }
+            unique.setReceiveName(receiveName);
             unique.setLastTime(System.currentTimeMillis());
             replyMsgBeanDao.insertOrReplace(unique);
         }

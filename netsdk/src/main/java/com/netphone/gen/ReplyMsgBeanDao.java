@@ -32,9 +32,10 @@ public class ReplyMsgBeanDao extends AbstractDao<ReplyMsgBean, Long> {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
         public final static Property UserId = new Property(1, String.class, "userId", false, "USER_ID");
         public final static Property ReceiveID = new Property(2, String.class, "receiveID", false, "RECEIVE_ID");
-        public final static Property Unread = new Property(3, int.class, "unread", false, "UNREAD");
-        public final static Property LastMsg = new Property(4, String.class, "lastMsg", false, "LAST_MSG");
-        public final static Property LastTime = new Property(5, long.class, "lastTime", false, "LAST_TIME");
+        public final static Property ReceiveName = new Property(3, String.class, "receiveName", false, "RECEIVE_NAME");
+        public final static Property Unread = new Property(4, int.class, "unread", false, "UNREAD");
+        public final static Property LastMsg = new Property(5, String.class, "lastMsg", false, "LAST_MSG");
+        public final static Property LastTime = new Property(6, long.class, "lastTime", false, "LAST_TIME");
     }
 
     private DaoSession daoSession;
@@ -56,9 +57,10 @@ public class ReplyMsgBeanDao extends AbstractDao<ReplyMsgBean, Long> {
                 "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: id
                 "\"USER_ID\" TEXT," + // 1: userId
                 "\"RECEIVE_ID\" TEXT," + // 2: receiveID
-                "\"UNREAD\" INTEGER NOT NULL ," + // 3: unread
-                "\"LAST_MSG\" TEXT," + // 4: lastMsg
-                "\"LAST_TIME\" INTEGER NOT NULL );"); // 5: lastTime
+                "\"RECEIVE_NAME\" TEXT," + // 3: receiveName
+                "\"UNREAD\" INTEGER NOT NULL ," + // 4: unread
+                "\"LAST_MSG\" TEXT," + // 5: lastMsg
+                "\"LAST_TIME\" INTEGER NOT NULL );"); // 6: lastTime
     }
 
     /** Drops the underlying database table. */
@@ -85,13 +87,18 @@ public class ReplyMsgBeanDao extends AbstractDao<ReplyMsgBean, Long> {
         if (receiveID != null) {
             stmt.bindString(3, receiveID);
         }
-        stmt.bindLong(4, entity.getUnread());
+ 
+        String receiveName = entity.getReceiveName();
+        if (receiveName != null) {
+            stmt.bindString(4, receiveName);
+        }
+        stmt.bindLong(5, entity.getUnread());
  
         String lastMsg = entity.getLastMsg();
         if (lastMsg != null) {
-            stmt.bindString(5, lastMsg);
+            stmt.bindString(6, lastMsg);
         }
-        stmt.bindLong(6, entity.getLastTime());
+        stmt.bindLong(7, entity.getLastTime());
     }
 
     @Override
@@ -112,13 +119,18 @@ public class ReplyMsgBeanDao extends AbstractDao<ReplyMsgBean, Long> {
         if (receiveID != null) {
             stmt.bindString(3, receiveID);
         }
-        stmt.bindLong(4, entity.getUnread());
+ 
+        String receiveName = entity.getReceiveName();
+        if (receiveName != null) {
+            stmt.bindString(4, receiveName);
+        }
+        stmt.bindLong(5, entity.getUnread());
  
         String lastMsg = entity.getLastMsg();
         if (lastMsg != null) {
-            stmt.bindString(5, lastMsg);
+            stmt.bindString(6, lastMsg);
         }
-        stmt.bindLong(6, entity.getLastTime());
+        stmt.bindLong(7, entity.getLastTime());
     }
 
     @Override
@@ -138,9 +150,10 @@ public class ReplyMsgBeanDao extends AbstractDao<ReplyMsgBean, Long> {
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
             cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // userId
             cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // receiveID
-            cursor.getInt(offset + 3), // unread
-            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // lastMsg
-            cursor.getLong(offset + 5) // lastTime
+            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // receiveName
+            cursor.getInt(offset + 4), // unread
+            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // lastMsg
+            cursor.getLong(offset + 6) // lastTime
         );
         return entity;
     }
@@ -150,9 +163,10 @@ public class ReplyMsgBeanDao extends AbstractDao<ReplyMsgBean, Long> {
         entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
         entity.setUserId(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
         entity.setReceiveID(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
-        entity.setUnread(cursor.getInt(offset + 3));
-        entity.setLastMsg(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
-        entity.setLastTime(cursor.getLong(offset + 5));
+        entity.setReceiveName(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
+        entity.setUnread(cursor.getInt(offset + 4));
+        entity.setLastMsg(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
+        entity.setLastTime(cursor.getLong(offset + 6));
      }
     
     @Override

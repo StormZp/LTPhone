@@ -9,6 +9,7 @@ import com.netphone.gen.CurrentGroupBeanDao;
 import com.netphone.gen.FriendChatMsgBeanDao;
 import com.netphone.gen.GroupChatMsgBeanDao;
 import com.netphone.gen.ImageBeanDao;
+import com.netphone.gen.ReplyMsgBeanDao;
 import com.netphone.gen.UserInfoBeanDao;
 import com.netphone.netsdk.Tool.Constant;
 import com.netphone.netsdk.bean.CurrentGroupBean;
@@ -227,13 +228,16 @@ public class LTApi {
         bean.setReceiveId(id);
         bean.setMsg(content);
         bean.setSendId(Constant.info.getUserId());
+        bean.setSendId(Constant.info.getUserId());
         bean.setUserId(Constant.info.getUserId());
         bean.setDateTime(System.currentTimeMillis());
 
         if (friendChatMsgBeanDao == null)
             friendChatMsgBeanDao = LTConfigure.getInstance().getDaoSession().getFriendChatMsgBeanDao();
         friendChatMsgBeanDao.insertOrReplace(bean);
-        ReplyUtil.insertMsg(bean.getReceiveId(), bean.getUserId(), bean.getMsg(), true);
+
+        UserInfoBean userInfo = getUserInfo(id);
+        ReplyUtil.insertMsg(bean.getReceiveId(), userInfo.getRealName(), bean.getUserId(), bean.getMsg(), true);
 
         if (LTApi.getInstance().onReFreshListener != null) {
             LTApi.getInstance().onReFreshListener.onFriendChatMsg(bean);
@@ -306,10 +310,11 @@ public class LTApi {
 
     /**
      * 获取某个用户的信息
+     *
      * @param userId
      * @return
      */
-    public UserInfoBean getUserInfo(String userId){
+    public UserInfoBean getUserInfo(String userId) {
         return userInfoBeanDao.queryBuilder().where(UserInfoBeanDao.Properties.UserId.eq(userId)).unique();
     }
 
@@ -520,5 +525,20 @@ public class LTApi {
      * 退出登录app
      */
     public void exitLogin() {
+    }
+
+    /**
+     * 根据关键字获取会话列表
+     *
+     * @param key
+     * @return
+     */
+    public ArrayList<ReplyMsgBean> SearchSession(String key) {
+        ArrayList<ReplyMsgBean> replyMsgBeans   = new ArrayList<>();
+        ReplyMsgBeanDao         replyMsgBeanDao = LTConfigure.getInstance().getDaoSession().getReplyMsgBeanDao();
+        replyMsgBeans.addAll(replyMsgBeanDao.queryBuilder().where(ReplyMsgBeanDao.Properties.UserId.eq(Constant.info.getUserId()), ReplyMsgBeanDao.Properties.ReceiveName.like("%" + key + "%")).orderDesc(ReplyMsgBeanDao.Properties.LastTime).list());
+        return replyMsgBeans;
+//        replyMsgBeans.addAll(ReplyUtil.getList(Constant.info.getUserId()));
+//        return replyMsgBeans;
     }
 }

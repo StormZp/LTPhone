@@ -30,7 +30,7 @@ android {
 
 }
 greendao {
-    schemaVersion 2
+    schemaVersion 1
     daoPackage 'com.netphone.gen'
     targetGenDir 'src/main/java'
 }

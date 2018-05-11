@@ -27,6 +27,7 @@ public class ReplyMsgBean {
 
     private String userId;//当前用户id
     private String receiveID;//消息列表的用户id
+    private String receiveName;//消息列表的用户名
     private int    unread;//未读数
     private String lastMsg;//最后一条
     private long lastTime;//最后一条的时间
@@ -41,12 +42,13 @@ public class ReplyMsgBean {
     /** Used for active entity operations. */
     @Generated(hash = 1482789800)
     private transient ReplyMsgBeanDao myDao;
-    @Generated(hash = 1935031722)
-    public ReplyMsgBean(Long id, String userId, String receiveID, int unread,
-            String lastMsg, long lastTime) {
+    @Generated(hash = 741537379)
+    public ReplyMsgBean(Long id, String userId, String receiveID,
+            String receiveName, int unread, String lastMsg, long lastTime) {
         this.id = id;
         this.userId = userId;
         this.receiveID = receiveID;
+        this.receiveName = receiveName;
         this.unread = unread;
         this.lastMsg = lastMsg;
         this.lastTime = lastTime;
@@ -71,6 +73,12 @@ public class ReplyMsgBean {
     }
     public void setReceiveID(String receiveID) {
         this.receiveID = receiveID;
+    }
+    public String getReceiveName() {
+        return this.receiveName;
+    }
+    public void setReceiveName(String receiveName) {
+        this.receiveName = receiveName;
     }
     public int getUnread() {
         return this.unread;
@@ -188,5 +196,6 @@ public class ReplyMsgBean {
         myDao = daoSession != null ? daoSession.getReplyMsgBeanDao() : null;
     }
     
+
 
 }

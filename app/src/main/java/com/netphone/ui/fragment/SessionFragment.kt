@@ -2,6 +2,9 @@ package com.netphone.ui.fragment
 
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
+import android.text.Editable
+import android.text.TextUtils
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -41,6 +44,24 @@ class SessionFragment : BaseFragment<FragmentSessionBinding>() {
     }
 
     override fun initListener() {
+        binding.titleSearch.etSearch.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                var key = binding.titleSearch.etSearch.text.toString()
+                if (!TextUtils.isEmpty(key)){
+                    var searchSession = LTApi.getInstance().SearchSession(key)
+                    adapter.setDatas(searchSession)
+                }else{
+                    adapter.setDatas(LTApi.getInstance().getSessionList())
+                }
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+
+            }
+        })
     }
 
     override fun initData() {

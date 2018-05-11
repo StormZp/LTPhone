@@ -428,7 +428,7 @@ public class TcpCmd {
                             mFriendChatMsgBeanDao = LTConfigure.getInstance().getDaoSession().getFriendChatMsgBeanDao();
                         mFriendChatMsgBeanDao.insertOrReplace(friendChatMsgBean);
 
-                        ReplyUtil.insertMsg(friendChatMsgBean.getReceiveId(), friendChatMsgBean.getUserId(), friendChatMsgBean.getMsg());
+                        ReplyUtil.insertMsg(friendChatMsgBean.getReceiveId(), friendChatMsgBean.getName(), friendChatMsgBean.getUserId(), friendChatMsgBean.getMsg());
                         if (LTApi.getInstance().onReFreshListener != null) {
                             LTApi.getInstance().onReFreshListener.onFriendChatMsg(friendChatMsgBean);
                         }
