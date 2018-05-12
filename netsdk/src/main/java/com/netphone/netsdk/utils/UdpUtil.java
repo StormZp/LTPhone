@@ -9,6 +9,8 @@ import android.content.Context;
 public class UdpUtil {
     private static byte[] idBytes;
 
+    private static int VOID_HEAD_LENGHT = 10;
+
     public static void init(Context context) {
         if (idBytes == null) {
             String getDeviceId = CRC16.getDeviceId(context);
@@ -22,7 +24,7 @@ public class UdpUtil {
      * @return
      */
     public static byte[] udpDataEncode(byte[] audios) {
-        byte[] voices = new byte[audios.length + 10];
+        byte[] voices = new byte[audios.length + VOID_HEAD_LENGHT];
         voices[0] = (byte) 0xff;//帧头
         //语音长度
         int    length = audios.length + 2;
@@ -34,6 +36,7 @@ public class UdpUtil {
         voices[4] = idBytes[1];
         voices[5] = idBytes[2];
         voices[6] = idBytes[3];
+
 
         System.arraycopy(audios, 0, voices, 9, audios.length);
         //帧尾

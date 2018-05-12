@@ -13,6 +13,7 @@ import java.net.DatagramPacket
 import java.net.DatagramSocket
 import java.net.InetAddress
 import java.net.UnknownHostException
+import java.text.SimpleDateFormat
 import kotlin.concurrent.thread
 
 /**
@@ -116,6 +117,7 @@ class UdpSocket {
         VoiceUtil.getInstance().stopRecord()
     }
 
+//    private var bArray=ByteArray(8)
     /**
      * 发送udp数据
      *
@@ -124,6 +126,8 @@ class UdpSocket {
      */
     private fun sendData(audios: ByteArray, sendMode: Int) {
         var udpDataEncode = UdpUtil.udpDataEncode(audios)
+//        ByteUtil.putLong(bArray,System.currentTimeMillis(),0)
+//        var udpDataEncode = UdpUtil.udpDataEncode(bArray)//todo 测试用
         when (sendMode) {
             0 -> {
 
@@ -146,6 +150,7 @@ class UdpSocket {
         return DatagramPacket(recvBuf, length, addr, port)
     }
 
+    var sdFormat = SimpleDateFormat("yyyy-MM-dd hh:mm:ss SSS")
     private val playVoiceWork = Runnable {
         // 接收udp
         val recvBuf = ByteArray(VoiceUtil.getBufferSize() + 10)
@@ -154,7 +159,6 @@ class UdpSocket {
 
         while (true) {
             try {
-
                 if (udpSocket != null && !udpSocket!!.isClosed()) {
                     LogUtil.error("UdpSocket.kt", "153\t()\n" + "开始播放");
                     udpSocket!!.receive(recvPacket)
@@ -162,6 +166,11 @@ class UdpSocket {
                     if (pack != null && pack.size != 0) {
                         LogUtil.error("UdpSocket.kt", "153\t()\n" + pack.size);
                         var udpDataUncode = UdpUtil.udpDataUncode(pack)
+                        //测试流数据是对一致
+//                        var long = ByteUtil.getLong(udpDataUncode, 0)
+//                        var format = sdFormat.format(long)
+//                        LogUtil.error("UdpSocket.kt","175\t()\n"+format);
+
                         VoiceUtil.getInstance().writePlayData(udpDataUncode)
                     }
                 }
