@@ -265,7 +265,8 @@ public class LTApi {
      */
     public ArrayList<ReplyMsgBean> getSessionList() {
         ArrayList<ReplyMsgBean> replyMsgBeans = new ArrayList<>();
-        replyMsgBeans.addAll(ReplyUtil.getList(Constant.info.getUserId()));
+        if (Constant.info != null)
+            replyMsgBeans.addAll(ReplyUtil.getList(Constant.info.getUserId()));
         return replyMsgBeans;
     }
 
@@ -425,6 +426,7 @@ public class LTApi {
             }
         });
     }
+
 
     /**
      * 上传文件

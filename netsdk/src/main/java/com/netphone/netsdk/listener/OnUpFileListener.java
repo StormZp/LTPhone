@@ -5,6 +5,6 @@ package com.netphone.netsdk.listener;
  */
 
 public interface OnUpFileListener {
-    void upSuccess();
+    void upSuccess(String path);
     void upFail();
 }

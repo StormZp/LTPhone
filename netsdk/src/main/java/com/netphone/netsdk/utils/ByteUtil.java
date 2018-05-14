@@ -151,7 +151,7 @@ public class ByteUtil {
     /**
      * 通过byte数组取得float
      *
-     * @param bb
+     * @param b
      * @param index
      * @return
      */
@@ -170,7 +170,7 @@ public class ByteUtil {
     /**
      * double转换byte
      *
-     * @param bb
+     * @param b
      * @param x
      * @param index
      */
@@ -186,7 +186,7 @@ public class ByteUtil {
     /**
      * 通过byte数组取得float
      *
-     * @param bb
+     * @param b
      * @param index
      * @return
      */
@@ -246,5 +246,38 @@ public class ByteUtil {
         }
 
         return subAry;
+    }
+
+
+    /**
+     * byte数组转short数组
+     * @param src
+     * @return
+     */
+    public static char[] toShortArray(byte[] src) {
+
+        int count = src.length >> 1;
+        char[] dest = new char[count];
+        for (int i = 0; i < count; i++) {
+            dest[i] = (char) (src[i * 2] << 8 | src[2 * i + 1] & 0xff);
+        }
+        return dest;
+    }
+
+    /**
+     * char数组转byte数组
+     * @param src
+     * @return
+     */
+    public static byte[] toByteArray(char[] src) {
+
+        int count = src.length;
+        byte[] dest = new byte[count << 1];
+        for (int i = 0; i < count; i++) {
+            dest[i * 2] = (byte) (src[i] >> 8);
+            dest[i * 2 + 1] = (byte) (src[i] >> 0);
+        }
+
+        return dest;
     }
 }

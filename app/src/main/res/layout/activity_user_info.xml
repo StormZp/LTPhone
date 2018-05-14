@@ -42,6 +42,7 @@
                 android:layout_width="@dimen/dp48"
                 android:layout_height="@dimen/dp48"
                 android:layout_marginLeft="8dp"
+                android:onClick="@{click.changeHead}"
                 android:src="@mipmap/icon_defult_detail" />
 
             <ImageView

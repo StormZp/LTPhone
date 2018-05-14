@@ -168,6 +168,7 @@
                         android:layout_alignParentBottom="true"
                         android:layout_alignParentRight="true"
                         android:layout_toRightOf="@+id/send_voice"
+                        android:visibility="invisible"
                         android:gravity="center">
 
                         <ImageView
@@ -193,7 +194,7 @@
                         android:layout_height="@dimen/dp36"
                         android:layout_marginLeft="@dimen/dp14"
                         android:onClick="@{click.showVoice}"
-                        android:src="@mipmap/icon_jp" />
+                        android:src="@mipmap/icon_jp2" />
 
 
                     <EditText

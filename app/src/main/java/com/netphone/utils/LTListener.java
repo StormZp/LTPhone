@@ -204,6 +204,11 @@ public class LTListener {
                     }
                 }
                 EventBusUtil.sendEvent(new AppBean(EventConfig.REFRESH_FRIEND, null));
+
+                if (bean.getUserId().equals(LTApi.getInstance().getCurrentInfo().getUserId())){
+                    com.netphone.netsdk.Tool.Constant.info = bean;
+                    EventBusUtil.sendEvent(new AppBean(EventConfig.REFRESH_SELF, null));
+                }
             }
 
             @Override

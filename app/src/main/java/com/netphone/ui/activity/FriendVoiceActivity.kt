@@ -18,6 +18,7 @@ import com.netphone.netsdk.Tool.TcpConfig
 import com.netphone.netsdk.base.AppBean
 import com.netphone.netsdk.bean.UserInfoBean
 import com.netphone.netsdk.listener.OnFriendCallListener
+import com.netphone.netsdk.utils.LogUtil
 import com.netphone.utils.GlideCircleTransform
 import com.storm.tool.base.BaseActivity
 import java.text.SimpleDateFormat
@@ -33,6 +34,7 @@ class FriendVoiceActivity : BaseActivity<ActivityVoiceFriendBinding>() {
 
     private var audioManager: AudioManager? = null
     private lateinit var userInfoBean: UserInfoBean
+    private var speakPhone = false
 
     private var mp: MediaPlayer? = null//铃声
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -178,21 +180,21 @@ class FriendVoiceActivity : BaseActivity<ActivityVoiceFriendBinding>() {
 
     open fun setSpeakerphoneOn(on: Boolean, activity: Activity, audioManager: AudioManager?) {
         if (on) {
-//            // 为true打开喇叭扩音器；为false关闭喇叭扩音器.
-//            audioManager.setSpeakerphoneOn(true)
-//            // 添加的代码，恢复系统声音设置
-//            audioManager.setMode(AudioManager.STREAM_SYSTEM)
-//            activity.volumeControlStream = AudioManager.USE_DEFAULT_STREAM_TYPE
-//            LogUtil.error("true打开喇叭扩音器")
+            // 为true打开喇叭扩音器；为false关闭喇叭扩音器.
+            audioManager!!.setSpeakerphoneOn(true)
+            // 添加的代码，恢复系统声音设置
+            audioManager!!.setMode(AudioManager.STREAM_SYSTEM)
+            activity.volumeControlStream = AudioManager.USE_DEFAULT_STREAM_TYPE
+            LogUtil.error("true打开喇叭扩音器")
             binding.ivIson.setBackgroundResource(R.mipmap.icon_yangshengqi_sel)
             binding.btnIson.setText(context.resources.getString(R.string.text_hands_free))
         } else {
-//            audioManager.setSpeakerphoneOn(false)//关闭扬声器
-//            audioManager.setRouting(AudioManager.MODE_NORMAL, AudioManager.ROUTE_EARPIECE, AudioManager.ROUTE_ALL)
-//            activity.volumeControlStream = AudioManager.STREAM_VOICE_CALL
-//            //把声音设定成Earpiece（听筒）出来，设定为正在通话中
-//            audioManager.setMode(AudioManager.MODE_IN_COMMUNICATION)
-//            LogUtil.error("关闭扬声器")
+            audioManager!!.setSpeakerphoneOn(false)//关闭扬声器
+            audioManager!!.setRouting(AudioManager.MODE_NORMAL, AudioManager.ROUTE_EARPIECE, AudioManager.ROUTE_ALL)
+            activity.volumeControlStream = AudioManager.STREAM_VOICE_CALL
+            //把声音设定成Earpiece（听筒）出来，设定为正在通话中
+            audioManager.setMode(AudioManager.MODE_IN_COMMUNICATION)
+            LogUtil.error("关闭扬声器")
             binding.ivIson.setBackgroundResource(R.mipmap.icon_yangshengqi)
             binding.btnIson.setText(context.resources.getString(R.string.Handset))
         }
@@ -263,6 +265,25 @@ class FriendVoiceActivity : BaseActivity<ActivityVoiceFriendBinding>() {
         override fun onPreExecute() {
             super.onPreExecute()
 
+        }
+    }
+
+
+    private fun setSpeakerphoneOn(on: Boolean) {
+        if (on) {
+            // 为true打开喇叭扩音器；为false关闭喇叭扩音器.
+            audioManager!!.setSpeakerphoneOn(true)
+            // 添加的代码，恢复系统声音设置
+            audioManager!!.setMode(AudioManager.STREAM_SYSTEM)
+            volumeControlStream = AudioManager.USE_DEFAULT_STREAM_TYPE
+            LogUtil.error("true打开喇叭扩音器")
+        } else {
+            audioManager!!.setSpeakerphoneOn(false)//关闭扬声器
+            audioManager!!.setRouting(AudioManager.MODE_NORMAL, AudioManager.ROUTE_EARPIECE, AudioManager.ROUTE_ALL)
+            volumeControlStream = AudioManager.STREAM_VOICE_CALL
+            //把声音设定成Earpiece（听筒）出来，设定为正在通话中
+            audioManager!!.setMode(AudioManager.MODE_IN_COMMUNICATION)
+            LogUtil.error("关闭扬声器")
         }
     }
 }

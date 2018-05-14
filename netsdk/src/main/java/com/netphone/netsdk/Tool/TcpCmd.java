@@ -273,8 +273,15 @@ public class TcpCmd {
                         break;
                     case 0x0F://上传多媒体内容(图片,视频,文件等)
                         if (LTConfigure.getInstance().getLtApi().onUpFileListener != null) {
+                            String path = null;
+                            if (bodyBytes.length > 1) {
+                                byte[] pack = new byte[bodyBytes.length - 1];
+                                System.arraycopy(bodyBytes, 1, pack, 0, bodyBytes.length - 1);
+                                path = ByteIntUtils.utfToString(pack);
+                            }
+
                             if (bodyBytes[0] == 0x00) {
-                                LTConfigure.getInstance().getLtApi().onUpFileListener.upSuccess();
+                                LTConfigure.getInstance().getLtApi().onUpFileListener.upSuccess(path);
                             } else {
                                 LTConfigure.getInstance().getLtApi().onUpFileListener.upFail();
                             }

@@ -47,7 +47,7 @@ class GroupsFragment : BaseFragment<FragmentGroupsBinding>() {
                     var infoBean = appBean.data as GroupInfoBean
                     if (groupAdapter != null && infoBean != null)
                         groupAdapter!!.refresh(infoBean.groupID, infoBean.onLineCount)
-                    if (currentGroup != null && currentGroup!!.groupID.equals(infoBean.groupID)) {
+                    if (currentGroup != null&&infoBean.micer!=null && currentGroup!!.groupID.equals(infoBean.groupID)) {
                         currentMic = LTApi.getInstance().getUserInfo(infoBean.micer.userId)
                         currentGroup = infoBean;
                     } else {

@@ -23,10 +23,7 @@ import com.netphone.netsdk.listener.OnLocationListener
 import com.netphone.netsdk.listener.OnUpFileListener
 import com.netphone.netsdk.utils.EventBusUtil
 import com.netphone.ui.activity.*
-import com.netphone.utils.GlideCircleTransform
-import com.netphone.utils.GlideLoader
-import com.netphone.utils.LTListener
-import com.netphone.utils.PermissionUtil
+import com.netphone.utils.*
 import com.storm.developapp.tools.AppManager
 import com.storm.tool.base.BaseFragment
 import com.yancy.imageselector.ImageConfig
@@ -40,6 +37,7 @@ import com.yancy.imageselector.ImageSelectorActivity
 
 class SettingFragment : BaseFragment<FragmentSettingBinding>() {
     val PIC_COED = 1
+    val FILE_COED = 3
     val REQUEST_CAMERA = 2
 
     private var fragment: Fragment? = null
@@ -51,7 +49,6 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == ImageSelector.IMAGE_REQUEST_CODE && resultCode == RESULT_OK && data != null) {
-
             // Get Image Path List
             val pathList = data!!.getStringArrayListExtra(ImageSelectorActivity.EXTRA_RESULT)
             for (path in pathList) {
@@ -63,17 +60,39 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>() {
                         }
                     }
 
-                    override fun upSuccess() {
+                    override fun upSuccess( path:String?) {
                         activity.runOnUiThread {
                             toasts(context.getResources().getString(R.string.upload_seccess))
                         }
                     }
                 });
             }
+        }else if (requestCode == FILE_COED&& data != null){
+            var uri = data.getData();
+            var path = WebFileUtils.getPath(getActivity(), uri)
+            LTApi.getInstance().upFile(path, object : OnUpFileListener {
+                override fun upFail() {
+                    activity.runOnUiThread {
+                        toasts(context.getResources().getString(R.string.update_fail))
+                    }
+                }
+
+                override fun upSuccess(path:String?) {
+                    activity.runOnUiThread {
+                        toasts(context.getResources().getString(R.string.upload_seccess))
+                    }
+                }
+            });
         }
     }
 
     override fun receiveEvent(appBean: AppBean<Any>) {
+
+        when(appBean.code){
+            EventConfig.REFRESH_SELF->{
+                initData()
+            }
+        }
     }
 
     override fun receiveStickyEvent(appBean: AppBean<Any>) {
@@ -97,6 +116,8 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>() {
     override fun initData() {
         binding.title.back.visibility = View.INVISIBLE
         binding.title.title.text = context.resources.getString(R.string.setting_content)
+
+        registerEventBus()
 
         fragment = this
         if (Constant.info != null) {
@@ -222,6 +243,8 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>() {
                 }
 
                 override fun PermissionSuccess() {
+                    val fileType = "*/*"
+                    uploadFile(fileType)
                 }
             }, Manifest.permission.WRITE_EXTERNAL_STORAGE)
 
@@ -242,6 +265,14 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>() {
         open fun test(view: View) {
             jump(FriendVoiceActivity::class.java)
         }
+    }
+
+    private fun uploadFile(type: String) {
+        val intent = Intent(Intent.ACTION_GET_CONTENT)
+        intent.type = type//设置类型
+        intent.addCategory(Intent.CATEGORY_OPENABLE)
+        startActivityForResult(intent, FILE_COED)
+
     }
 
 
