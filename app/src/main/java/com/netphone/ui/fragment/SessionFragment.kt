@@ -37,6 +37,16 @@ class SessionFragment : BaseFragment<FragmentSessionBinding>() {
             EventConfig.FRIEND_SEND_MSG -> {
                 adapter.setDatas(LTApi.getInstance().getSessionList())
             }
+            EventConfig.BROADCAST_STATE -> {
+                var state = appBean.data as String?
+                if (!TextUtils.isEmpty(state)) {
+                    binding.tvHint.setText(state)
+                    binding.tvHint.visibility = View.VISIBLE
+                } else {
+                    binding.tvHint.visibility = View.GONE
+                }
+
+            }
         }
     }
 
@@ -47,10 +57,10 @@ class SessionFragment : BaseFragment<FragmentSessionBinding>() {
         binding.titleSearch.etSearch.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
                 var key = binding.titleSearch.etSearch.text.toString()
-                if (!TextUtils.isEmpty(key)){
+                if (!TextUtils.isEmpty(key)) {
                     var searchSession = LTApi.getInstance().SearchSession(key)
                     adapter.setDatas(searchSession)
-                }else{
+                } else {
                     adapter.setDatas(LTApi.getInstance().getSessionList())
                 }
             }

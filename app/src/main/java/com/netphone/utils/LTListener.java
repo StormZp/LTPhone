@@ -27,6 +27,7 @@ import com.netphone.netsdk.listener.OnGroupChatListener;
 import com.netphone.netsdk.listener.OnGroupComeInListener;
 import com.netphone.netsdk.listener.OnGroupStateListener;
 import com.netphone.netsdk.listener.OnLocationListener;
+import com.netphone.netsdk.listener.OnManagerListener;
 import com.netphone.netsdk.listener.OnNetworkListener;
 import com.netphone.netsdk.listener.OnReFreshListener;
 import com.netphone.netsdk.utils.EventBusUtil;
@@ -34,8 +35,12 @@ import com.netphone.netsdk.utils.LogUtil;
 import com.netphone.ui.activity.BigImageActivity;
 import com.netphone.ui.activity.BroadcastSendActivity;
 import com.netphone.ui.activity.FriendVoiceActivity;
+import com.netphone.ui.activity.GroupChatActivity;
+import com.netphone.ui.activity.LoginActivity;
 import com.netphone.ui.activity.MainActivity;
+import com.netphone.ui.activity.VoicePlayActivity;
 import com.netphone.ui.dialog.MessageDialog;
+import com.storm.developapp.tools.AppManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,7 +68,9 @@ public class LTListener {
         LTConfigure.getInstance().setOnNetworkListener(new OnNetworkListener() {
             @Override
             public void onNoNet() {
-
+                EventBusUtil.sendEvent(new AppBean(EventConfig.BROADCAST_STATE, MyApp.getContext().getString(R.string.text_network)));
+                LTApi.getInstance().offLine();
+                EventBusUtil.sendEvent(new AppBean(EventConfig.LINE_STATE, 1));
             }
 
             @Override
@@ -73,17 +80,22 @@ public class LTListener {
 
             @Override
             public void onMobileNet() {
-
             }
 
             @Override
             public void onConnectFail() {
+                EventBusUtil.sendEvent(new AppBean(EventConfig.BROADCAST_STATE, MyApp.getContext().getString(R.string.net_connect_not)));
 
+                LTApi.getInstance().offLine();
+                EventBusUtil.sendEvent(new AppBean(EventConfig.LINE_STATE, 1));
             }
 
             @Override
             public void onConnectSuccess() {
+                EventBusUtil.sendEvent(new AppBean(EventConfig.BROADCAST_STATE, null));
 
+                LTApi.getInstance().onLine(MyApp.getContext());
+                EventBusUtil.sendEvent(new AppBean(EventConfig.LINE_STATE, 0));
             }
         });
     }
@@ -163,6 +175,52 @@ public class LTListener {
         });
     }
 
+
+    public void setOnManagerListener() {
+        LTApi.getInstance().setOnManagerListener(new OnManagerListener() {
+            @Override
+            public void voice(UserInfoBean userBean) {
+//                jump(FriendVoiceActivity::class.java, userBean)
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("bean", userBean);
+                bundle.putInt("state", 0);
+
+                Intent intent = new Intent(MyApp.getContext(), FriendVoiceActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                MyApp.getContext().startActivity(intent);
+            }
+
+            @Override
+            public void listener() {
+                //VoicePlayActivity
+                Bundle bundle = new Bundle();
+                bundle.putInt("state", 1);
+
+                Intent intent = new Intent(MyApp.getContext(), VoicePlayActivity.class);
+                intent.putExtras(bundle);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                MyApp.getContext().startActivity(intent);
+
+            }
+
+            @Override
+            public void listenerStop() {
+                EventBusUtil.sendEvent(new AppBean(EventConfig.MANAGER_LISTENR_STOP,null));
+            }
+
+            @Override
+            public void receiveListener() {
+                Bundle bundle = new Bundle();
+                bundle.putInt("state", 0);
+
+                Intent intent = new Intent(MyApp.getContext(), VoicePlayActivity.class);
+                intent.putExtras(bundle);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                MyApp.getContext().startActivity(intent);
+            }
+        });
+    }
+
     public void setOnReFreshListener() {
         LTApi.getInstance().setOnReFreshListener(new OnReFreshListener() {
 //            @Override
@@ -205,7 +263,7 @@ public class LTListener {
                 }
                 EventBusUtil.sendEvent(new AppBean(EventConfig.REFRESH_FRIEND, null));
 
-                if (bean.getUserId().equals(LTApi.getInstance().getCurrentInfo().getUserId())){
+                if (bean.getUserId().equals(LTApi.getInstance().getCurrentInfo().getUserId())) {
                     com.netphone.netsdk.Tool.Constant.info = bean;
                     EventBusUtil.sendEvent(new AppBean(EventConfig.REFRESH_SELF, null));
                 }
@@ -252,7 +310,7 @@ public class LTListener {
                         }
                     }
                 }
-                EventBusUtil.sendEvent(new AppBean(EventConfig.GROUP_REFRESH, bean));
+                EventBusUtil.sendEvent(new AppBean(EventConfig.GROUP_DEL, bean));
 
             }
 
@@ -308,6 +366,43 @@ public class LTListener {
                 bundle.putSerializable("state", 1);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 MyApp.getInstense().getContext().startActivity(intent.putExtras(bundle));
+            }
+
+            @Override
+            public void groupCome(GroupInfoBean comeBean) {
+                Intent intent = new Intent(MyApp.getContext(), GroupChatActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("bean", comeBean);
+                intent.putExtras(bundle);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                MyApp.getContext().startActivity(intent);
+            }
+
+            @Override
+            public void dizzy() {
+                EventBusUtil.sendEvent(new AppBean(EventConfig.BROADCAST_STATE, MyApp.getContext().getString(R.string.been_shaken)));
+                ToastUtil.Companion.toasts(MyApp.getContext().getString(R.string.been_shaken));
+            }
+
+            @Override
+            public void dizzyCancel() {
+                EventBusUtil.sendEvent(new AppBean(EventConfig.BROADCAST_STATE, null));
+            }
+
+            @Override
+            public void shake() {
+                EventBusUtil.sendEvent(new AppBean(EventConfig.BROADCAST_STATE, MyApp.getContext().getString(R.string.account_shake_off)));
+                ToastUtil.Companion.toastl(MyApp.getContext().getString(R.string.account_shake_off));
+
+                AppManager.Companion.getAppManager().finishAllActivity();
+                Intent intent = new Intent(MyApp.getContext(), LoginActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                MyApp.getContext().startActivity(intent);
+            }
+
+            @Override
+            public void shakeCancel() {
+                EventBusUtil.sendEvent(new AppBean(EventConfig.BROADCAST_STATE, null));
             }
         });
     }

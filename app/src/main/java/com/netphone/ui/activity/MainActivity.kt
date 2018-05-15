@@ -106,6 +106,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
                 }
             })
         LTListener.newInstance().setOnReFreshListener()
+        LTListener.newInstance().setOnManagerListener()
         LTListener.newInstance().setOnBroadcastListener()
     }
 

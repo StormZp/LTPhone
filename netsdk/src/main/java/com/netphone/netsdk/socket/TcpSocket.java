@@ -104,7 +104,8 @@ public class TcpSocket {
             } catch (Exception e) {
                 connectThreadStart = false;
                 LogUtil.error("创建连接失败:" + e);
-                LTConfigure.getInstance().mOnNetworkListener.onConnectFail();
+                if (LTConfigure.getInstance().mOnNetworkListener != null)
+                    LTConfigure.getInstance().mOnNetworkListener.onConnectFail();
                 // 通知
 //                EventBusUtil.sendEvent(new AppBean(EventConfig.TCP_CONNECT_STATUS_FAIL, 0, null, null));
                 return;

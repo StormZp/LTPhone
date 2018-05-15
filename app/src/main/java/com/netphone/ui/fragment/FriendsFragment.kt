@@ -47,6 +47,16 @@ class FriendsFragment : BaseFragment<FragmentFriendsBinding>() {
                 }
 
             }
+            EventConfig.BROADCAST_STATE -> {
+                var state = appBean.data as String?
+                if (!TextUtils.isEmpty(state)){
+                    binding.tvHint.setText(state)
+                    binding.tvHint.visibility = View.VISIBLE
+                }else{
+                    binding.tvHint.visibility = View.GONE
+                }
+
+            }
         }
     }
 
@@ -76,14 +86,14 @@ class FriendsFragment : BaseFragment<FragmentFriendsBinding>() {
         binding.titleSearch.etSearch.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
                 var key = binding.titleSearch.etSearch.text.toString()
-                if (!TextUtils.isEmpty(key)){
+                if (!TextUtils.isEmpty(key)) {
                     var friends = LTApi.getInstance().SearchFriend(key)
 //                    friend2Adapter.setDatas(searchSession)
                     friend2Adapter = Friend2Adapter(context, friends)
                     mLinearLayoutManager = LinearLayoutManager(context)
                     binding.listView.layoutManager = mLinearLayoutManager
                     binding.listView.adapter = friend2Adapter
-                }else{
+                } else {
                     friend2Adapter = Friend2Adapter(context, Constant.myFriendList)
                     mLinearLayoutManager = LinearLayoutManager(context)
                     binding.listView.layoutManager = mLinearLayoutManager
@@ -107,7 +117,7 @@ class FriendsFragment : BaseFragment<FragmentFriendsBinding>() {
         binding.title.title.text = context.resources.getString(R.string.fridends)
         registerEventBus()
 
-        if (Constant.myFriendList==null){
+        if (Constant.myFriendList == null) {
             Constant.myFriendList = arrayListOf();
         }
 

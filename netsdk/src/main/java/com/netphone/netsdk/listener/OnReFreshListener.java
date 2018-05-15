@@ -19,9 +19,11 @@ public interface OnReFreshListener {
     void onReGroupsFresh(List<GroupInfoBean> groupListBean);//群列表推送
 
     void onFriendsReFresh(UserInfoBean bean);//好友刷新
+
     void onFriendsDel(UserInfoBean bean);//删除好友
 
     void onGroupReFresh(GroupInfoBean bean);//群刷新
+
     void onGroupDel(GroupInfoBean bean);//群删除
 
     void onWordBroadcast(BroadcastBean msgBean);
@@ -37,4 +39,17 @@ public interface OnReFreshListener {
     void onBroadcastCome(int state);//0 接收 1 发送
 
     void onFriendVoice(UserInfoBean userBean);//好友通话请求
+
+
+    void groupCome(GroupInfoBean comeBean);//进入群聊
+
+    void dizzy();//摇晕
+
+    void dizzyCancel();//取消摇晕
+
+    void shake();//取消摇晕
+
+    void shakeCancel();//取消摇晕
+
+
 }

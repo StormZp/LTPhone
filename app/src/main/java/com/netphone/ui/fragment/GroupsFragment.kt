@@ -42,22 +42,48 @@ class GroupsFragment : BaseFragment<FragmentGroupsBinding>() {
 
     override fun receiveEvent(appBean: AppBean<Any>) {
         when (appBean.code) {
+            EventConfig.GROUP_DEL -> {
+                if (appBean.data != null) {
+                    var infoBean = appBean.data as GroupInfoBean
+                    if (groupAdapter != null && infoBean != null){
+                        groupAdapter!!.del(infoBean.groupID)
+
+                    } else {
+                        currentMic = null;
+                        if (currentGroup != null)
+                            currentGroup!!.micer = null
+                    }
+                } else {
+                    initData()
+                }
+            }
             EventConfig.GROUP_REFRESH -> {
                 if (appBean.data != null) {
                     var infoBean = appBean.data as GroupInfoBean
                     if (groupAdapter != null && infoBean != null)
                         groupAdapter!!.refresh(infoBean.groupID, infoBean.onLineCount)
-                    if (currentGroup != null&&infoBean.micer!=null && currentGroup!!.groupID.equals(infoBean.groupID)) {
+                    if (currentGroup != null && infoBean.micer != null && currentGroup!!.groupID.equals(infoBean.groupID)) {
                         currentMic = LTApi.getInstance().getUserInfo(infoBean.micer.userId)
                         currentGroup = infoBean;
                     } else {
                         currentMic = null;
-                        currentGroup!!.micer = null
+                        if (currentGroup != null)
+                            currentGroup!!.micer = null
                     }
                 } else {
                     initData()
                 }
 
+
+            }
+            EventConfig.BROADCAST_STATE -> {
+                var state = appBean.data as String?
+                if (!TextUtils.isEmpty(state)) {
+                    binding.tvHint.setText(state)
+                    binding.tvHint.visibility = View.VISIBLE
+                } else {
+                    binding.tvHint.visibility = View.GONE
+                }
 
             }
         }
@@ -123,7 +149,7 @@ class GroupsFragment : BaseFragment<FragmentGroupsBinding>() {
         }
 
         if (Constant.myGroupList == null) {
-            Constant.myGroupList = arrayListOf();
+            Constant.myGroupList = arrayListOf()
         }
 //        LogUtil.error("GroupsFragment.kt", "86\tinitData()\n" + Constant.myGroupList.size);
 

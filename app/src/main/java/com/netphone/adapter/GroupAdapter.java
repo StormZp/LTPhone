@@ -53,7 +53,19 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
         notifyDataSetChanged();
     }
 
-    public void setList( List<GroupInfoBean> datas){
+    public void del(String groupId) {
+        LogUtil.error("GroupAdapter", "45\trefresh()\n" + new Gson().toJson(datas));
+        LogUtil.error("GroupAdapter", "47\trefresh()\n" + "groupId:" + groupId);
+        for (int i = 0; i < datas.size(); i++) {
+            if (datas.get(i).getGroupID().equals(groupId)) {
+                datas.remove(i);
+            }
+        }
+        notifyDataSetChanged();
+    }
+
+
+    public void setList(List<GroupInfoBean> datas) {
 //        if (datas!=null){
 //            datas.clear();
 //            datas.addAll(datas);

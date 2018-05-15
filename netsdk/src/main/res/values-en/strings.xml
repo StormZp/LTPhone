@@ -43,6 +43,7 @@
     <string name="refuse_class">The other side refused to speak</string>
     <string name="called_calling">The other person is on the phone</string>
     <string name="stop_call">Stop Call</string>
+    <string name="over">Over</string>
     <string name="time_out_call">Overtime unanswered</string>
     <string name="Handset">Handset</string>
     <string name="calling">calling</string>
@@ -166,7 +167,7 @@
     <string name="Voice_recording">Voice recording</string>
     <string name="photo">Photo</string>
     <string name="take_info">Chat details</string>
-    <string name="net_connect_not">The network is connected, but the net is not accessible</string>
+    <string name="net_connect_not">Server disconnection</string>
     <string name="u_time">Your time is still left  </string>
     <string name="u_time_out">This account is not active and cannot be used</string>
     <string name="day"> day </string>
@@ -205,5 +206,6 @@
     <string name="Word_broadcasting">Word broadcasting</string>
     <string name="call_back">call back</string>
     <string name="come_form">Come form:</string>
-
+    <string name="Echo_broadcast">Echo broadcast</string>
+    <string name="listening">I\'m listening...</string>
 </resources>

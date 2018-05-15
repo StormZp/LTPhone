@@ -5,6 +5,7 @@ import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -91,6 +92,20 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>() {
         when(appBean.code){
             EventConfig.REFRESH_SELF->{
                 initData()
+            }
+            EventConfig.BROADCAST_STATE -> {
+                var state = appBean.data as String?
+                if (!TextUtils.isEmpty(state)) {
+                    binding.tvHint.setText(state)
+                    binding.tvHint.visibility = View.VISIBLE
+
+                    binding.onlineState.text = context.resources.getString(R.string.off_line)
+                } else {
+                    binding.tvHint.visibility = View.GONE
+
+                    binding.onlineState.text = context.resources.getString(R.string.onLine)
+                }
+
             }
         }
     }

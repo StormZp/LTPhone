@@ -46,6 +46,9 @@
     <string name="calling">呼叫中</string>
     <string name="Setting_up_call">正在建立通话</string>
     <string name="stop_call">结束通话</string>
+    <string name="over">结束</string>
+
+
     <string name="called_line_off">对方不在线</string>
     <string name="text_accepted">接受</string>
     <string name="text_hands_free">免提</string>
@@ -162,7 +165,7 @@
     <string name="have_relase_mic">已释放麦权</string>
     <string name="system_relase_mic">麦权被系统回收</string>
     <string name="group_users">群组成员</string>
-    <string name="net_connect_not">网络连的上，但是网不通</string>
+    <string name="net_connect_not">服务器断开连接</string>
     <string name="u_time">您的时间还剩  </string>
     <string name="u_time_out">此账户未激活，不能使用</string>
     <string name="day"> 天 </string>
@@ -197,6 +200,11 @@
     <string name="Word_broadcasting">文字广播</string>
     <string name="call_back">马上回复</string>
     <string name="come_form">来自:</string>
+    <string name="Echo_broadcast">回播监听中</string>
+    <string name="listening">我正在监听中...</string>
+
+
+
 
 
 </resources>

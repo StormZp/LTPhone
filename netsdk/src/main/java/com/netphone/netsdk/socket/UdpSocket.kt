@@ -6,7 +6,6 @@ import com.netphone.netsdk.Tool.TcpConfig
 import com.netphone.netsdk.utils.CRC16
 import com.netphone.netsdk.utils.LogUtil
 import com.netphone.netsdk.utils.UdpUtil
-import com.test.jni.OnVoiceListener
 import com.test.jni.VoiceUtil
 import java.io.IOException
 import java.net.DatagramPacket
@@ -26,12 +25,14 @@ class UdpSocket {
     private var udpPacket: DatagramPacket? = null//UDP发送包
 
     private var recordPort: Int = 0//录音端口号
+    private var voiceUtil:VoiceUtil ?=null
 
 
     fun connect(recordPort: Int) {
         closeUdp()
         UdpUtil.init(LTConfigure.mContext)
         this.recordPort = recordPort
+        voiceUtil = VoiceUtil();
         try {
             udpSocket = DatagramSocket(recordPort)//新建一个DatagramSocket,获取客户端本地端口号
 
@@ -90,26 +91,28 @@ class UdpSocket {
     @Synchronized
     open fun play() {
         LogUtil.error("UdpSocket.kt", "90\tplay()\n" + "开始播放");
-        VoiceUtil.getInstance().initPlay()
+        VoiceUtil.getInstance().initPlayer()
+        voiceUtil!!.initPlayer()
         sendData(ByteArray(0), 0)
-
+        isPlayVoice = true;
         thread { playVoiceWork.run() }
     }
 
     open fun stopPlay() {
         LogUtil.error("UdpSocket.kt", "93\tstopPlay()\n" + "停止播放");
-        VoiceUtil.getInstance().stopPlay()
+        isPlayVoice = false
+        VoiceUtil.getInstance().stopPlayer()
     }
 
     open fun record() {
         LogUtil.error("UdpSocket.kt", "97\trecord()\n" + "开始录制");
-        VoiceUtil.getInstance().setOnVoiceListener(object : OnVoiceListener {
+        VoiceUtil.getInstance().initRecord(object : VoiceUtil.OnRecordListener {
             override fun recording(data: ByteArray?) {
                 LogUtil.error("UdpSocket.kt", "106\trecording()\n" + "录制中" + data!!.size);
                 sendData(data!!, 0)
             }
         })
-        VoiceUtil.getInstance().startRecord()
+        VoiceUtil.getInstance().startReocrd()
     }
 
     open fun stopRecord() {
@@ -133,7 +136,7 @@ class UdpSocket {
 
                 udpPacket = getCommonDatagramPacket(udpDataEncode, udpDataEncode.size, address!!, recordPort)
                 if (udpSocket != null && !udpSocket!!.isClosed) {
-                    LogUtil.error("SocketManageService.kt", "582\n" + "发送音频数据${udpDataEncode.size}")
+                    LogUtil.error("SocketManageService.kt", "582\n" + "发送音频数据${udpDataEncode.size}::"+udpPacket)
 
                     udpSocket!!.send(udpPacket)
                 } else {
@@ -153,29 +156,26 @@ class UdpSocket {
     var sdFormat = SimpleDateFormat("yyyy-MM-dd hh:mm:ss SSS")
     private val playVoiceWork = Runnable {
         // 接收udp
-        val recvBuf = ByteArray(VoiceUtil.getBufferSize() + 10)
+        val recvBuf = ByteArray(VoiceUtil.BUFFER_SIZE + VoiceUtil.HEAD_SIZE )
         var count = 0
         val recvPacket = DatagramPacket(recvBuf, recvBuf.size)
 
-        while (true) {
+        while (isPlayVoice) {
             try {
                 if (udpSocket != null && !udpSocket!!.isClosed()) {
-                    LogUtil.error("UdpSocket.kt", "153\t()\n" + "开始播放");
+//                    LogUtil.error("UdpSocket.kt", "153\t()\n" + "开始播放");
                     udpSocket!!.receive(recvPacket)
                     val pack = recvPacket.data
                     if (pack != null && pack.size != 0) {
-                        LogUtil.error("UdpSocket.kt", "153\t()\n" + pack.size);
+//                        LogUtil.error("UdpSocket.kt", "153\t()\n" + pack.size);
                         var udpDataUncode = UdpUtil.udpDataUncode(pack)
-                        //测试流数据是对一致
-//                        var long = ByteUtil.getLong(udpDataUncode, 0)
-//                        var format = sdFormat.format(long)
-//                        LogUtil.error("UdpSocket.kt","175\t()\n"+format);
 
-                        VoiceUtil.getInstance().writePlayData(udpDataUncode)
+                        VoiceUtil.getInstance().setPlayData(udpDataUncode)
                     }
                 }
             } catch (e: IOException) {
-                e.printStackTrace()
+                LogUtil.error("UdpSocket.kt","176\t()\n",e);
+//                e.printStackTrace()
             }
         }
     }

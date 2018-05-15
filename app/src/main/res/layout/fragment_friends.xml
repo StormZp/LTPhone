@@ -11,6 +11,18 @@
             layout="@layout/titlebar"
             />
 
+        <TextView
+            android:id="@+id/tv_hint"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp48"
+            android:background="@color/sandybrown"
+            android:textColor="@color/yellow"
+            android:text="@string/text_network"
+            android:textSize="15sp"
+            android:gravity="center"
+            android:visibility="gone"
+            />
+
         <include
             android:id="@+id/title_search"
             layout="@layout/title_search"
@@ -19,6 +31,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/listView"

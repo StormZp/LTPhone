@@ -10,6 +10,18 @@
             android:id="@+id/title"
             layout="@layout/titlebar" />
 
+        <TextView
+            android:id="@+id/tv_hint"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp48"
+            android:background="@color/sandybrown"
+            android:textColor="@color/yellow"
+            android:text="@string/text_network"
+            android:textSize="15sp"
+            android:gravity="center"
+            android:visibility="gone"
+            />
+        
         <include
             android:id="@+id/title_search"
             layout="@layout/title_search"
@@ -22,6 +34,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+
+
 
             <TextView
                 android:id="@+id/catalog1"

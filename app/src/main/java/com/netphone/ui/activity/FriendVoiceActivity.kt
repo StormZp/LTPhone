@@ -50,7 +50,7 @@ class FriendVoiceActivity : BaseActivity<ActivityVoiceFriendBinding>() {
 
     override fun initData() {
         StatusBarCompat.setStatusBarColor(this, context.resources.getColor(R.color.bg_voice), false);
-        audioManager == getSystemService(Context.AUDIO_SERVICE) as AudioManager
+        audioManager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
         binding.click = OnClick()
 
         var state = intent.extras.getInt("state", 0)
@@ -67,6 +67,12 @@ class FriendVoiceActivity : BaseActivity<ActivityVoiceFriendBinding>() {
         } else { //被叫
             startPlayRing();
         }
+        if (audioManager != null) {
+            setSpeakerphoneOn(false, activity, audioManager)
+            setAudio(true)
+        }
+
+
         LTApi.getInstance().friendCall(id, object : OnFriendCallListener {
             override fun onCallStart() {
                 activity.runOnUiThread {
@@ -74,14 +80,14 @@ class FriendVoiceActivity : BaseActivity<ActivityVoiceFriendBinding>() {
                     binding.state.text = context.resources.getString(R.string.calling_now)
                     var timeTask = TimeTask()
                     timeTask.execute(0)
+                    showButton(2)
                 }
-
             }
 
             override fun onCallAccept() {
                 activity.runOnUiThread {
                     binding.state.text = context.resources.getString(R.string.Setting_call_connection)
-                    showButton(2)
+
                     playStop()
                 }
 
@@ -153,8 +159,8 @@ class FriendVoiceActivity : BaseActivity<ActivityVoiceFriendBinding>() {
 
         open fun mute(view: View) {
 
-//            if (audioManager != null)
-            setAudio(isSound)
+            if (audioManager != null)
+                setAudio(isSound)
             isSound = !isSound
         }
 
@@ -174,7 +180,8 @@ class FriendVoiceActivity : BaseActivity<ActivityVoiceFriendBinding>() {
 
         open fun open(view: View) {
             isOpenOn = !isOpenOn
-            setSpeakerphoneOn(isOpenOn, activity, audioManager)
+            if (audioManager != null)
+                setSpeakerphoneOn(isOpenOn, activity, audioManager)
         }
     }
 
@@ -204,10 +211,10 @@ class FriendVoiceActivity : BaseActivity<ActivityVoiceFriendBinding>() {
         if (leg) {
             binding.ivSound.setBackgroundResource(R.mipmap.icon_jingyin)
             binding.btnSound.setText(context.resources.getString(R.string.text_hands_free))
-//            audioManager!!.isMicrophoneMute = false
+            audioManager!!.isMicrophoneMute = false
         } else {
             binding.ivSound.setBackgroundResource(R.mipmap.icon_jingyin_sel)
-//            audioManager!!.isMicrophoneMute = true
+            audioManager!!.isMicrophoneMute = true
 
         }
     }
@@ -268,22 +275,4 @@ class FriendVoiceActivity : BaseActivity<ActivityVoiceFriendBinding>() {
         }
     }
 
-
-    private fun setSpeakerphoneOn(on: Boolean) {
-        if (on) {
-            // 为true打开喇叭扩音器；为false关闭喇叭扩音器.
-            audioManager!!.setSpeakerphoneOn(true)
-            // 添加的代码，恢复系统声音设置
-            audioManager!!.setMode(AudioManager.STREAM_SYSTEM)
-            volumeControlStream = AudioManager.USE_DEFAULT_STREAM_TYPE
-            LogUtil.error("true打开喇叭扩音器")
-        } else {
-            audioManager!!.setSpeakerphoneOn(false)//关闭扬声器
-            audioManager!!.setRouting(AudioManager.MODE_NORMAL, AudioManager.ROUTE_EARPIECE, AudioManager.ROUTE_ALL)
-            volumeControlStream = AudioManager.STREAM_VOICE_CALL
-            //把声音设定成Earpiece（听筒）出来，设定为正在通话中
-            audioManager!!.setMode(AudioManager.MODE_IN_COMMUNICATION)
-            LogUtil.error("关闭扬声器")
-        }
-    }
 }

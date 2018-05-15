@@ -1,5 +1,7 @@
 package com.netphone.netsdk.Tool;
 
+import android.content.Context;
+import android.media.AudioManager;
 import android.os.SystemClock;
 import android.text.TextUtils;
 
@@ -17,9 +19,11 @@ import com.netphone.netsdk.bean.BroadcastBean;
 import com.netphone.netsdk.bean.FriendChatMsgBean;
 import com.netphone.netsdk.bean.FriendReFreshBean;
 import com.netphone.netsdk.bean.GroupChatMsgBean;
+import com.netphone.netsdk.bean.GroupComeBean;
 import com.netphone.netsdk.bean.GroupInfoBean;
 import com.netphone.netsdk.bean.GroupReFreshBean;
 import com.netphone.netsdk.bean.ImageBean;
+import com.netphone.netsdk.bean.PortBean;
 import com.netphone.netsdk.bean.UserInfoBean;
 import com.netphone.netsdk.bean.UserListBean;
 import com.netphone.netsdk.socket.TcpSocket;
@@ -28,10 +32,15 @@ import com.netphone.netsdk.utils.ByteIntUtils;
 import com.netphone.netsdk.utils.ByteUtil;
 import com.netphone.netsdk.utils.CmdUtils;
 import com.netphone.netsdk.utils.DataTypeChangeHelper;
+import com.netphone.netsdk.utils.HttpDownloader;
 import com.netphone.netsdk.utils.LogUtil;
 import com.netphone.netsdk.utils.ReplyUtil;
 import com.netphone.netsdk.utils.SharedPreferenceUtil;
+import com.netphone.netsdk.utils.UdpUtil;
+import com.test.jni.VoiceUtil;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
@@ -86,6 +95,9 @@ public class TcpCmd {
 
                         switch (bodyBytes[0]) {
                             case 0x00://登录成功
+                                mUserInfoBeanDao.deleteAll();
+                                mGroupInfoBeanDao.deleteAll();
+
                                 byte[] jsonBytes = new byte[bodyBytes.length - 1];
                                 System.arraycopy(bodyBytes, 1, jsonBytes, 0, bodyBytes.length - 1);
                                 body = ByteIntUtils.utfToString(jsonBytes);
@@ -167,6 +179,8 @@ public class TcpCmd {
                             LTApi.getInstance().onFriendCallListener.onCallFail(0x06, LTConfigure.getInstance().getContext().getResources().getString(R.string.stop_call));
                             LTApi.getInstance().onFriendCallListener = null;
                         }
+                        UdpSocket.Companion.getInstance().stopPlay();
+                        UdpSocket.Companion.getInstance().stopRecord();
 
                         break;
                     case 0x04://收到加入群聊回复
@@ -333,7 +347,7 @@ public class TcpCmd {
                     case 0x19://停止发送广播
                         UdpSocket.Companion.getInstance().stopPlay();
                         break;
-                    case 0x1A://todo 设置呼叫转移
+                    case 0x1A:// 设置呼叫转移
                         break;
                     case 0x1B://获取群组成员信息
                         if (LTConfigure.getInstance().getLtApi().getGroupMemberListener != null) {
@@ -414,13 +428,13 @@ public class TcpCmd {
                         UdpSocket.Companion.getInstance().stopRecord();
                         UdpSocket.Companion.getInstance().stopPlay();
                         break;
-                    case 0x04://todo 被叫视频通话
+                    case 0x04:// 被叫视频通话
                         break;
                     case 0x05://
                         break;
-                    case 0x06://todo 开始视频通话
+                    case 0x06:// 开始视频通话
                         break;
-                    case 0x07://todo 对方挂断视频通话
+                    case 0x07:// 对方挂断视频通话
                         break;
                     case 0x08://收到文字消息
                         body = ByteIntUtils.utfToString(bodyBytes);
@@ -475,14 +489,27 @@ public class TcpCmd {
                         }
                         break;
                     case 0x0E://todo被遥晕
+                        if (LTConfigure.getInstance().getLtApi().onReFreshListener != null) {
+                            LTConfigure.getInstance().getLtApi().onReFreshListener.dizzy();
+                        }
                         break;
-                    case 0x0F://todo 被取消遥晕
+                    case 0x0F:// 被取消遥晕
+                        if (LTConfigure.getInstance().getLtApi().onReFreshListener != null) {
+                            LTConfigure.getInstance().getLtApi().onReFreshListener.dizzyCancel();
+                        }
                         break;
-                    case 0x10://todo 被遥弊
+                    case 0x10:// 被遥弊
+                        if (LTConfigure.getInstance().getLtApi().onReFreshListener != null) {
+                            LTConfigure.getInstance().getLtApi().onReFreshListener.shake();
+                        }
                         break;
-                    case 0x11://todo 被取消遥弊
+                    case 0x11:// 被取消遥弊
+                        if (LTConfigure.getInstance().getLtApi().onReFreshListener != null) {
+                            LTConfigure.getInstance().getLtApi().onReFreshListener.shakeCancel();
+                        }
                         break;
-                    case 0x12://todo 当前通话时,通话对象被遥弊,或遥晕
+                    case 0x12:// 当前通话时,通话对象被遥弊,或遥晕
+
                         break;
                     case 0x13://当用户超出电子围栏范围时
                         if (LTApi.getInstance().onReFreshListener != null) {
@@ -496,8 +523,22 @@ public class TcpCmd {
                             LTApi.getInstance().onReFreshListener = null;
                         }
                         break;
-                    case 0x15://todo 强制加入群聊
-                        break;
+                    case 0x15:// 强制加入群聊
+                    {
+                        body = ByteIntUtils.utfToString(bodyBytes);
+                        GroupComeBean bean = mGson.fromJson(body, GroupComeBean.class);
+                        UdpSocket.Companion.getInstance().connect(bean.getPort());
+                        UdpSocket.Companion.getInstance().play();
+
+                        GroupInfoBean groupInfoBean = mGroupInfoBeanDao.queryBuilder().where(GroupInfoBeanDao.Properties.GroupID.eq(bean.getGroupId())).build().unique();
+
+                        if (LTApi.getInstance().onReFreshListener != null) {
+                            LTApi.getInstance().onReFreshListener.groupCome(groupInfoBean);
+                        }
+                    }
+
+
+                    break;
                     case 0x16://收到多媒体内容(图片,视频,文件等)
                         body = ByteIntUtils.utfToString(bodyBytes);
                         ImageBean bean = mGson.fromJson(body, ImageBean.class);
@@ -512,15 +553,30 @@ public class TcpCmd {
                         break;
                     case 0x17://todo 组呼中,被系统分配了权限
                         break;
-                    case 0x18://todo 被发起主叫(从调度台)
-                        break;
-                    case 0x19://todo 服务端发起监听(被监听)
-                        break;
-                    case 0x1A://todo 服务端停止监听(被监听)
+                    case 0x18://todo 被发起主叫(从调度台){
+                    {
+                        body = ByteIntUtils.utfToString(bodyBytes);
+                        UserInfoBean userbean = mUserInfoBeanDao.queryBuilder().where(UserInfoBeanDao.Properties.UserId.eq(body)).build().unique();
+//                        if (userbean != null && LTConfigure.getInstance().getLtApi().onReFreshListener != null) {// void onManagerVoice(UserInfoBean userBean);//管理者通话(PC端提示)
+//                            LTConfigure.getInstance().getLtApi().onReFreshListener.onManagerVoice(userbean);
+//                        }
+                    }
+                    break;
+                    case 0x19:// 服务端发起监听(被监听)
+                    {
+                        port = ByteUtil.getInt(bodyBytes, 0);//udp端口,占4位
+                        UdpSocket.Companion.getInstance().connect(port);
+                        UdpSocket.Companion.getInstance().record();
+                    }
+
+                    break;
+                    case 0x1A:// 服务端停止监听(被监听)
+                        UdpSocket.Companion.getInstance().stopRecord();
                         break;
                     case 0x1D://todo 正在监听终端(主动),是否d同步播放
                         break;
-                    case 0x1E://todo 监听(主动)已被中断
+                    case 0x1E:// 监听(主动)已被中断
+                        UdpSocket.Companion.getInstance().stopPlay();
                         break;
                     case 0x1F://从服务台发起广播(发起方) 收到端口号
 //                        port = ByteUtil.getInt(bodyBytes, 0);//udp 端口
@@ -544,12 +600,64 @@ public class TcpCmd {
                             LTApi.getInstance().onBroadcastListener.onStop();
                         }
                         break;
-                    case 0x23://todo 开始播放监听内容
+                    case 0x23:// 开始播放监听内容
+                    {
+                        body = ByteIntUtils.utfToString(bodyBytes);
+                        Gson     gson = new Gson();
+                        PortBean info = gson.fromJson(body, PortBean.class);
+
+                        UdpSocket.Companion.getInstance().connect(Integer.parseInt(info.getPort()));
+                        UdpSocket.Companion.getInstance().play();
+
+                        if (LTApi.getInstance().onManagerListener != null) {
+                            LTApi.getInstance().onManagerListener.listener();
+                        }
+
+                        setSound();
+                    }
+                    break;
+                    case 0x24:// 停止播放监听内容
+                        UdpSocket.Companion.getInstance().stopPlay();
+                        if (LTApi.getInstance().onManagerListener != null) {
+                            LTApi.getInstance().onManagerListener.listenerStop();
+                        }
                         break;
-                    case 0x24://todo 停止播放监听内容
-                        break;
-                    case 0x25://todo 播放监听文件
-                        break;
+                    case 0x25:// 播放监听文件
+                    {
+                        body = ByteIntUtils.utfToString(bodyBytes);
+                        String path = TcpConfig.URL + body;
+
+                        setSound();
+
+
+                        //创建文件
+                        String save = LTConfigure.mContext.getExternalFilesDir("").getAbsolutePath() + "/temp";
+                        File   file = new File(save);
+                        if (file.exists()) {
+                            file.delete();
+                        }
+                        int temp = new HttpDownloader().downloadFiles(path, LTConfigure.mContext.getExternalFilesDir("").getAbsolutePath(), "temp");
+                        if (LTApi.getInstance().onManagerListener != null) {
+                            LTApi.getInstance().onManagerListener.receiveListener();
+                        }
+                        if (temp == 0) {
+                            try {
+                                FileInputStream stream = new FileInputStream(file);
+                                byte[]          bytes  = new byte[VoiceUtil.BUFFER_SIZE + 10];
+                                byte[]          pack;
+                                VoiceUtil.getInstance().initPlayer();
+                                while (stream.read(bytes) != -1) {
+                                    pack = UdpUtil.udpDataUncode(bytes);
+                                    VoiceUtil.getInstance().setPlayData(pack);
+                                }
+                            } catch (IOException e) {
+                                LogUtil.error("641\tcmdExplore()\n", e);
+//                                e.printStackTrace();
+                            }
+                            VoiceUtil.getInstance().stopPlayer();
+                        }
+                    }
+                    break;
                     case 0x26://收到群聊消息
                         body = ByteIntUtils.utfToString(bodyBytes);
                         LogUtil.error("TcpCmd", "356\tcmdExplore()\n" + body);
@@ -577,6 +685,7 @@ public class TcpCmd {
                         body = ByteIntUtils.utfToString(bodyBytes);
                         LogUtil.error("TcpCmd", "568\tcmdExplore()\n" + body);
                         GroupInfoBean group = mGson.fromJson(body, GroupInfoBean.class);
+                        mGroupInfoBeanDao.insertOrReplace(group);
                         if (LTApi.getInstance().onReFreshListener != null) {
                             LTApi.getInstance().onReFreshListener.onGroupReFresh(group);
                         }
@@ -605,7 +714,8 @@ public class TcpCmd {
                         LogUtil.error("TcpCmd", "595\tcmdExplore()\n" + "总包数" + friendReFreshBean.getCount() + "第" + friendReFreshBean.getIndex() + "包 内容" + friendReFreshBean.getList().size());
 
                         for (int i = 0; i < friendReFreshBean.getList().size(); i++) {
-                            mUserInfoBeanDao.insertOrReplace(friendReFreshBean.getList().get(i));
+                            if (friendReFreshBean.getList().get(i) != null)
+                                mUserInfoBeanDao.insertOrReplace(friendReFreshBean.getList().get(i));
                         }
 
                     }
@@ -622,7 +732,7 @@ public class TcpCmd {
                             LTConfigure.getInstance().getLtApi().onReFreshListener.onReGroupsFresh(groupReFreshBean.getList());
                         }
                         UserInfoBean currentInfo = LTApi.getInstance().getCurrentInfo();
-                        LogUtil.error("TcpCmd", "609\tcmdExplore()\n" + "总包数" + groupReFreshBean.getCount() + "第" + groupReFreshBean.getIndex() + "包 内容" + groupReFreshBean.getList().size());
+                        LogUtil.error("TcpCmd", "609\tcmdExplore()\n" + "总包数" + groupReFreshBean.getCount() + "第" + groupReFreshBean.getIndex() + "包\n内容" + mGson.toJson(groupReFreshBean.getList()));
                         for (int i = 0; i < groupReFreshBean.getList().size(); i++) {
                             groupReFreshBean.getList().get(i).setUserId(currentInfo.getUserId());
                         }
@@ -770,6 +880,13 @@ public class TcpCmd {
 
     }
 
+    private void setSound() {
+        AudioManager service = (AudioManager) LTConfigure.mContext.getSystemService(Context.AUDIO_SERVICE);
+        service.setSpeakerphoneOn(true);
+        service.setMode(AudioManager.STREAM_SYSTEM);
+    }
+
+
     public static boolean isGroupBeat   = false;//群聊心跳包
     public static boolean isConnectBeat = false;//联网心跳包
 
@@ -811,5 +928,17 @@ public class TcpCmd {
             }
         }
     };
+
+    //强制加入群聊
+    private void skipToGroup(byte[] bodyBytes) {
+        LogUtil.error("TcpCmd", "837\tskipToGroup()\n" + "强制加入群聊");
+        String        json     = ByteIntUtils.utfToString(bodyBytes);
+        Gson          gson     = new Gson();
+        GroupComeBean chatBean = gson.fromJson(json, GroupComeBean.class);
+        if (chatBean == null)
+            return;
+        port = chatBean.getPort();
+//        sendBroadcast(new Intent(BroadcastUtils.SKIP_TO_GROUP).putExtra("groupid", chatBean.getGroupId()));
+    }
 
 }

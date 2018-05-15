@@ -30,10 +30,12 @@ import com.netphone.netsdk.listener.OnGroupComeInListener;
 import com.netphone.netsdk.listener.OnGroupStateListener;
 import com.netphone.netsdk.listener.OnLocationListener;
 import com.netphone.netsdk.listener.OnLoginListener;
+import com.netphone.netsdk.listener.OnManagerListener;
 import com.netphone.netsdk.listener.OnReFreshListener;
 import com.netphone.netsdk.listener.OnUpFileListener;
 import com.netphone.netsdk.service.LocationService;
 import com.netphone.netsdk.socket.TcpSocket;
+import com.netphone.netsdk.socket.UdpSocket;
 import com.netphone.netsdk.utils.CmdUtils;
 import com.netphone.netsdk.utils.FileUtils;
 import com.netphone.netsdk.utils.LogUtil;
@@ -100,6 +102,7 @@ public class LTApi {
     public OnBroadcastListener      onBroadcastListener;
     public OnChangeUserInfoListener onChangeUserInfoListener;
     public OnFriendCallListener     onFriendCallListener;
+    public OnManagerListener        onManagerListener;
     public String                   groupId;
 
     /**
@@ -254,7 +257,8 @@ public class LTApi {
      * @param id
      */
     public void joinFriendChat(String id) {
-        ReplyUtil.read(id, Constant.info.getUserId());
+        if (Constant.info != null)
+            ReplyUtil.read(id, Constant.info.getUserId());
 
     }
 
@@ -508,6 +512,10 @@ public class LTApi {
         this.onBroadcastListener = onBroadcastListener;
     }
 
+    public void setOnManagerListener(OnManagerListener onManagerListener) {
+        this.onManagerListener = onManagerListener;
+    }
+
     /**
      * 修改密码
      *
@@ -580,4 +588,8 @@ public class LTApi {
     }
 
 
+    public void voiceStop(){
+        UdpSocket.Companion.getInstance().stopPlay();
+        UdpSocket.Companion.getInstance().closeUdp();
+    }
 }
