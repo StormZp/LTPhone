@@ -708,16 +708,13 @@ public class TcpCmd {
                         body = ByteIntUtils.utfToString(jsonBytes);
                         LogUtil.error("TcpCmd", "592\tcmdExplore()\n" + body);
                         FriendReFreshBean friendReFreshBean = mGson.fromJson(body, FriendReFreshBean.class);
+
+                        LogUtil.error("TcpCmd", "595\tcmdExplore()\n" + "总包数" + friendReFreshBean.getCount() + "第" + friendReFreshBean.getIndex() + "包 内容" + friendReFreshBean.getList().size());
+                        mUserInfoBeanDao.insertOrReplaceInTx(friendReFreshBean.getList());
+
                         if (LTConfigure.getInstance().getLtApi().onReFreshListener != null) {
                             LTConfigure.getInstance().getLtApi().onReFreshListener.onReFriendsFresh(friendReFreshBean.getList());
                         }
-                        LogUtil.error("TcpCmd", "595\tcmdExplore()\n" + "总包数" + friendReFreshBean.getCount() + "第" + friendReFreshBean.getIndex() + "包 内容" + friendReFreshBean.getList().size());
-
-                        for (int i = 0; i < friendReFreshBean.getList().size(); i++) {
-                            if (friendReFreshBean.getList().get(i) != null)
-                                mUserInfoBeanDao.insertOrReplace(friendReFreshBean.getList().get(i));
-                        }
-
                     }
                     //                                break;
 //                        }
@@ -728,15 +725,17 @@ public class TcpCmd {
                         System.arraycopy(bodyBytes, 0, jsonBytes, 0, bodyBytes.length);
                         body = ByteIntUtils.utfToString(jsonBytes);
                         GroupReFreshBean groupReFreshBean = mGson.fromJson(body, GroupReFreshBean.class);
-                        if (LTConfigure.getInstance().getLtApi().onReFreshListener != null) {
-                            LTConfigure.getInstance().getLtApi().onReFreshListener.onReGroupsFresh(groupReFreshBean.getList());
-                        }
+
                         UserInfoBean currentInfo = LTApi.getInstance().getCurrentInfo();
                         LogUtil.error("TcpCmd", "609\tcmdExplore()\n" + "总包数" + groupReFreshBean.getCount() + "第" + groupReFreshBean.getIndex() + "包\n内容" + mGson.toJson(groupReFreshBean.getList()));
                         for (int i = 0; i < groupReFreshBean.getList().size(); i++) {
                             groupReFreshBean.getList().get(i).setUserId(currentInfo.getUserId());
                         }
                         mGroupInfoBeanDao.insertOrReplaceInTx(groupReFreshBean.getList());
+
+                        if (LTConfigure.getInstance().getLtApi().onReFreshListener != null) {
+                            LTConfigure.getInstance().getLtApi().onReFreshListener.onReGroupsFresh(groupReFreshBean.getList());
+                        }
                     }
                     break;
                     case 0x3B:// 用户上线
@@ -745,9 +744,14 @@ public class TcpCmd {
                         System.arraycopy(bodyBytes, 0, jsonBytes, 0, bodyBytes.length);
                         body = ByteIntUtils.utfToString(jsonBytes);
                         UserInfoBean users = mGson.fromJson(body, UserInfoBean.class);
+                        LogUtil.error("TcpCmd", "757\tcmdExplore()\n" + body);
+
+                        UserInfoBean unique1 = mUserInfoBeanDao.queryBuilder().where(UserInfoBeanDao.Properties.UserId.eq(users.getUserId())).build().unique();
+                        unique1.setIsOnLine("1");
+                        mUserInfoBeanDao.insertOrReplace(unique1);
 
                         if (LTConfigure.getInstance().getLtApi().onReFreshListener != null) {
-                            LTConfigure.getInstance().getLtApi().onReFreshListener.onFriendsReFresh(users);
+                            LTConfigure.getInstance().getLtApi().onReFreshListener.onFriendsReFresh(unique1);
                         }
 
                     }
@@ -760,8 +764,12 @@ public class TcpCmd {
 
                         UserInfoBean users = mGson.fromJson(body, UserInfoBean.class);
 
+                        UserInfoBean unique1 = mUserInfoBeanDao.queryBuilder().where(UserInfoBeanDao.Properties.UserId.eq(users.getUserId())).build().unique();
+                        unique1.setIsOnLine("0");
+                        mUserInfoBeanDao.insertOrReplace(unique1);
+
                         if (LTConfigure.getInstance().getLtApi().onReFreshListener != null) {
-                            LTConfigure.getInstance().getLtApi().onReFreshListener.onFriendsReFresh(users);
+                            LTConfigure.getInstance().getLtApi().onReFreshListener.onFriendsReFresh(unique1);
                         }
                     }
                     break;
@@ -771,6 +779,7 @@ public class TcpCmd {
                         System.arraycopy(bodyBytes, 0, jsonBytes, 0, bodyBytes.length);
                         body = ByteIntUtils.utfToString(jsonBytes);
                         UserInfoBean users = mGson.fromJson(body, UserInfoBean.class);
+                        mUserInfoBeanDao.insertOrReplace(users);
 
                         if (LTConfigure.getInstance().getLtApi().onReFreshListener != null) {
                             LTConfigure.getInstance().getLtApi().onReFreshListener.onFriendsReFresh(users);
@@ -784,6 +793,7 @@ public class TcpCmd {
                         System.arraycopy(bodyBytes, 0, jsonBytes, 0, bodyBytes.length);
                         body = ByteIntUtils.utfToString(jsonBytes);
                         UserInfoBean users = mGson.fromJson(body, UserInfoBean.class);
+                        mUserInfoBeanDao.delete(users);
 
                         if (LTConfigure.getInstance().getLtApi().onReFreshListener != null) {
                             LTConfigure.getInstance().getLtApi().onReFreshListener.onFriendsDel(users);
@@ -797,6 +807,11 @@ public class TcpCmd {
                         System.arraycopy(bodyBytes, 0, jsonBytes, 0, bodyBytes.length);
                         body = ByteIntUtils.utfToString(jsonBytes);
                         UserInfoBean users = mGson.fromJson(body, UserInfoBean.class);
+
+//                        UserInfoBean unique1 = mUserInfoBeanDao.queryBuilder().where(UserInfoBeanDao.Properties.UserId.eq(users.getUserId())).build().unique();
+//                        unique1.setIsOnLine("1");
+                        mUserInfoBeanDao.insertOrReplace(users);
+
                         LogUtil.error("TcpCmd", "680\tcmdExplore()\n" + body);
                         if (LTConfigure.getInstance().getLtApi().onReFreshListener != null) {
                             LTConfigure.getInstance().getLtApi().onReFreshListener.onFriendsReFresh(users);
@@ -809,6 +824,7 @@ public class TcpCmd {
                         System.arraycopy(bodyBytes, 0, jsonBytes, 0, bodyBytes.length);
                         body = ByteIntUtils.utfToString(jsonBytes);
                         GroupInfoBean users = mGson.fromJson(body, GroupInfoBean.class);
+                        mGroupInfoBeanDao.delete(users);
 
                         if (LTConfigure.getInstance().getLtApi().onReFreshListener != null) {
                             LTConfigure.getInstance().getLtApi().onReFreshListener.onGroupDel(users);
@@ -821,6 +837,7 @@ public class TcpCmd {
                         System.arraycopy(bodyBytes, 0, jsonBytes, 0, bodyBytes.length);
                         body = ByteIntUtils.utfToString(jsonBytes);
                         GroupInfoBean users = mGson.fromJson(body, GroupInfoBean.class);
+                        mGroupInfoBeanDao.insertOrReplace(users);
 
                         if (LTConfigure.getInstance().getLtApi().onReFreshListener != null) {
                             LTConfigure.getInstance().getLtApi().onReFreshListener.onGroupReFresh(users);

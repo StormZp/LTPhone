@@ -275,6 +275,17 @@ public class LTApi {
     }
 
     /**
+     * 获取好友列表
+     *
+     * @return
+     */
+    public ArrayList<UserInfoBean> getFriendsList() {
+        ArrayList<UserInfoBean> userInfoBeans = new ArrayList<>();
+        userInfoBeans.addAll(userInfoBeanDao.loadAll());
+        return userInfoBeans;
+    }
+
+    /**
      * 获取好友聊天记录
      *
      * @param receiveId 好友id
@@ -588,7 +599,7 @@ public class LTApi {
     }
 
 
-    public void voiceStop(){
+    public void voiceStop() {
         UdpSocket.Companion.getInstance().stopPlay();
         UdpSocket.Companion.getInstance().closeUdp();
     }

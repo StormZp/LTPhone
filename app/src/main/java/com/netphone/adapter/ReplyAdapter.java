@@ -11,11 +11,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.google.gson.Gson;
 import com.netphone.R;
 import com.netphone.netsdk.LTApi;
 import com.netphone.netsdk.Tool.Constant;
 import com.netphone.netsdk.Tool.TcpConfig;
 import com.netphone.netsdk.bean.ReplyMsgBean;
+import com.netphone.netsdk.utils.LogUtil;
 import com.netphone.ui.activity.FriendChatActivity;
 import com.netphone.utils.ChatTimeUtil;
 import com.netphone.utils.GlideCircleTransform;
@@ -65,6 +67,7 @@ public class ReplyAdapter extends RecyclerView.Adapter<ReplyAdapter.ViewHolder> 
         if (user.getReceiver() == null) {
             user.setReceiver(LTApi.getInstance().getUserInfo(user.getReceiveID()));
         }
+        LogUtil.error("ReplyAdapter", "68\tonBindViewHolder()\n" +new  Gson().toJson(user));
         if (user.getReceiver() != null) {
             viewHolder.name.setText(user.getReceiver().getRealName());
             viewHolder.content.setText(user.getLastMsg());

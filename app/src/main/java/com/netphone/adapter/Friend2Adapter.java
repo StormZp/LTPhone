@@ -42,14 +42,16 @@ public class Friend2Adapter extends RecyclerView.Adapter<Friend2Adapter.ViewHold
         this.mContext = mContext;
         mGlideCircleTransform = new GlideCircleTransform(mContext);
         this.list = list;
+        Collections.sort(list); // 对list进行排序，需要让User实现Comparable接口重写compareTo方法
         mLayoutInflater = LayoutInflater.from(mContext);
     }
 
     public void setList(List<UserInfoBean> list) {
 //        this.list.clear();
 //        this.list.addAll(list);
+        this.list = list;
         LogUtil.error("Friend2Adapter", "50\tsetList()\n" + list.size());
-        Collections.sort(this.list); // 对list进行排序，需要让User实现Comparable接口重写compareTo方法
+        Collections.sort(list); // 对list进行排序，需要让User实现Comparable接口重写compareTo方法
         notifyDataSetChanged();
     }
 
@@ -103,9 +105,9 @@ public class Friend2Adapter extends RecyclerView.Adapter<Friend2Adapter.ViewHold
         viewHolder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (user.getUserId().equals(curr.getUserId())){
+                if (user.getUserId().equals(curr.getUserId())) {
                     ToastUtil.Companion.toasts(mContext.getResources().getString(R.string.chat_with_u));
-                }else {
+                } else {
                     if (!Constant.isOnline) {
                         ToastUtil.Companion.toasts(mContext.getResources().getString(R.string.already_line_off));
                         return;

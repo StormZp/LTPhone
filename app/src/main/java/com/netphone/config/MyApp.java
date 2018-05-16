@@ -2,6 +2,8 @@ package com.netphone.config;
 
 import android.app.Application;
 import android.content.Context;
+import android.os.Build;
+import android.os.StrictMode;
 import android.support.multidex.MultiDex;
 
 import com.netphone.netsdk.LTConfigure;
@@ -38,6 +40,13 @@ public class MyApp extends Application {
         CrashHandler.getInstance().init(mContext);
 
         ToastUtil.Companion.init(mContext);
+
+        // android 7.0系统解决拍照的问题
+        StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+        StrictMode.setVmPolicy(builder.build());
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            builder.detectFileUriExposure();
+        }
     }
 
 

@@ -9,6 +9,7 @@ import org.greenrobot.greendao.DaoException;
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Id;
+import org.greenrobot.greendao.annotation.NotNull;
 import org.greenrobot.greendao.annotation.ToOne;
 
 /**
@@ -26,6 +27,7 @@ public class ReplyMsgBean {
 
 
     private String userId;//当前用户id
+    @NotNull
     private String receiveID;//消息列表的用户id
     private String receiveName;//消息列表的用户名
     private int    unread;//未读数
@@ -42,9 +44,9 @@ public class ReplyMsgBean {
     /** Used for active entity operations. */
     @Generated(hash = 1482789800)
     private transient ReplyMsgBeanDao myDao;
-    @Generated(hash = 741537379)
-    public ReplyMsgBean(Long id, String userId, String receiveID,
-            String receiveName, int unread, String lastMsg, long lastTime) {
+    @Generated(hash = 309302885)
+    public ReplyMsgBean(Long id, String userId, @NotNull String receiveID, String receiveName,
+            int unread, String lastMsg, long lastTime) {
         this.id = id;
         this.userId = userId;
         this.receiveID = receiveID;
@@ -148,11 +150,15 @@ public class ReplyMsgBean {
         return receiver;
     }
     /** called by internal mechanisms, do not call yourself. */
-    @Generated(hash = 1914448516)
-    public void setReceiver(UserInfoBean receiver) {
+    @Generated(hash = 949687934)
+    public void setReceiver(@NotNull UserInfoBean receiver) {
+        if (receiver == null) {
+            throw new DaoException(
+                    "To-one property 'receiveID' has not-null constraint; cannot set to-one to null");
+        }
         synchronized (this) {
             this.receiver = receiver;
-            receiveID = receiver == null ? null : receiver.getUserId();
+            receiveID = receiver.getUserId();
             receiver__resolvedKey = receiveID;
         }
     }

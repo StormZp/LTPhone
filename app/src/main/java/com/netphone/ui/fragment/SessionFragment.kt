@@ -8,12 +8,14 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.google.gson.Gson
 import com.netphone.R
 import com.netphone.adapter.ReplyAdapter
 import com.netphone.config.EventConfig
 import com.netphone.databinding.FragmentSessionBinding
 import com.netphone.netsdk.LTApi
 import com.netphone.netsdk.base.AppBean
+import com.netphone.netsdk.utils.LogUtil
 import com.storm.tool.base.BaseFragment
 
 /**
@@ -29,7 +31,9 @@ class SessionFragment : BaseFragment<FragmentSessionBinding>() {
 
     override fun onResume() {
         super.onResume()
-        adapter.setDatas(LTApi.getInstance().getSessionList())
+        var sessionList = LTApi.getInstance().getSessionList()
+        LogUtil.error("SessionFragment.kt", "33\tonResume()\n" + Gson().toJson(sessionList));
+        adapter.setDatas(sessionList)
     }
 
     override fun receiveEvent(appBean: AppBean<Any>) {
@@ -46,6 +50,15 @@ class SessionFragment : BaseFragment<FragmentSessionBinding>() {
                     binding.tvHint.visibility = View.GONE
                 }
 
+            }
+            EventConfig.REFRESH_FRIEND -> {
+                if (adapter == null) {
+                    adapter = ReplyAdapter(context, LTApi.getInstance().getSessionList())
+                    binding.recycle.adapter = adapter
+                    binding.recycle.layoutManager = LinearLayoutManager(context)
+                }
+                adapter.setDatas( LTApi.getInstance().getSessionList())
+                adapter.notifyDataSetChanged()
             }
         }
     }

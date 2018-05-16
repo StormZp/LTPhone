@@ -56,7 +56,7 @@ public class ReplyMsgBeanDao extends AbstractDao<ReplyMsgBean, Long> {
         db.execSQL("CREATE TABLE " + constraint + "\"REPLY_MSG_BEAN\" (" + //
                 "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: id
                 "\"USER_ID\" TEXT," + // 1: userId
-                "\"RECEIVE_ID\" TEXT," + // 2: receiveID
+                "\"RECEIVE_ID\" TEXT NOT NULL ," + // 2: receiveID
                 "\"RECEIVE_NAME\" TEXT," + // 3: receiveName
                 "\"UNREAD\" INTEGER NOT NULL ," + // 4: unread
                 "\"LAST_MSG\" TEXT," + // 5: lastMsg
@@ -82,11 +82,7 @@ public class ReplyMsgBeanDao extends AbstractDao<ReplyMsgBean, Long> {
         if (userId != null) {
             stmt.bindString(2, userId);
         }
- 
-        String receiveID = entity.getReceiveID();
-        if (receiveID != null) {
-            stmt.bindString(3, receiveID);
-        }
+        stmt.bindString(3, entity.getReceiveID());
  
         String receiveName = entity.getReceiveName();
         if (receiveName != null) {
@@ -114,11 +110,7 @@ public class ReplyMsgBeanDao extends AbstractDao<ReplyMsgBean, Long> {
         if (userId != null) {
             stmt.bindString(2, userId);
         }
- 
-        String receiveID = entity.getReceiveID();
-        if (receiveID != null) {
-            stmt.bindString(3, receiveID);
-        }
+        stmt.bindString(3, entity.getReceiveID());
  
         String receiveName = entity.getReceiveName();
         if (receiveName != null) {
@@ -149,7 +141,7 @@ public class ReplyMsgBeanDao extends AbstractDao<ReplyMsgBean, Long> {
         ReplyMsgBean entity = new ReplyMsgBean( //
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
             cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // userId
-            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // receiveID
+            cursor.getString(offset + 2), // receiveID
             cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // receiveName
             cursor.getInt(offset + 4), // unread
             cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // lastMsg
@@ -162,7 +154,7 @@ public class ReplyMsgBeanDao extends AbstractDao<ReplyMsgBean, Long> {
     public void readEntity(Cursor cursor, ReplyMsgBean entity, int offset) {
         entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
         entity.setUserId(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
-        entity.setReceiveID(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
+        entity.setReceiveID(cursor.getString(offset + 2));
         entity.setReceiveName(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
         entity.setUnread(cursor.getInt(offset + 4));
         entity.setLastMsg(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
@@ -222,7 +214,9 @@ public class ReplyMsgBeanDao extends AbstractDao<ReplyMsgBean, Long> {
         offset += daoSession.getUserInfoBeanDao().getAllColumns().length;
 
         UserInfoBean receiver = loadCurrentOther(daoSession.getUserInfoBeanDao(), cursor, offset);
-        entity.setReceiver(receiver);
+         if(receiver != null) {
+            entity.setReceiver(receiver);
+        }
 
         return entity;    
     }

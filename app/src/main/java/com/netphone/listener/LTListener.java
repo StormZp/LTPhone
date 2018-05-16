@@ -31,7 +31,6 @@ import com.netphone.netsdk.listener.OnManagerListener;
 import com.netphone.netsdk.listener.OnNetworkListener;
 import com.netphone.netsdk.listener.OnReFreshListener;
 import com.netphone.netsdk.utils.EventBusUtil;
-import com.netphone.netsdk.utils.LogUtil;
 import com.netphone.ui.activity.BigImageActivity;
 import com.netphone.ui.activity.BroadcastSendActivity;
 import com.netphone.ui.activity.FriendVoiceActivity;
@@ -206,7 +205,7 @@ public class LTListener {
 
             @Override
             public void listenerStop() {
-                EventBusUtil.sendEvent(new AppBean(EventConfig.MANAGER_LISTENR_STOP,null));
+                EventBusUtil.sendEvent(new AppBean(EventConfig.MANAGER_LISTENR_STOP, null));
             }
 
             @Override
@@ -236,8 +235,10 @@ public class LTListener {
                     Constant.myFriendList = new ArrayList<>();
                 }
 //                Constant.myFriendList.clear();
-                LogUtil.error("LTListener", "179\tonReFriendsFresh()\n" + userListBean.size());
-                Constant.myFriendList.addAll(userListBean);
+//                LogUtil.error("LTListener", "179\tonReFriendsFresh()\n" + userListBean.size());
+//                Constant.myFriendList.addAll(userListBean);
+                Constant.myFriendList = LTApi.getInstance().getFriendsList();
+
                 EventBusUtil.sendEvent(new AppBean(EventConfig.REFRESH_FRIEND, null));
             }
 

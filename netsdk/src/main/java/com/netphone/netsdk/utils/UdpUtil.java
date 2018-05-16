@@ -24,6 +24,7 @@ public class UdpUtil {
      * @return
      */
     public static byte[] udpDataEncode(byte[] audios) {
+
         byte[] voices = new byte[audios.length + VOID_HEAD_LENGHT];
         voices[0] = (byte) 0xff;//帧头
         //语音长度
@@ -38,9 +39,10 @@ public class UdpUtil {
         voices[6] = idBytes[3];
 
 
-        System.arraycopy(audios, 0, voices, 9, audios.length);
+        System.arraycopy(audios, 0, voices, VOID_HEAD_LENGHT-1, audios.length);
         //帧尾
-        voices[audios.length + 9] = (byte) 0xff;
+        voices[audios.length + VOID_HEAD_LENGHT-1] = (byte) 0xff;
+
         return voices;
     }
 
@@ -57,7 +59,7 @@ public class UdpUtil {
 
         byte[] voicepacks = new byte[length - 2];
         LogUtil.error("UdpUtil", "56\tudpDataUncode()\n" + voicepacks.length + "\t" + pack.length);
-        System.arraycopy(pack, 9, voicepacks, 0, length - 2);
+        System.arraycopy(pack, VOID_HEAD_LENGHT-1, voicepacks, 0, length - 2);
         return voicepacks;
     }
 

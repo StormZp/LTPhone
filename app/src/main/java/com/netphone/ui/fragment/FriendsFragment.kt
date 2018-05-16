@@ -17,7 +17,6 @@ import com.netphone.databinding.FragmentFriendsBinding
 import com.netphone.netsdk.LTApi
 import com.netphone.netsdk.base.AppBean
 import com.storm.tool.base.BaseFragment
-import java.util.*
 
 
 /**
@@ -33,7 +32,10 @@ class FriendsFragment : BaseFragment<FragmentFriendsBinding>() {
     override fun receiveEvent(appBean: AppBean<Any>) {
         when (appBean.code) {
             EventConfig.REFRESH_FRIEND -> {
-                friend2Adapter.setList(Constant.myFriendList)
+                friend2Adapter = Friend2Adapter(context, LTApi.getInstance().friendsList)
+                mLinearLayoutManager = LinearLayoutManager(context)
+                binding.listView.layoutManager = mLinearLayoutManager
+                binding.listView.adapter = friend2Adapter
 //                friend2Adapter.setOnline(true)
 
             }
@@ -94,7 +96,7 @@ class FriendsFragment : BaseFragment<FragmentFriendsBinding>() {
                     binding.listView.layoutManager = mLinearLayoutManager
                     binding.listView.adapter = friend2Adapter
                 } else {
-                    friend2Adapter = Friend2Adapter(context, Constant.myFriendList)
+                    friend2Adapter = Friend2Adapter(context,LTApi.getInstance().friendsList)
                     mLinearLayoutManager = LinearLayoutManager(context)
                     binding.listView.layoutManager = mLinearLayoutManager
                     binding.listView.adapter = friend2Adapter
@@ -121,14 +123,11 @@ class FriendsFragment : BaseFragment<FragmentFriendsBinding>() {
             Constant.myFriendList = arrayListOf();
         }
 
-        if (Constant.myFriendList != null) {
 //            LogUtil.error("FriendsFragment.kt", "83\tinitData()\n" + Constant.myGroupList.size);
-            Collections.sort(Constant.myFriendList); // 对list进行排序，需要让User实现Comparable接口重写compareTo方法
-            friend2Adapter = Friend2Adapter(context, Constant.myFriendList)
+            friend2Adapter = Friend2Adapter(context, LTApi.getInstance().friendsList)
             mLinearLayoutManager = LinearLayoutManager(context)
             binding.listView.layoutManager = mLinearLayoutManager
             binding.listView.adapter = friend2Adapter
-        }
     }
 
 

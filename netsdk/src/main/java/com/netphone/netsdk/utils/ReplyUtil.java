@@ -72,7 +72,7 @@ public class ReplyUtil {
 
     public static List<ReplyMsgBean> getList(String userId) {
         ReplyMsgBeanDao replyMsgBeanDao = LTConfigure.getInstance().getDaoSession().getReplyMsgBeanDao();
-        return replyMsgBeanDao.queryBuilder().where(ReplyMsgBeanDao.Properties.UserId.eq(userId)).orderDesc(ReplyMsgBeanDao.Properties.LastTime).list();
+        return replyMsgBeanDao.queryBuilder().where(ReplyMsgBeanDao.Properties.UserId.eq(userId),ReplyMsgBeanDao.Properties.ReceiveID.isNotNull()).orderDesc(ReplyMsgBeanDao.Properties.LastTime).list();
     }
 
 }

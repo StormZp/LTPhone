@@ -10,6 +10,7 @@ import android.media.audiofx.AutomaticGainControl;
 import android.media.audiofx.NoiseSuppressor;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
+import android.util.Log;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -56,7 +57,8 @@ public class VoiceUtil {
         if (adpcm == null)
             adpcm = new ADPCM();
         if (bufferSize == 0) {
-            bufferSize = AudioRecord.getMinBufferSize(samp_rate, channelConfig, audioFormat) / 2;
+//            bufferSize = AudioRecord.getMinBufferSize(samp_rate, channelConfig, audioFormat) / 2;
+            bufferSize = 320;
         }
         record = new AudioRecord(audioSource, samp_rate, channelConfig, audioFormat, bufferSize);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN && record.getAudioSessionId() != 0) {
@@ -104,6 +106,7 @@ public class VoiceUtil {
                     adpcm.adpcm_thirdparty_reset();
                     zip = adpcm.adpcm_coder(audioData, zip, audioData.length);
 
+                    Log.e("adpcm","bufferSize:"+bufferSize+"\tzip:"+zip.length);
                     if (zip != null && onRecordListener != null) {
                         onRecordListener.recording(zip);
                     }
@@ -171,7 +174,8 @@ public class VoiceUtil {
         if (adpcm == null)
             adpcm = new ADPCM();
         if (bufferSize == 0) {
-            bufferSize = AudioRecord.getMinBufferSize(samp_rate, channelConfig, audioFormat) / 2;
+//            bufferSize = AudioRecord.getMinBufferSize(samp_rate, channelConfig, audioFormat) / 2;
+            bufferSize = 320;
         }
         track = new AudioTrack(AudioManager.STREAM_VOICE_CALL, samp_rate, channelConfig, audioFormat,
                 bufferSize * 2 * 10, AudioTrack.MODE_STREAM);
@@ -180,6 +184,8 @@ public class VoiceUtil {
 
 
     public void setPlayData(byte[] data) {
+        if (adpcm == null)
+            adpcm = new ADPCM();
         short[] decode = new short[data.length * 2];
         adpcm.adpcm_thirdparty_reset();
         decode = adpcm.adpcm_decoder(data, decode, data.length);
