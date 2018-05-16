@@ -15,16 +15,17 @@ import com.netphone.R
 import com.netphone.config.EventConfig
 import com.netphone.config.MyApp
 import com.netphone.databinding.ActivityMainBinding
+import com.netphone.listener.LTListener
 import com.netphone.netsdk.LTApi
 import com.netphone.netsdk.LTConfigure
 import com.netphone.netsdk.base.AppBean
 import com.netphone.netsdk.listener.OnErrorListener
+import com.netphone.netsdk.utils.LogUtil
 import com.netphone.ui.dialog.PermissionDialog
 import com.netphone.ui.fragment.FriendsFragment
 import com.netphone.ui.fragment.GroupsFragment
 import com.netphone.ui.fragment.SessionFragment
 import com.netphone.ui.fragment.SettingFragment
-import com.netphone.utils.LTListener
 import com.netphone.utils.ToastUtil
 import com.storm.developapp.tools.AppManager
 import com.storm.tool.base.BaseActivity
@@ -95,12 +96,14 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
             }
         }
         binding.viewpage.offscreenPageLimit = 4//缓存页数
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
-            getRxPermissions().shouldShowRequestPermissionRationale(activity, Manifest.permission.RECORD_AUDIO, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.READ_EXTERNAL_STORAGE).subscribe(object : Consumer<Boolean> {
+            getRxPermissions().shouldShowRequestPermissionRationale(activity, Manifest.permission.RECORD_AUDIO).subscribe(object : Consumer<Boolean> {
                 override fun accept(t: Boolean?) {
                     if (!t!!) {
                         jump(PermissionDialog::class.java)
                     } else {
+                        LogUtil.error("MainActivity.kt","105\taccept()\n"+"都有权限");
                         LTConfigure.getInstance().startLocationService()
                     }
                 }

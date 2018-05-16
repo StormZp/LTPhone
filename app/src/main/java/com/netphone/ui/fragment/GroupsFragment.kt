@@ -57,6 +57,16 @@ class GroupsFragment : BaseFragment<FragmentGroupsBinding>() {
                     initData()
                 }
             }
+
+            EventConfig.LINE_STATE -> {
+                var state = appBean.data as Int
+                if (state == 0) {
+                    Constant.myGroupList = arrayListOf()
+                    groupAdapter = GroupAdapter(context,  Constant.myGroupList);
+                    binding.recycle.adapter = groupAdapter;
+                }
+            }
+
             EventConfig.GROUP_REFRESH -> {
                 if (appBean.data != null) {
                     var infoBean = appBean.data as GroupInfoBean

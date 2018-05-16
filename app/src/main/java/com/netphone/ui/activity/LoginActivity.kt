@@ -5,7 +5,6 @@ import android.text.TextUtils
 import android.view.KeyEvent
 import android.view.View
 import com.githang.statusbar.StatusBarCompat
-import com.netphone.BuildConfig
 import com.netphone.R
 import com.netphone.config.MyApp
 import com.netphone.databinding.ActivityLoginBinding
@@ -77,10 +76,10 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>() {
         binding.click = onClick()
         StatusBarCompat.setStatusBarColor(this, context.resources.getColor(R.color.black), false);
 
-        if (BuildConfig.DEBUG) {
+//        if (BuildConfig.DEBUG) {
             binding.etAccount.setText(SharedPreferenceUtil.read(Constant.username, ""))
             binding.etPassword.setText(SharedPreferenceUtil.read(Constant.password, ""))
-        }
+//        }
 
 
     }

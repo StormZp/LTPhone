@@ -34,7 +34,7 @@ class FriendsFragment : BaseFragment<FragmentFriendsBinding>() {
         when (appBean.code) {
             EventConfig.REFRESH_FRIEND -> {
                 friend2Adapter.setList(Constant.myFriendList)
-                friend2Adapter.setOnline(true)
+//                friend2Adapter.setOnline(true)
 
             }
             EventConfig.LINE_STATE -> {

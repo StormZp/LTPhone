@@ -1,4 +1,4 @@
-package com.netphone.utils;
+package com.netphone.listener;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -40,6 +40,7 @@ import com.netphone.ui.activity.LoginActivity;
 import com.netphone.ui.activity.MainActivity;
 import com.netphone.ui.activity.VoicePlayActivity;
 import com.netphone.ui.dialog.MessageDialog;
+import com.netphone.utils.ToastUtil;
 import com.storm.developapp.tools.AppManager;
 
 import java.util.ArrayList;
