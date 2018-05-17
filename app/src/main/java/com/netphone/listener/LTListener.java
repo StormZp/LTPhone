@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.NotificationCompat;
 
+import com.google.gson.Gson;
 import com.netphone.R;
 import com.netphone.config.Constant;
 import com.netphone.config.EventConfig;
@@ -31,6 +32,7 @@ import com.netphone.netsdk.listener.OnManagerListener;
 import com.netphone.netsdk.listener.OnNetworkListener;
 import com.netphone.netsdk.listener.OnReFreshListener;
 import com.netphone.netsdk.utils.EventBusUtil;
+import com.netphone.netsdk.utils.LogUtil;
 import com.netphone.ui.activity.BigImageActivity;
 import com.netphone.ui.activity.BroadcastSendActivity;
 import com.netphone.ui.activity.FriendVoiceActivity;
@@ -299,6 +301,7 @@ public class LTListener {
                         Constant.myGroupList.add(bean);
                     }
                 }
+                LogUtil.error("LTListener", "302\tonGroupReFresh()\n" + new Gson().toJson(bean));
                 EventBusUtil.sendEvent(new AppBean(EventConfig.GROUP_REFRESH, bean));
             }
 

@@ -21,6 +21,7 @@ public class DaoMaster extends AbstractDaoMaster {
 
     /** Creates underlying database table using DAOs. */
     public static void createAllTables(Database db, boolean ifNotExists) {
+        CurrentGroupBeanDao.createTable(db, ifNotExists);
         FriendChatMsgBeanDao.createTable(db, ifNotExists);
         GroupChatMsgBeanDao.createTable(db, ifNotExists);
         GroupInfoBeanDao.createTable(db, ifNotExists);
@@ -28,11 +29,11 @@ public class DaoMaster extends AbstractDaoMaster {
         LastPositionBeanDao.createTable(db, ifNotExists);
         ReplyMsgBeanDao.createTable(db, ifNotExists);
         UserInfoBeanDao.createTable(db, ifNotExists);
-        CurrentGroupBeanDao.createTable(db, ifNotExists);
     }
 
     /** Drops underlying database table using DAOs. */
     public static void dropAllTables(Database db, boolean ifExists) {
+        CurrentGroupBeanDao.dropTable(db, ifExists);
         FriendChatMsgBeanDao.dropTable(db, ifExists);
         GroupChatMsgBeanDao.dropTable(db, ifExists);
         GroupInfoBeanDao.dropTable(db, ifExists);
@@ -40,7 +41,6 @@ public class DaoMaster extends AbstractDaoMaster {
         LastPositionBeanDao.dropTable(db, ifExists);
         ReplyMsgBeanDao.dropTable(db, ifExists);
         UserInfoBeanDao.dropTable(db, ifExists);
-        CurrentGroupBeanDao.dropTable(db, ifExists);
     }
 
     /**
@@ -59,6 +59,7 @@ public class DaoMaster extends AbstractDaoMaster {
 
     public DaoMaster(Database db) {
         super(db, SCHEMA_VERSION);
+        registerDaoClass(CurrentGroupBeanDao.class);
         registerDaoClass(FriendChatMsgBeanDao.class);
         registerDaoClass(GroupChatMsgBeanDao.class);
         registerDaoClass(GroupInfoBeanDao.class);
@@ -66,7 +67,6 @@ public class DaoMaster extends AbstractDaoMaster {
         registerDaoClass(LastPositionBeanDao.class);
         registerDaoClass(ReplyMsgBeanDao.class);
         registerDaoClass(UserInfoBeanDao.class);
-        registerDaoClass(CurrentGroupBeanDao.class);
     }
 
     public DaoSession newSession() {

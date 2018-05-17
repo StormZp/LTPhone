@@ -14,6 +14,7 @@ import com.netphone.R
 import com.netphone.adapter.GroupChatAdapter
 import com.netphone.config.EventConfig
 import com.netphone.databinding.ActivityChatGroupBinding
+import com.netphone.listener.LTListener
 import com.netphone.netsdk.LTApi
 import com.netphone.netsdk.LTConfigure
 import com.netphone.netsdk.Tool.TcpConfig
@@ -24,7 +25,6 @@ import com.netphone.netsdk.bean.UserInfoBean
 import com.netphone.netsdk.utils.LogUtil
 import com.netphone.utils.AppUtil
 import com.netphone.utils.GlideCircleTransform
-import com.netphone.listener.LTListener
 import com.netphone.view.InputMethodLayout
 import com.storm.tool.base.BaseActivity
 
@@ -191,11 +191,27 @@ open class GroupChatActivity : BaseActivity<ActivityChatGroupBinding>() {
             }
             EventConfig.GROUP_REFRESH -> {//刷新
                 var infoBean = appBean.data as GroupInfoBean
+                LogUtil.error("GroupChatActivity.kt", "194\treceiveEvent()\n" + Gson().toJson(infoBean));
+                if (infoBean == null) {
+                    return
+                }
+//                LogUtil.error("GroupChatActivity.kt","194\treceiveEvent()\n"+"infoBean:"+infoBean.groupID+"\tcurrent:"+groupInfo.groupID);
                 activity.runOnUiThread {
-                    if (infoBean == null && !TextUtils.isEmpty(infoBean.groupID) && infoBean.groupID.equals(groupInfo.groupID))
-                        if (infoBean.micer != null) {
+                    if (infoBean != null && !TextUtils.isEmpty(infoBean.groupID) && infoBean.groupID.equals(groupInfo.groupID))
+                        LogUtil.error("GroupChatActivity.kt","201\treceiveEvent()\n"+"userId:"+infoBean.micer.userId+"\t"+Gson().toJson(infoBean.micer));
+                        if (infoBean.micer != null && !TextUtils.isEmpty(infoBean.micer.userId)) {
                             binding.layMic.visibility = View.VISIBLE
+                            var userInfo = LTApi.getInstance().getUserInfo(infoBean.micer.userId)
+                            LogUtil.error("GroupChatActivity.kt","205\treceiveEvent()\n"+Gson().toJson(userInfo));
+                            if (userInfo == null) {
+                                binding.layMic.visibility = View.GONE
+                                return@runOnUiThread
+                            } else {
+                                binding.tvCurrent.setText(userInfo.realName)
+                                Glide.with(LTConfigure.mContext).load(TcpConfig.URL + userInfo.getHeadIcon()).placeholder(R.mipmap.icon_defult_detail).error(R.mipmap.icon_defult_detail).transform(mGlideCircleTransform).into(binding.ivCurrent)
 
+                            }
+                            LogUtil.error("GroupChatActivity.kt", "201\treceiveEvent()\n" + Gson().toJson(userInfo));
                         } else {
                             binding.layMic.visibility = View.GONE
                         }

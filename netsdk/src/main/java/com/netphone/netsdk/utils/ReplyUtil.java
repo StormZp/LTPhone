@@ -29,6 +29,7 @@ public class ReplyUtil {
             int unread = unique.getUnread();
             unique.setUnread(++unread);
             unique.setReceiveName(receiveName);
+            unique.setReceiveID(receiveId);
             unique.setLastTime(System.currentTimeMillis());
             replyMsgBeanDao.insertOrReplace(unique);
         }
@@ -39,8 +40,8 @@ public class ReplyUtil {
         ReplyMsgBean    unique          = replyMsgBeanDao.queryBuilder().where(ReplyMsgBeanDao.Properties.ReceiveID.eq(receiveId), ReplyMsgBeanDao.Properties.UserId.eq(userId)).unique();
         if (unique == null) {
             unique = new ReplyMsgBean();
-            unique.setReceiveID(receiveId);
             unique.setUserId(userId);
+            unique.setReceiveID(receiveId);
             unique.setReceiveName(receiveName);
             unique.setLastMsg(msg);
             unique.setLastTime(System.currentTimeMillis());
@@ -55,6 +56,7 @@ public class ReplyUtil {
                 unique.setLastMsg(msg);
             }
             unique.setReceiveName(receiveName);
+            unique.setReceiveID(receiveId);
             unique.setLastTime(System.currentTimeMillis());
             replyMsgBeanDao.insertOrReplace(unique);
         }
@@ -65,6 +67,7 @@ public class ReplyUtil {
         ReplyMsgBean    unique          = replyMsgBeanDao.queryBuilder().where(ReplyMsgBeanDao.Properties.ReceiveID.eq(receiveId), ReplyMsgBeanDao.Properties.UserId.eq(userId)).unique();
         if (unique != null) {
             unique.setUnread(0);
+            unique.setReceiveID(receiveId);
             unique.setLastTime(System.currentTimeMillis());
             replyMsgBeanDao.insertOrReplace(unique);
         }

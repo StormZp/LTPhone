@@ -686,14 +686,15 @@ public class TcpCmd {
                         LogUtil.error("TcpCmd", "568\tcmdExplore()\n" + body);
                         GroupInfoBean group = mGson.fromJson(body, GroupInfoBean.class);
                         mGroupInfoBeanDao.insertOrReplace(group);
-                        if (LTApi.getInstance().onReFreshListener != null) {
-                            LTApi.getInstance().onReFreshListener.onGroupReFresh(group);
-                        }
+//                        if (LTApi.getInstance().onReFreshListener != null) {
+//                            LTApi.getInstance().onReFreshListener.onGroupReFresh(group);
+//                        }
                         break;
                     case 0x29://群组麦权变更
                         body = ByteIntUtils.utfToString(bodyBytes);
                         LogUtil.error("TcpCmd", "568\tcmdExplore()\n" + body);
                         GroupInfoBean group2 = mGson.fromJson(body, GroupInfoBean.class);
+                        LogUtil.error("TcpCmd", "568\tcmdExplore()\n" + new Gson().toJson(group2));
 
                         if (LTApi.getInstance().onReFreshListener != null) {
                             LTApi.getInstance().onReFreshListener.onGroupReFresh(group2);
@@ -867,6 +868,26 @@ public class TcpCmd {
                         if (LTConfigure.getInstance().getLtApi().onReFreshListener != null) {
                             LTConfigure.getInstance().getLtApi().onReFreshListener.onGroupDel(users);
                         }
+                    }
+                    break;
+                    case 0x47:// 企业成员在线状态变化
+                    {
+                        byte[] jsonBytes = new byte[bodyBytes.length];
+                        System.arraycopy(bodyBytes, 0, jsonBytes, 0, bodyBytes.length);
+                        body = ByteIntUtils.utfToString(jsonBytes);
+
+                        List<UserInfoBean> users = mGson.fromJson(body, new TypeToken<List<UserInfoBean>>() {
+                        }.getType());
+                        for (int i = 0; i < users.size(); i++) {
+                            UserInfoBean unique1 = mUserInfoBeanDao.queryBuilder().where(UserInfoBeanDao.Properties.UserId.eq(users.get(i).getUserId())).build().unique();
+                            unique1.setIsOnLine(users.get(i).getIsOnLine());
+                            mUserInfoBeanDao.insertOrReplace(unique1);
+                        }
+
+                        if (LTConfigure.getInstance().getLtApi().onReFreshListener != null) {
+                            LTConfigure.getInstance().getLtApi().onReFreshListener.onReFriendsFresh(users);
+                        }
+
                     }
                     break;
                 }

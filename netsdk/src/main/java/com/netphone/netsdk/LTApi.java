@@ -242,7 +242,7 @@ public class LTApi {
         friendChatMsgBeanDao.insertOrReplace(bean);
 
         UserInfoBean userInfo = getUserInfo(id);
-        ReplyUtil.insertMsg(bean.getReceiveId(), userInfo.getRealName(), bean.getUserId(), bean.getMsg(), true);
+        ReplyUtil.insertMsg(id, userInfo.getRealName(), bean.getUserId(), bean.getMsg(), true);
 
         if (LTApi.getInstance().onReFreshListener != null) {
             LTApi.getInstance().onReFreshListener.onFriendChatMsg(bean);
@@ -271,6 +271,11 @@ public class LTApi {
         ArrayList<ReplyMsgBean> replyMsgBeans = new ArrayList<>();
         if (Constant.info != null)
             replyMsgBeans.addAll(ReplyUtil.getList(Constant.info.getUserId()));
+
+        for (int i = 0; i < replyMsgBeans.size(); i++) {
+            replyMsgBeans.get(i).setReceiver(getUserInfo(replyMsgBeans.get(i).getReceiveID()));
+        }
+        LogUtil.error("LTApi", "274\tgetSessionList()\n" + new Gson().toJson(replyMsgBeans));
         return replyMsgBeans;
     }
 
@@ -333,17 +338,18 @@ public class LTApi {
      * @return
      */
     public UserInfoBean getUserInfo(String userId) {
-        try {
-            UserInfoBean unique = userInfoBeanDao.queryBuilder().where(UserInfoBeanDao.Properties.UserId.eq(userId)).unique();
-            if (unique == null)
-                return new UserInfoBean();
-            else
-                return unique;
-        } catch (Exception e) {
-            LogUtil.error("LTApi", "323\tgetUserInfo()\n" + e);
-            return new UserInfoBean();
-        }
-
+        if (!TextUtils.isEmpty(userId))
+            try {
+                UserInfoBean unique = userInfoBeanDao.queryBuilder().where(UserInfoBeanDao.Properties.UserId.eq(userId)).build().unique();
+                if (unique != null) {
+                    return unique;
+                } else {
+                    return new UserInfoBean();
+                }
+            } catch (Exception e) {
+                LogUtil.error("323\tgetUserInfo()\n" + userId, e);
+            }
+        return null;
     }
 
 
