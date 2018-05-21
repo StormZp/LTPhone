@@ -4,10 +4,10 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * Created by lgp on 2017/8/16.
- * 用户列表
+ * Created Storm <p>
+ * Time    2018/5/21 10:42<p>
+ * Message {用户列表}
  */
-
 public class UserListBean implements Serializable {
 
     private List<UserInfoBean> UserInfo;

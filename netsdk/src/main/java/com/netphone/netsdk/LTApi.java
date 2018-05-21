@@ -12,7 +12,8 @@ import com.netphone.gen.GroupInfoBeanDao;
 import com.netphone.gen.ImageBeanDao;
 import com.netphone.gen.ReplyMsgBeanDao;
 import com.netphone.gen.UserInfoBeanDao;
-import com.netphone.netsdk.Tool.Constant;
+import com.netphone.netsdk.Tool.LtConstant;
+import com.netphone.netsdk.Tool.TcpConfig;
 import com.netphone.netsdk.bean.CurrentGroupBean;
 import com.netphone.netsdk.bean.FriendChatMsgBean;
 import com.netphone.netsdk.bean.GroupChatMsgBean;
@@ -53,9 +54,10 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by XYSM on 2018/4/13.
+ * Created Storm <p>
+ * Time    2018/5/21 10:39<p>
+ * Message {力同 lib的api}
  */
-
 public class LTApi {
     private static LTApi mApi;
     private SimpleDateFormat dateformat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
@@ -78,13 +80,13 @@ public class LTApi {
     public void login(String username, String password, OnLoginListener loginListener) {
         mOnLoginListener = loginListener;
 //        if (isAuto){
-//            SharedPreferenceUtil.Companion.put(Constant.Auto_Login,true);
-        SharedPreferenceUtil.Companion.put(Constant.username, username);
-        SharedPreferenceUtil.Companion.put(Constant.password, password);
+//            SharedPreferenceUtil.Companion.put(LtConstant.Auto_Login,true);
+        SharedPreferenceUtil.Companion.put(LtConstant.username, username);
+        SharedPreferenceUtil.Companion.put(LtConstant.password, password);
 //        }else {
-//            SharedPreferenceUtil.Companion.put(Constant.Auto_Login,false);
-//            SharedPreferenceUtil.Companion.put(Constant.username,"");
-//            SharedPreferenceUtil.Companion.put(Constant.password,"");
+//            SharedPreferenceUtil.Companion.put(LtConstant.Auto_Login,false);
+//            SharedPreferenceUtil.Companion.put(LtConstant.username,"");
+//            SharedPreferenceUtil.Companion.put(LtConstant.password,"");
 //        }
         byte[] login = CmdUtils.getInstance().sendLogin(username, password);
         TcpSocket.getInstance().addData(login);
@@ -232,9 +234,9 @@ public class LTApi {
         FriendChatMsgBean bean = new FriendChatMsgBean();
         bean.setReceiveId(id);
         bean.setMsg(content);
-        bean.setSendId(Constant.info.getUserId());
-        bean.setSendId(Constant.info.getUserId());
-        bean.setUserId(Constant.info.getUserId());
+        bean.setSendId(LtConstant.info.getUserId());
+        bean.setSendId(LtConstant.info.getUserId());
+        bean.setUserId(LtConstant.info.getUserId());
         bean.setDateTime(System.currentTimeMillis());
 
         if (friendChatMsgBeanDao == null)
@@ -257,8 +259,8 @@ public class LTApi {
      * @param id
      */
     public void joinFriendChat(String id) {
-        if (Constant.info != null)
-            ReplyUtil.read(id, Constant.info.getUserId());
+        if (LtConstant.info != null)
+            ReplyUtil.read(id, LtConstant.info.getUserId());
 
     }
 
@@ -269,8 +271,8 @@ public class LTApi {
      */
     public ArrayList<ReplyMsgBean> getSessionList() {
         ArrayList<ReplyMsgBean> replyMsgBeans = new ArrayList<>();
-        if (Constant.info != null)
-            replyMsgBeans.addAll(ReplyUtil.getList(Constant.info.getUserId()));
+        if (LtConstant.info != null)
+            replyMsgBeans.addAll(ReplyUtil.getList(LtConstant.info.getUserId()));
 
         for (int i = 0; i < replyMsgBeans.size(); i++) {
             replyMsgBeans.get(i).setReceiver(getUserInfo(replyMsgBeans.get(i).getReceiveID()));
@@ -328,7 +330,7 @@ public class LTApi {
     public UserInfoBean getCurrentInfo() {
         if (userInfoBeanDao == null)
             userInfoBeanDao = LTConfigure.getInstance().getDaoSession().getUserInfoBeanDao();
-        return userInfoBeanDao.queryBuilder().where(UserInfoBeanDao.Properties.UserId.eq(SharedPreferenceUtil.Companion.read(Constant.UserId, ""))).unique();
+        return userInfoBeanDao.queryBuilder().where(UserInfoBeanDao.Properties.UserId.eq(SharedPreferenceUtil.Companion.read(LtConstant.UserId, ""))).unique();
     }
 
     /**
@@ -388,7 +390,7 @@ public class LTApi {
      */
     public void offLine() {
         LTConfigure.getInstance().onDestory();
-        Constant.isOnline = false;
+        LtConstant.isOnline = false;
     }
 
     /**
@@ -397,8 +399,8 @@ public class LTApi {
     public void onLine(Context context) {
         LTConfigure.init(context);
         LTConfigure.getInstance().startLocationService();
-        final String username = SharedPreferenceUtil.Companion.read(Constant.username, "");
-        final String password = SharedPreferenceUtil.Companion.read(Constant.password, "");
+        final String username = SharedPreferenceUtil.Companion.read(LtConstant.username, "");
+        final String password = SharedPreferenceUtil.Companion.read(LtConstant.password, "");
         LogUtil.error("LTApi", "205\tonLine()\n" + "请求登录$username" + username + "\tpassword:" + password);
 
         new Thread(new Runnable() {
@@ -408,7 +410,7 @@ public class LTApi {
                 login(username, password, null);
             }
         }).start();
-        Constant.isOnline = true;
+        LtConstant.isOnline = true;
     }
 
     /**
@@ -529,6 +531,11 @@ public class LTApi {
         this.onBroadcastListener = onBroadcastListener;
     }
 
+    /**
+     * 设置管理者监听
+     *
+     * @param onManagerListener
+     */
     public void setOnManagerListener(OnManagerListener onManagerListener) {
         this.onManagerListener = onManagerListener;
     }
@@ -546,6 +553,12 @@ public class LTApi {
         TcpSocket.getInstance().addData(datas);
     }
 
+    /**
+     * 修改用户信息
+     *
+     * @param userInfoBean             用户信息
+     * @param onChangeUserInfoListener 监听用户信息修改
+     */
     public void changeUserInfo(UserInfoBean userInfoBean, OnChangeUserInfoListener onChangeUserInfoListener) {
         this.onChangeUserInfoListener = onChangeUserInfoListener;
         Gson   gson  = new Gson();
@@ -555,6 +568,12 @@ public class LTApi {
     }
 
 
+    /**
+     * 获取接收图片
+     *
+     * @param userId
+     * @return
+     */
     public List<ImageBean> getReceiverImages(String userId) {
         ImageBeanDao imageBeanDao = LTConfigure.getInstance().getDaoSession().getImageBeanDao();
         return imageBeanDao.queryBuilder().where(ImageBeanDao.Properties.ReceiveId.eq(userId)).list();
@@ -575,7 +594,7 @@ public class LTApi {
     public ArrayList<ReplyMsgBean> SearchSession(String key) {
         ArrayList<ReplyMsgBean> replyMsgBeans   = new ArrayList<>();
         ReplyMsgBeanDao         replyMsgBeanDao = LTConfigure.getInstance().getDaoSession().getReplyMsgBeanDao();
-        replyMsgBeans.addAll(replyMsgBeanDao.queryBuilder().where(ReplyMsgBeanDao.Properties.UserId.eq(Constant.info.getUserId()), ReplyMsgBeanDao.Properties.ReceiveName.like("%" + key + "%")).orderDesc(ReplyMsgBeanDao.Properties.LastTime).list());
+        replyMsgBeans.addAll(replyMsgBeanDao.queryBuilder().where(ReplyMsgBeanDao.Properties.UserId.eq(LtConstant.info.getUserId()), ReplyMsgBeanDao.Properties.ReceiveName.like("%" + key + "%")).orderDesc(ReplyMsgBeanDao.Properties.LastTime).list());
         return replyMsgBeans;
     }
 
@@ -605,8 +624,90 @@ public class LTApi {
     }
 
 
-    public void voiceStop() {
+    /**
+     * 停止播放
+     */
+    public void voicePlayStop() {
         UdpSocket.Companion.getInstance().stopPlay();
         UdpSocket.Companion.getInstance().closeUdp();
     }
+
+    /**
+     * 获取当前账号是否在线
+     *
+     * @return
+     */
+    public boolean getIsOnline() {
+        return LtConstant.isOnline;
+    }
+
+    /**
+     * 设置是否在线
+     *
+     * @param b
+     */
+    public void setOnline(boolean b) {
+        LtConstant.isOnline = b;
+//        SharedPreferenceUtil.Companion.read(LtConstant.Auto_Login, b);
+    }
+
+    /**
+     * 设置是否自动登录
+     *
+     * @param auto
+     * @return
+     */
+    public void setAuto(boolean auto) {
+        SharedPreferenceUtil.Companion.insert(LtConstant.Auto_Login, auto);
+    }
+
+    /**
+     * 获取是否自动登录
+     *
+     * @param auto
+     * @return
+     */
+    public boolean getAuto(boolean auto) {
+        return SharedPreferenceUtil.Companion.read(LtConstant.Auto_Login, auto);
+    }
+
+
+    /**
+     * 设置当前账号的名字
+     *
+     * @return
+     */
+    @Deprecated
+    public void setUserName(String name) {
+        SharedPreferenceUtil.Companion.insert(LtConstant.username, name);
+    }
+
+    /**
+     * 获取当前账号的名字
+     *
+     * @return
+     */
+    public String getUserName() {
+        return SharedPreferenceUtil.Companion.read(LtConstant.username, "");
+    }
+
+
+    /**
+     * 获取当前账号的密码
+     *
+     * @return
+     */
+    public String getPassword() {
+        return SharedPreferenceUtil.Companion.read(LtConstant.password, "");
+    }
+
+
+    /**
+     * 返回url连接
+     * @return
+     */
+    public String getUrl() {
+        return TcpConfig.URL;
+    }
+
 }

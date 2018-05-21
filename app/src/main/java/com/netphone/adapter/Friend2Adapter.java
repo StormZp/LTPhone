@@ -14,7 +14,6 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.netphone.R;
 import com.netphone.netsdk.LTApi;
-import com.netphone.netsdk.Tool.Constant;
 import com.netphone.netsdk.Tool.TcpConfig;
 import com.netphone.netsdk.bean.UserInfoBean;
 import com.netphone.netsdk.utils.LogUtil;
@@ -108,7 +107,7 @@ public class Friend2Adapter extends RecyclerView.Adapter<Friend2Adapter.ViewHold
                 if (user.getUserId().equals(curr.getUserId())) {
                     ToastUtil.Companion.toasts(mContext.getResources().getString(R.string.chat_with_u));
                 } else {
-                    if (!Constant.isOnline) {
+                    if (!LTApi.getInstance().getIsOnline()) {
                         ToastUtil.Companion.toasts(mContext.getResources().getString(R.string.already_line_off));
                         return;
                     }

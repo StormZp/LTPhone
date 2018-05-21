@@ -12,7 +12,9 @@ import org.greenrobot.greendao.annotation.ToOne;
 import org.greenrobot.greendao.annotation.Unique;
 
 /**
- * Created by XYSM on 2018/4/27.
+ * Created Storm<p>
+ * Time    2018/5/21 10:40<p>
+ * Message {当前群bean}
  */
 @Entity
 public class CurrentGroupBean {

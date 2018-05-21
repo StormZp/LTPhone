@@ -1,18 +1,19 @@
 package com.netphone.netsdk.bean;
 
+import com.netphone.gen.DaoSession;
+import com.netphone.gen.ImageBeanDao;
+import com.netphone.gen.UserInfoBeanDao;
+
+import org.greenrobot.greendao.DaoException;
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.ToOne;
 
 import java.io.Serializable;
-import org.greenrobot.greendao.DaoException;
-import com.netphone.gen.DaoSession;
-import com.netphone.gen.UserInfoBeanDao;
-import com.netphone.gen.ImageBeanDao;
 
 /**
- * Created Storm
- * Time    2018/4/20 16:58
+ * Created Storm<p>
+ * Time    2018/4/20 16:58<p>
  * Message {图片数据}
  */
 @Entity

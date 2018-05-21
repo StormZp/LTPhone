@@ -7,7 +7,6 @@ import com.netphone.R
 import com.netphone.adapter.ImageAdapter
 import com.netphone.databinding.ActivityReceiverImageBinding
 import com.netphone.netsdk.LTApi
-import com.netphone.netsdk.Tool.Constant
 import com.netphone.netsdk.base.AppBean
 import com.storm.tool.base.BaseActivity
 
@@ -22,7 +21,8 @@ class ReceiverImageActivity : BaseActivity<ActivityReceiverImageBinding>() {
     }
 
     override fun initData() {
-        var receiverImages = LTApi.getInstance().getReceiverImages(Constant.info.userId)
+//        var receiverImages = LTApi.getInstance().getReceiverImages(LtConstant.info.userId)
+        var receiverImages = LTApi.getInstance().getReceiverImages(LTApi.getInstance().currentInfo.userId)
 
         binding.recycle.adapter = ImageAdapter(context, receiverImages)
         binding.recycle.layoutManager = LinearLayoutManager(context)

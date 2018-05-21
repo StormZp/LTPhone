@@ -5,10 +5,11 @@ import com.netphone.netsdk.bean.UserInfoBean;
 import com.netphone.netsdk.bean.UserListBean;
 
 /**
- * Created by Storm on 2018/2/6.
+ * Created Storm 
+ * Time    2018/5/21 10:20
+ * Message {力同lib本地配置}
  */
-
-public class Constant {
+public class LtConstant {
 
     public static final String RealName    = "RealName";
     public static final String UserId      = "UserId";

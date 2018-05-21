@@ -15,7 +15,9 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * Created by lgp on 2017/8/23.
+ * Created Storm <p>
+ * Time    2018/5/21 10:41<p>
+ * Message {群信息bean}
  */
 @Entity
 public class GroupInfoBean implements Serializable {

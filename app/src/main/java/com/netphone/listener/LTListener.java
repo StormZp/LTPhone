@@ -227,7 +227,7 @@ public class LTListener {
         LTApi.getInstance().setOnReFreshListener(new OnReFreshListener() {
 //            @Override
 //            public void onReFresh(UserListBean userListBean) {
-//                com.netphone.netsdk.Tool.Constant.listBean = userListBean;
+//                com.netphone.netsdk.Tool.LtConstant.listBean = userListBean;
 //                EventBusUtil.sendEvent(new AppBean(EventConfig.REFRESH_FRIEND, null));
 //            }
 
@@ -236,9 +236,9 @@ public class LTListener {
                 if (Constant.myFriendList == null) {
                     Constant.myFriendList = new ArrayList<>();
                 }
-//                Constant.myFriendList.clear();
+//                LtConstant.myFriendList.clear();
 //                LogUtil.error("LTListener", "179\tonReFriendsFresh()\n" + userListBean.size());
-//                Constant.myFriendList.addAll(userListBean);
+//                LtConstant.myFriendList.addAll(userListBean);
                 Constant.myFriendList = LTApi.getInstance().getFriendsList();
 
                 EventBusUtil.sendEvent(new AppBean(EventConfig.REFRESH_FRIEND, null));
@@ -249,7 +249,7 @@ public class LTListener {
                 if (Constant.myGroupList == null) {
                     Constant.myGroupList = new ArrayList<>();
                 }
-//                Constant.myGroupList.clear();
+//                LtConstant.myGroupList.clear();
                 Constant.myGroupList.addAll(groupListBean);
                 EventBusUtil.sendEvent(new AppBean(EventConfig.GROUP_REFRESH, null));
             }
@@ -268,7 +268,6 @@ public class LTListener {
                 EventBusUtil.sendEvent(new AppBean(EventConfig.REFRESH_FRIEND, null));
 
                 if (bean.getUserId().equals(LTApi.getInstance().getCurrentInfo().getUserId())) {
-                    com.netphone.netsdk.Tool.Constant.info = bean;
                     EventBusUtil.sendEvent(new AppBean(EventConfig.REFRESH_SELF, null));
                 }
             }
@@ -295,7 +294,7 @@ public class LTListener {
                 for (int i = 0; i < Constant.myGroupList.size(); i++) {
                     if (Constant.myGroupList.get(i).getGroupID().equals(bean.getGroupID())) {
                         Constant.myGroupList.set(i, bean);
-//                            Constant.myGroupList.remove(i);
+//                            LtConstant.myGroupList.remove(i);
                         break;
                     } else if (i == Constant.myGroupList.size() - 1) {
                         Constant.myGroupList.add(bean);

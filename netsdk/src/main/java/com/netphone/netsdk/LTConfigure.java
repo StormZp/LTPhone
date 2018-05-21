@@ -19,8 +19,8 @@ import com.netphone.netsdk.utils.MySQLiteOpenHelper;
 import com.netphone.netsdk.utils.SharedPreferenceUtil;
 
 /**
- * Created Storm
- * Time    2018/4/13 11:07
+ * Created Storm<p>
+ * Time    2018/4/13 11:07<p>
  * Message {这是力同的管理类}
  */
 public class LTConfigure {
@@ -183,7 +183,7 @@ public class LTConfigure {
 
 //
 //    public GroupInfoBean getCurrentGroup() {
-//        String           currentId        = SharedPreferenceUtil.Companion.read(Constant.currentGroupId, "");
+//        String           currentId        = SharedPreferenceUtil.Companion.read(LtConstant.currentGroupId, "");
 //        GroupInfoBeanDao groupInfoBeanDao = getDaoSession().getGroupInfoBeanDao();
 //        GroupInfoBean    unique           = groupInfoBeanDao.queryBuilder().where(GroupInfoBeanDao.Properties.GroupID.eq(currentId)).build().unique();
 //        return unique;

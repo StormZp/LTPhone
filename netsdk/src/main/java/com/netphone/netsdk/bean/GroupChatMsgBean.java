@@ -16,7 +16,9 @@ import org.greenrobot.greendao.annotation.ToOne;
 import java.io.Serializable;
 
 /**
- * Created by XYSM on 2018/4/18.
+ * Created Storm <p>
+ * Time    2018/5/21 10:41<p>
+ * Message {群聊单条bean}
  */
 @Entity
 public class GroupChatMsgBean implements Serializable, Comparable<GroupChatMsgBean> {

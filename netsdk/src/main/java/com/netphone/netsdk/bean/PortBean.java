@@ -1,9 +1,10 @@
 package com.netphone.netsdk.bean;
 
 /**
- * Created by Storm on 2018/1/25.
+ * Created Storm <p>
+ * Time    2018/5/21 10:42<p>
+ * Message {端口号bean}
  */
-
 public class PortBean {
     private String Port;
     private String UserId;

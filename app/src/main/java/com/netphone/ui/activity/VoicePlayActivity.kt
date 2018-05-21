@@ -33,7 +33,7 @@ class VoicePlayActivity : BaseActivity<ActivityVoicePlayBinding>() {
 
     override fun onDestroy() {
         super.onDestroy()
-        LTApi.getInstance().voiceStop();
+        LTApi.getInstance().voicePlayStop();
 //        playStop()
 
     }

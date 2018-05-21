@@ -17,7 +17,6 @@ import com.netphone.databinding.FragmentSettingBinding
 import com.netphone.listener.LTListener
 import com.netphone.listener.PermissionListener
 import com.netphone.netsdk.LTApi
-import com.netphone.netsdk.Tool.Constant
 import com.netphone.netsdk.Tool.TcpConfig
 import com.netphone.netsdk.base.AppBean
 import com.netphone.netsdk.bean.ImageBean
@@ -25,7 +24,10 @@ import com.netphone.netsdk.listener.OnLocationListener
 import com.netphone.netsdk.listener.OnUpFileListener
 import com.netphone.netsdk.utils.EventBusUtil
 import com.netphone.ui.activity.*
-import com.netphone.utils.*
+import com.netphone.utils.GlideCircleTransform
+import com.netphone.utils.GlideLoader
+import com.netphone.utils.PermissionUtil
+import com.netphone.utils.WebFileUtils
 import com.storm.developapp.tools.AppManager
 import com.storm.tool.base.BaseFragment
 import com.yancy.imageselector.ImageConfig
@@ -136,12 +138,13 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>() {
         registerEventBus()
 
         fragment = this
-        if (Constant.info != null) {
-            binding.tvNickname.text = Constant.info.realName
-//            binding.onlineState.text = if (Constant.info.isOnLine == 1) "在线1" else "离线1"
+        var currentInfo = LTApi.getInstance().currentInfo
+        if (currentInfo != null) {
+            binding.tvNickname.text = currentInfo.realName
+//            binding.onlineState.text = if (LtConstant.info.isOnLine == 1) "在线1" else "离线1"
             binding.onlineSwitch.isChecked = true
 
-            Glide.with(context).load(TcpConfig.URL + Constant.info.getHeadIcon()).placeholder(R.mipmap.icon_defult_detail).error(R.mipmap.icon_defult_detail).transform(GlideCircleTransform(context)).into(binding.ivHead)
+            Glide.with(context).load(TcpConfig.URL + currentInfo.getHeadIcon()).placeholder(R.mipmap.icon_defult_detail).error(R.mipmap.icon_defult_detail).transform(GlideCircleTransform(context)).into(binding.ivHead)
 
         }
 
@@ -273,7 +276,7 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>() {
         open fun head(view: View) {
             var bundle = Bundle()
             var imageBean = ImageBean()
-            imageBean.resourceHref = Constant.info.headIcon
+            imageBean.resourceHref = LTApi.getInstance().currentInfo.headIcon
             bundle.putSerializable("bean", imageBean)
             jump(BigImageActivity::class.java, bundle)
         }

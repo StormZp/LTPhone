@@ -123,7 +123,7 @@ class FriendsFragment : BaseFragment<FragmentFriendsBinding>() {
             Constant.myFriendList = arrayListOf();
         }
 
-//            LogUtil.error("FriendsFragment.kt", "83\tinitData()\n" + Constant.myGroupList.size);
+//            LogUtil.error("FriendsFragment.kt", "83\tinitData()\n" + LtConstant.myGroupList.size);
             friend2Adapter = Friend2Adapter(context, LTApi.getInstance().friendsList)
             mLinearLayoutManager = LinearLayoutManager(context)
             binding.listView.layoutManager = mLinearLayoutManager

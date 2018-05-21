@@ -20,9 +20,10 @@ import com.netphone.netsdk.utils.CmdUtils;
 import com.netphone.netsdk.utils.LogUtil;
 
 /**
- * Created by lgp on 2017/8/31.
+ * Created Storm <p>
+ * Time    2018/5/21 10:15<p>
+ * Message {位置定位service}
  */
-
 public class LocationService extends Service {
 
     private Context context;

@@ -1,9 +1,11 @@
 package com.netphone.netsdk.listener;
 
-/**
- * Created by XYSM on 2018/4/13.
- */
 
+/**
+ * Created Storm<p>
+ * Time    2018/5/21 10:31<p>
+ * Message {网络状态监听回调}
+ */
 public interface OnNetworkListener {
     void onNoNet();
     void onWifiNet();

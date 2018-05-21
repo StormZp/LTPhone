@@ -3,10 +3,10 @@ package com.netphone.netsdk.bean;
 import java.io.Serializable;
 
 /**
- * Created by lgp on 2017/9/1.
- * 强制加入群聊实体类
+ * Created Storm<p>
+ * Time    2018/5/21 10:41<p>
+ * Message {强制加入群聊实体类}
  */
-
 public class GroupComeBean implements Serializable {
 
 

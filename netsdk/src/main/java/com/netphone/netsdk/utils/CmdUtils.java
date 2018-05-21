@@ -5,7 +5,7 @@ import android.text.TextUtils;
 
 import com.google.gson.Gson;
 import com.netphone.netsdk.LTConfigure;
-import com.netphone.netsdk.Tool.Constant;
+import com.netphone.netsdk.Tool.LtConstant;
 
 import java.nio.charset.Charset;
 import java.util.HashMap;
@@ -332,7 +332,7 @@ public class CmdUtils {
      */
     public byte[] getRecordVoiceData(byte[] audios, byte[] idBytes) {
 //            LogUtil.error("获取音频录音数据包");
-        byte[] data = new byte[audios.length + Constant.VOICE_DATA_HEARD];
+        byte[] data = new byte[audios.length + LtConstant.VOICE_DATA_HEARD];
         //帧头
         data[0] = (byte) 0xff;
         byte[] bytes = ByteIntUtils.int2byte(audios.length + 2);
@@ -345,9 +345,9 @@ public class CmdUtils {
         data[5] = idBytes[2];
         data[6] = idBytes[3];
 
-        System.arraycopy(audios, 0, data, Constant.VOICE_DATA_HEARD - 1, audios.length);
+        System.arraycopy(audios, 0, data, LtConstant.VOICE_DATA_HEARD - 1, audios.length);
         //帧尾
-        data[audios.length + Constant.VOICE_DATA_HEARD - 1] = (byte) 0xff;
+        data[audios.length + LtConstant.VOICE_DATA_HEARD - 1] = (byte) 0xff;
         return data;
     }
 

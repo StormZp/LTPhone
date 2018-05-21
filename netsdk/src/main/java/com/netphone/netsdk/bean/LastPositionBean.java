@@ -7,7 +7,9 @@ import org.greenrobot.greendao.annotation.Generated;
 import java.io.Serializable;
 
 /**
- * Created by XYSM on 2018/4/17.
+ * Created Storm<p>
+ * Time    2018/5/21 10:42<p>
+ * Message {最后一条数据bean}
  */
 @Entity
 public class LastPositionBean implements Serializable {

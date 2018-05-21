@@ -13,7 +13,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.netphone.R;
-import com.netphone.netsdk.Tool.Constant;
+import com.netphone.netsdk.LTApi;
 import com.netphone.netsdk.Tool.TcpConfig;
 import com.netphone.netsdk.bean.GroupInfoBean;
 import com.netphone.netsdk.utils.LogUtil;
@@ -89,7 +89,7 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
         holder.getView().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!Constant.isOnline) {
+                if (!LTApi.getInstance().getIsOnline()) {
                     ToastUtil.Companion.toasts(mContext.getResources().getString(R.string.already_line_off));
                     return;
                 }

@@ -130,7 +130,7 @@ class GroupsFragment : BaseFragment<FragmentGroupsBinding>() {
     private var currentMic: UserInfoBean? = null;
 
     override fun initData() {
-        if (!com.netphone.netsdk.Tool.Constant.isOnline)
+        if (!LTApi.getInstance().getIsOnline())
             return
         binding.title.back.visibility = View.INVISIBLE
         binding.title.title.text = context.resources.getString(R.string.groups)
@@ -161,7 +161,7 @@ class GroupsFragment : BaseFragment<FragmentGroupsBinding>() {
         if (Constant.myGroupList == null) {
             Constant.myGroupList = arrayListOf()
         }
-//        LogUtil.error("GroupsFragment.kt", "86\tinitData()\n" + Constant.myGroupList.size);
+//        LogUtil.error("GroupsFragment.kt", "86\tinitData()\n" + LtConstant.myGroupList.size);
 
         if (currentGroup != null) {
             var arrss: ArrayList<GroupInfoBean> = arrayListOf<GroupInfoBean>()

@@ -13,8 +13,9 @@ import org.greenrobot.greendao.annotation.Transient;
 import java.io.Serializable;
 
 /**
- * Created by lgp on 2017/8/23.
- * 用户列表item
+ * Created Storm <p>
+ * Time    2018/5/21 10:42<p>
+ * Message {用户信息bean}
  */
 @Entity
 public class UserInfoBean implements Serializable, Comparable<UserInfoBean> {

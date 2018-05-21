@@ -8,8 +8,8 @@ import org.greenrobot.greendao.annotation.Transient;
 import org.greenrobot.greendao.annotation.Generated;
 
 /**
- * Created Storm
- * Time    2018/4/21 16:12
+ * Created Storm<p>
+ * Time    2018/4/21 16:12<p>
  * Message {消息列表}
  */
 @Entity

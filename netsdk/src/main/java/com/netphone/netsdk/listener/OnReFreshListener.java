@@ -8,10 +8,12 @@ import com.netphone.netsdk.bean.UserInfoBean;
 
 import java.util.List;
 
-/**
- * Created by XYSM on 2018/4/13.
- */
 
+/**
+ * Created Storm<p>
+ * Time    2018/5/21 10:32<p>
+ * Message {实时监听回调}
+ */
 public interface OnReFreshListener {
 
     void onReFriendsFresh(List<UserInfoBean> userListBean);//好友列表推送

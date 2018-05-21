@@ -11,9 +11,10 @@ import com.netphone.netsdk.utils.CRC16;
 import com.netphone.netsdk.utils.LogUtil;
 
 /**
- * Created by XYSM on 2018/4/13.
+ * Created Storm <p>
+ * Time    2018/5/21 10:17<p>
+ * Message {TCP客户端连接service}
  */
-
 public class SocketManageService extends Service {
 //    private TcpSocket mTcpSocket;//tcp客户端
 

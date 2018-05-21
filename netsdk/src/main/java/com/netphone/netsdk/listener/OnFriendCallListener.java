@@ -1,9 +1,10 @@
 package com.netphone.netsdk.listener;
 
 /**
- * Created by XYSM on 2018/4/26.
+ * Created Storm<p>
+ * Time    2018/5/21 10:23<p>
+ * Message {好友来电回调}
  */
-
 public interface OnFriendCallListener {
     void onCallAccept();
 

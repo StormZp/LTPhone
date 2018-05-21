@@ -3,9 +3,10 @@ package com.netphone.netsdk.bean;
 import java.util.List;
 
 /**
- * Created by XYSM on 2018/5/9.
+ * Created Storm <p>
+ * Time    2018/5/21 10:40<p>
+ * Message {好友刷新bean}
  */
-
 public class FriendReFreshBean {
 
     /**

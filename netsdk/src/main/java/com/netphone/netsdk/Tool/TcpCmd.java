@@ -49,9 +49,10 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Created by XYSM on 2018/4/13.
+ * Created Storm
+ * Time    2018/5/21 10:20
+ * Message {力同lib Socket数据处理}
  */
-
 public class TcpCmd {
 
     private InetAddress addr = null;
@@ -110,10 +111,12 @@ public class TcpCmd {
                                     LogUtil.error("user= " + user.toString());
                                 }
                                 isConnectBeat = true;
-                                Constant.isOnline = true;
-                                SharedPreferenceUtil.Companion.put(Constant.UserId, user.getUserId());
+                                LtConstant.isOnline = true;
+                                SharedPreferenceUtil.Companion.put(LtConstant.UserId, user.getUserId());
                                 new Thread(BeatRunnable).start();
                                 mUserInfoBeanDao.insertOrReplace(user);
+
+                                LtConstant.info = user;
                                 if (LTConfigure.getInstance().getLtApi().mOnLoginListener != null)
                                     LTConfigure.getInstance().getLtApi().mOnLoginListener.onSuccess(user);
                                 break;
@@ -197,10 +200,10 @@ public class TcpCmd {
                                     UdpSocket.Companion.getInstance().play();
 
                                     if (!TextUtils.isEmpty(LTApi.getInstance().groupId)) {
-                                        SharedPreferenceUtil.Companion.put(Constant.currentGroupId, LTApi.getInstance().groupId);
+                                        SharedPreferenceUtil.Companion.put(LtConstant.currentGroupId, LTApi.getInstance().groupId);
                                         GroupInfoBean unique = mGroupInfoBeanDao.queryBuilder().where(GroupInfoBeanDao.Properties.GroupID.eq(LTApi.getInstance().groupId)).unique();
                                         if (unique != null) {
-                                            Constant.currentGroupInfo = unique;
+                                            LtConstant.currentGroupInfo = unique;
                                         }
                                         LTConfigure.getInstance().getLtApi().groupComeInListener.onComeInSuccess();
                                     }
@@ -443,7 +446,7 @@ public class TcpCmd {
                         FriendChatMsgBean friendChatMsgBean = mGson.fromJson(body, FriendChatMsgBean.class);
 
                         friendChatMsgBean.setSendId(friendChatMsgBean.getReceiveId());
-                        friendChatMsgBean.setUserId(Constant.info.getUserId());
+                        friendChatMsgBean.setUserId(LtConstant.info.getUserId());
                         friendChatMsgBean.setDateTime(System.currentTimeMillis());
                         if (mFriendChatMsgBeanDao == null)
                             mFriendChatMsgBeanDao = LTConfigure.getInstance().getDaoSession().getFriendChatMsgBeanDao();
@@ -543,7 +546,7 @@ public class TcpCmd {
                         body = ByteIntUtils.utfToString(bodyBytes);
                         ImageBean bean = mGson.fromJson(body, ImageBean.class);
                         bean.setDate(System.currentTimeMillis());
-                        bean.setReceiveId(SharedPreferenceUtil.Companion.read(Constant.UserId, ""));
+                        bean.setReceiveId(SharedPreferenceUtil.Companion.read(LtConstant.UserId, ""));
                         mImageBeanDao.insertOrReplace(bean);
                         if (LTApi.getInstance().onReFreshListener != null) {
                             LTApi.getInstance().onReFreshListener.onMultiMedia(bean);
@@ -663,7 +666,7 @@ public class TcpCmd {
                         LogUtil.error("TcpCmd", "356\tcmdExplore()\n" + body);
                         GroupChatMsgBean msg = mGson.fromJson(body, GroupChatMsgBean.class);
                         msg.setDateTime(System.currentTimeMillis());
-                        msg.setReceiveId(SharedPreferenceUtil.Companion.read(Constant.UserId, ""));
+                        msg.setReceiveId(SharedPreferenceUtil.Companion.read(LtConstant.UserId, ""));
 
                         GroupChatMsgBeanDao groupInfoBeanDao = LTConfigure.getInstance().getDaoSession().getGroupChatMsgBeanDao();
                         groupInfoBeanDao.insertOrReplace(msg);
@@ -750,6 +753,11 @@ public class TcpCmd {
                         UserInfoBean unique1 = mUserInfoBeanDao.queryBuilder().where(UserInfoBeanDao.Properties.UserId.eq(users.getUserId())).build().unique();
                         unique1.setIsOnLine("1");
                         mUserInfoBeanDao.insertOrReplace(unique1);
+
+
+                        if (unique1.getUserId().equals(LTApi.getInstance().getCurrentInfo().getUserId())) {
+                            LtConstant.info = unique1;
+                        }
 
                         if (LTConfigure.getInstance().getLtApi().onReFreshListener != null) {
                             LTConfigure.getInstance().getLtApi().onReFreshListener.onFriendsReFresh(unique1);
