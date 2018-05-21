@@ -52,7 +52,6 @@ dependencies {
     //图片压缩框架
     compile 'com.zxy.android:tiny:0.0.6'
     implementation project(':webrtclib')
-//    implementation 'com.github.StormZp:webrtcLib:1.01'
 }
 repositories {
     mavenCentral()
