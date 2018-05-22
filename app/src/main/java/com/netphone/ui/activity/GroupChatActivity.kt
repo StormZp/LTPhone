@@ -193,6 +193,9 @@ open class GroupChatActivity : BaseActivity<ActivityChatGroupBinding>() {
 
             }
             EventConfig.GROUP_REFRESH -> {//刷新
+                if (appBean.data!=null){
+                    return
+                }
                 var infoBean = appBean.data as GroupInfoBean
                 LogUtil.error("GroupChatActivity.kt", "194\treceiveEvent()\n" + Gson().toJson(infoBean));
                 if (infoBean == null) {

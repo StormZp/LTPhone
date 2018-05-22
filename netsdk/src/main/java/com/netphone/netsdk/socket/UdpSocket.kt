@@ -37,8 +37,8 @@ class UdpSocket {
             udpSocket = DatagramSocket(recordPort)//新建一个DatagramSocket,获取客户端本地端口号
 
         } catch (e: Exception) {
-            LogUtil.error("UdpSocket.kt", "39\tconnect()\n" + e);
-            e.printStackTrace()
+            LogUtil.error("UdpSocket.kt"+"39\tconnect()\n" , e);
+//            e.printStackTrace()
         }
 
     }
@@ -50,7 +50,9 @@ class UdpSocket {
                 udpSocket = DatagramSocket(recordPort)//新建一个DatagramSocket,获取客户端本地端口号
 
             } catch (e: Exception) {
-                e.printStackTrace()
+                LogUtil.error("UdpSocket.kt"+"53\tconnect()\n",e);
+//                LogUtil.error("UdpSocket.kt", "39\tconnect()\n" + e);
+//                e.printStackTrace()
             }
 
     }

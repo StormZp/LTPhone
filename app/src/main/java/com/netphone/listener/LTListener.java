@@ -36,7 +36,6 @@ import com.netphone.netsdk.utils.LogUtil;
 import com.netphone.ui.activity.BigImageActivity;
 import com.netphone.ui.activity.BroadcastSendActivity;
 import com.netphone.ui.activity.FriendVoiceActivity;
-import com.netphone.ui.activity.GroupChatActivity;
 import com.netphone.ui.activity.LoginActivity;
 import com.netphone.ui.activity.MainActivity;
 import com.netphone.ui.activity.VoicePlayActivity;
@@ -382,14 +381,10 @@ public class LTListener {
 
             @Override
             public void groupCome(GroupInfoBean comeBean) {
-//                Intent intent = new Intent(MyApp.getContext(), GroupChatActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("bean", comeBean);
-//                intent.putExtras(bundle);
-//                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//                MyApp.getContext().startActivity(intent);
 
-                jump( GroupChatActivity.class,bundle);
+//                Bundle bundle = new Bundle();
+//                bundle.putSerializable("bean", comeBean);
+//                jump( GroupChatActivity.class,bundle);
             }
 
             @Override

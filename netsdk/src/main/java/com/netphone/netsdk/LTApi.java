@@ -617,9 +617,20 @@ public class LTApi {
      * @param key
      * @return
      */
-    public ArrayList<GroupInfoBean> SearchGroup(String key) {
+    public ArrayList<GroupInfoBean> searchGroup(String key) {
         ArrayList<GroupInfoBean> replyMsgBeans = new ArrayList<>();
         replyMsgBeans.addAll(LTConfigure.getInstance().getDaoSession().getGroupInfoBeanDao().queryBuilder().where(GroupInfoBeanDao.Properties.GroupName.like("%" + key + "%")).list());
+        return replyMsgBeans;
+    }
+
+/**
+     * 获取所有群聊
+     *
+     * @return
+     */
+    public ArrayList<GroupInfoBean> getAllGroup() {
+        ArrayList<GroupInfoBean> replyMsgBeans = new ArrayList<>();
+        replyMsgBeans.addAll(LTConfigure.getInstance().getDaoSession().getGroupInfoBeanDao().loadAll());
         return replyMsgBeans;
     }
 

@@ -530,8 +530,8 @@ public class TcpCmd {
                     {
                         body = ByteIntUtils.utfToString(bodyBytes);
                         GroupComeBean bean = mGson.fromJson(body, GroupComeBean.class);
-                        UdpSocket.Companion.getInstance().connect(bean.getPort());
-                        UdpSocket.Companion.getInstance().play();
+//                        UdpSocket.Companion.getInstance().connect(bean.getPort());
+//                        UdpSocket.Companion.getInstance().play();
 
                         GroupInfoBean groupInfoBean1 = new GroupInfoBean();
                         groupInfoBean1.setUserId(bean.getAdminUserId());
@@ -865,6 +865,7 @@ public class TcpCmd {
                         System.arraycopy(bodyBytes, 0, jsonBytes, 0, bodyBytes.length);
                         body = ByteIntUtils.utfToString(jsonBytes);
                         GroupInfoBean users = mGson.fromJson(body, GroupInfoBean.class);
+                        mGroupInfoBeanDao.insertOrReplace(users);
 
                         if (LTConfigure.getInstance().getLtApi().onReFreshListener != null) {
                             LTConfigure.getInstance().getLtApi().onReFreshListener.onGroupReFresh(users);
@@ -894,7 +895,10 @@ public class TcpCmd {
                         }.getType());
                         for (int i = 0; i < users.size(); i++) {
                             UserInfoBean unique1 = mUserInfoBeanDao.queryBuilder().where(UserInfoBeanDao.Properties.UserId.eq(users.get(i).getUserId())).build().unique();
-                            unique1.setIsOnLine(users.get(i).getIsOnLine());
+                            if (users.get(i) != null && !TextUtils.isEmpty(users.get(i).getIsOnLine()))
+                                unique1.setIsOnLine(users.get(i).getIsOnLine());
+                            else
+                                unique1.setIsOnLine("0");
                             mUserInfoBeanDao.insertOrReplace(unique1);
                         }
 

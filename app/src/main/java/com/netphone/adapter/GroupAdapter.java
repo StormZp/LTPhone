@@ -66,10 +66,10 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
 
 
     public void setList(List<GroupInfoBean> datas) {
-//        if (datas!=null){
-//            datas.clear();
-//            datas.addAll(datas);
-//        }
+        if (datas!=null){
+            datas.clear();
+            datas.addAll(datas);
+        }
         notifyDataSetChanged();
     }
 
@@ -84,7 +84,7 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
         final GroupInfoBean groupInfoBean = datas.get(position);
         holder.tvName.setText(groupInfoBean.getGroupName());
         holder.tvOnline.setText(groupInfoBean.getOnLineCount() + "/" + groupInfoBean.getAllCount());
-        Glide.with(mContext).load(TcpConfig.URL + groupInfoBean.getHeadIcon()).placeholder(R.mipmap.icon_defult_detail).error(R.mipmap.icon_defult_detail).transform(mGlideCircleTransform).into(holder.ivHead);
+        Glide.with(mContext).load(TcpConfig.URL + groupInfoBean.getHeadIcon()).placeholder(R.mipmap.icon_qunzutouxiang).error(R.mipmap.icon_qunzutouxiang).transform(mGlideCircleTransform).into(holder.ivHead);
 
         holder.getView().setOnClickListener(new View.OnClickListener() {
             @Override

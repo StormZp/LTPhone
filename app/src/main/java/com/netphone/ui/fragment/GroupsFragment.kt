@@ -45,7 +45,7 @@ class GroupsFragment : BaseFragment<FragmentGroupsBinding>() {
             EventConfig.GROUP_DEL -> {
                 if (appBean.data != null) {
                     var infoBean = appBean.data as GroupInfoBean
-                    if (groupAdapter != null && infoBean != null){
+                    if (groupAdapter != null && infoBean != null) {
                         groupAdapter!!.del(infoBean.groupID)
 
                     } else {
@@ -61,28 +61,29 @@ class GroupsFragment : BaseFragment<FragmentGroupsBinding>() {
             EventConfig.LINE_STATE -> {
                 var state = appBean.data as Int
                 if (state == 0) {
-                    Constant.myGroupList = arrayListOf()
-                    groupAdapter = GroupAdapter(context,  Constant.myGroupList);
+                    groupAdapter = GroupAdapter(context, LTApi.getInstance().getAllGroup());
                     binding.recycle.adapter = groupAdapter;
                 }
             }
 
             EventConfig.GROUP_REFRESH -> {
-                if (appBean.data != null) {
-                    var infoBean = appBean.data as GroupInfoBean
-                    if (groupAdapter != null && infoBean != null)
-                        groupAdapter!!.refresh(infoBean.groupID, infoBean.onLineCount)
-                    if (currentGroup != null && infoBean.micer != null && currentGroup!!.groupID.equals(infoBean.groupID)) {
-                        currentMic = LTApi.getInstance().getUserInfo(infoBean.micer.userId)
-                        currentGroup = infoBean;
-                    } else {
-                        currentMic = null;
-                        if (currentGroup != null)
-                            currentGroup!!.micer = null
-                    }
-                } else {
-                    initData()
-                }
+//                var allGroup = LTApi.getInstance().getAllGroup()
+//                groupAdapter!!.setList(allGroup);
+//                if (appBean.data != null) {
+//                    var infoBean = appBean.data as GroupInfoBean
+//                    if (groupAdapter != null && infoBean != null)
+//                        groupAdapter!!.refresh(infoBean.groupID, infoBean.onLineCount)
+//                    if (currentGroup != null && infoBean.micer != null && currentGroup!!.groupID.equals(infoBean.groupID)) {
+//                        currentMic = LTApi.getInstance().getUserInfo(infoBean.micer.userId)
+//                        currentGroup = infoBean;
+//                    } else {
+//                        currentMic = null;
+//                        if (currentGroup != null)
+//                            currentGroup!!.micer = null
+//                    }
+//                } else {
+                initData()
+//                }
 
 
             }
@@ -107,7 +108,7 @@ class GroupsFragment : BaseFragment<FragmentGroupsBinding>() {
             override fun afterTextChanged(s: Editable?) {
                 var key = binding.titleSearch.etSearch.text.toString()
                 if (!TextUtils.isEmpty(key)) {
-                    var group = LTApi.getInstance().SearchGroup(key)
+                    var group = LTApi.getInstance().searchGroup(key)
                     groupAdapter = GroupAdapter(context, group)
                     binding.recycle.layoutManager = LinearLayoutManager(context)
                     binding.recycle.adapter = groupAdapter
@@ -147,7 +148,7 @@ class GroupsFragment : BaseFragment<FragmentGroupsBinding>() {
             LogUtil.error("GroupsFragment.kt", "50\tinitData()\n" + currentGroup!!.groupID);
             binding.layCurrent.visibility = View.VISIBLE
             binding.tvCurrent.setText(currentGroup!!.groupName)
-            Glide.with(context).load(TcpConfig.URL + currentGroup!!.headIcon).placeholder(R.mipmap.icon_defult_detail).error(R.mipmap.icon_defult_detail).transform(GlideCircleTransform(context)).into(binding.ivCurrent)
+            Glide.with(context).load(TcpConfig.URL + currentGroup!!.headIcon).placeholder(R.mipmap.icon_qunzutouxiang).error(R.mipmap.icon_qunzutouxiang).transform(GlideCircleTransform(context)).into(binding.ivCurrent)
 
             binding.layCurrent.setOnClickListener {
                 val bundle = Bundle()
@@ -161,37 +162,58 @@ class GroupsFragment : BaseFragment<FragmentGroupsBinding>() {
         if (Constant.myGroupList == null) {
             Constant.myGroupList = arrayListOf()
         }
+        var arrss: ArrayList<GroupInfoBean> = LTApi.getInstance().getAllGroup()
+
+        if (currentGroup != null && arrss.size != 0) {
+            for (i in 0 until arrss.size) {
+                if (currentGroup!!.groupID.equals(arrss[i].groupID)) {
+                    arrss.removeAt(i)
+                    break
+                }
+            }
+        }
+
+        if (arrss != null && arrss.size != 0) {
+            binding.catalog2.visibility = View.VISIBLE
+        } else {
+            binding.catalog2.visibility = View.GONE
+        }
+
+        groupAdapter = GroupAdapter(context, arrss)
+        binding.recycle.layoutManager = LinearLayoutManager(context)
+        binding.recycle.adapter = groupAdapter
+
 //        LogUtil.error("GroupsFragment.kt", "86\tinitData()\n" + LtConstant.myGroupList.size);
 
-        if (currentGroup != null) {
-            var arrss: ArrayList<GroupInfoBean> = arrayListOf<GroupInfoBean>()
-            if (Constant.myGroupList != null && Constant.myGroupList.size != 0) {
-                binding.catalog2.visibility = View.VISIBLE
-                for (i in 0 until Constant.myGroupList.size) {
-                    if (!TextUtils.isEmpty(currentGroup!!.groupID) && currentGroup!!.groupID.equals(Constant.myGroupList[i].groupID)) {
-                        continue
-                    }
-                    arrss.add(Constant.myGroupList[i])
-
-                }
-                groupAdapter = GroupAdapter(context, arrss)
-
-                binding.recycle.layoutManager = LinearLayoutManager(context)
-                binding.recycle.adapter = groupAdapter
-            } else {
-                binding.catalog2.visibility = View.GONE
-            }
-        } else {
-            if (Constant.myGroupList != null && Constant.myGroupList.size != 0) {
-                binding.catalog2.visibility = View.VISIBLE
-            } else {
-                binding.catalog2.visibility = View.GONE
-            }
-            groupAdapter = GroupAdapter(context, Constant.myGroupList)
-
-            binding.recycle.layoutManager = LinearLayoutManager(context)
-            binding.recycle.adapter = groupAdapter
-        }
+//        var arrss: ArrayList<GroupInfoBean> =  LTApi.getInstance().getAllGroup()
+//        if (currentGroup != null) {
+//            if (arrss != null && arrss.size != 0) {
+//                binding.catalog2.visibility = View.VISIBLE
+//                for (i in 0 until arrss.size) {
+//                    if (!TextUtils.isEmpty(currentGroup!!.groupID) && currentGroup!!.groupID.equals(arrss[i].groupID)) {
+//                        continue
+//                    }
+//                    arrss.add(Constant.myGroupList[i])
+//
+//                }
+//                groupAdapter = GroupAdapter(context,  arrss)
+//
+//                binding.recycle.layoutManager = LinearLayoutManager(context)
+//                binding.recycle.adapter = groupAdapter
+//            } else {
+//                binding.catalog2.visibility = View.GONE
+//            }
+//        } else {
+//            if (Constant.myGroupList != null && Constant.myGroupList.size != 0) {
+//                binding.catalog2.visibility = View.VISIBLE
+//            } else {
+//                binding.catalog2.visibility = View.GONE
+//            }
+//            groupAdapter = GroupAdapter(context, Constant.myGroupList)
+//
+//            binding.recycle.layoutManager = LinearLayoutManager(context)
+//            binding.recycle.adapter = groupAdapter
+//        }
 
     }
 
