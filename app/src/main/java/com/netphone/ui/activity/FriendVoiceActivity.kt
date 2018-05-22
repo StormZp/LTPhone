@@ -210,10 +210,11 @@ class FriendVoiceActivity : BaseActivity<ActivityVoiceFriendBinding>() {
     private fun setAudio(leg: Boolean) {
         if (leg) {
             binding.ivSound.setBackgroundResource(R.mipmap.icon_jingyin)
-            binding.btnSound.setText(context.resources.getString(R.string.text_hands_free))
+            binding.btnSound.setText(context.resources.getString(R.string.loudspeaker_mute))
             audioManager!!.isMicrophoneMute = false
         } else {
             binding.ivSound.setBackgroundResource(R.mipmap.icon_jingyin_sel)
+            binding.btnSound.setText(context.resources.getString(R.string.al_loudspeaker_mute))
             audioManager!!.isMicrophoneMute = true
 
         }

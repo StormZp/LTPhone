@@ -187,9 +187,11 @@ public class LTListener {
                 bundle.putSerializable("bean", userBean);
                 bundle.putInt("state", 0);
 
-                Intent intent = new Intent(MyApp.getContext(), FriendVoiceActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                MyApp.getContext().startActivity(intent);
+//                Intent intent = new Intent(MyApp.getContext(), FriendVoiceActivity.class);
+//                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                MyApp.getContext().startActivity(intent);
+
+                jump( FriendVoiceActivity.class,bundle);
             }
 
             @Override
@@ -198,11 +200,11 @@ public class LTListener {
                 Bundle bundle = new Bundle();
                 bundle.putInt("state", 1);
 
-                Intent intent = new Intent(MyApp.getContext(), VoicePlayActivity.class);
-                intent.putExtras(bundle);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                MyApp.getContext().startActivity(intent);
-
+//                Intent intent = new Intent(MyApp.getContext(), VoicePlayActivity.class);
+//                intent.putExtras(bundle);
+//                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                MyApp.getContext().startActivity(intent);
+                jump( VoicePlayActivity.class,bundle);
             }
 
             @Override
@@ -215,10 +217,11 @@ public class LTListener {
                 Bundle bundle = new Bundle();
                 bundle.putInt("state", 0);
 
-                Intent intent = new Intent(MyApp.getContext(), VoicePlayActivity.class);
-                intent.putExtras(bundle);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                MyApp.getContext().startActivity(intent);
+//                Intent intent = new Intent(MyApp.getContext(), VoicePlayActivity.class);
+//                intent.putExtras(bundle);
+//                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                MyApp.getContext().startActivity(intent);
+                jump( VoicePlayActivity.class,bundle);
             }
         });
     }
@@ -320,11 +323,12 @@ public class LTListener {
 
             @Override
             public void onWordBroadcast(BroadcastBean msgBean) {
-                Intent intent = new Intent(MyApp.getContext(), MessageDialog.class);
+//                Intent intent = new Intent(MyApp.getContext(), MessageDialog.class);
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("bean", msgBean);
-                intent.putExtras(bundle);
-                MyApp.getInstense().getContext().startActivity(intent);
+//                intent.putExtras(bundle);
+//                MyApp.getInstense().getContext().startActivity(intent);
+                jump( MessageDialog.class,bundle);
             }
 
             @Override
@@ -342,7 +346,8 @@ public class LTListener {
             public void onMultiMedia(ImageBean bean) {
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("bean", bean);
-                MyApp.getContext().startActivity(new Intent(MyApp.getContext(), BigImageActivity.class).putExtras(bundle));
+//                MyApp.getContext().startActivity(new Intent(MyApp.getContext(), BigImageActivity.class).putExtras(bundle));
+                jump( BigImageActivity.class,bundle);
             }
 
             @Override
@@ -354,32 +359,37 @@ public class LTListener {
 
             @Override
             public void onBroadcastCome(int state) {
-                Intent intent = new Intent(MyApp.getContext(), BroadcastSendActivity.class);
+//                Intent intent = new Intent(MyApp.getContext(), BroadcastSendActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putInt("state", state);
-                intent.putExtras(bundle);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                MyApp.getInstense().getContext().startActivity(intent);
+//                intent.putExtras(bundle);
+//                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                MyApp.getInstense().getContext().startActivity(intent);
+                jump( BroadcastSendActivity.class,bundle);
             }
 
             @Override
             public void onFriendVoice(UserInfoBean userBean) {
-                Intent intent = new Intent(MyApp.getContext(), FriendVoiceActivity.class);
+//                Intent intent = new Intent(MyApp.getContext(), FriendVoiceActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("bean", userBean);
                 bundle.putSerializable("state", 1);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                MyApp.getInstense().getContext().startActivity(intent.putExtras(bundle));
+//                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                MyApp.getInstense().getContext().startActivity(intent.putExtras(bundle));
+
+                jump( FriendVoiceActivity.class,bundle);
             }
 
             @Override
             public void groupCome(GroupInfoBean comeBean) {
-                Intent intent = new Intent(MyApp.getContext(), GroupChatActivity.class);
+//                Intent intent = new Intent(MyApp.getContext(), GroupChatActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("bean", comeBean);
-                intent.putExtras(bundle);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                MyApp.getContext().startActivity(intent);
+//                intent.putExtras(bundle);
+//                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                MyApp.getContext().startActivity(intent);
+
+                jump( GroupChatActivity.class,bundle);
             }
 
             @Override
@@ -435,6 +445,15 @@ public class LTListener {
                 MyApp.getInstense().getContext().startActivity(intent);
             }
         });
+    }
+
+    private void jump(Class c, Bundle b) {
+        Intent intent = new Intent(MyApp.getContext(), c);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        if (b != null) {
+            intent.putExtras(b);
+        }
+        MyApp.getContext().startActivity(intent);
     }
 
     /**

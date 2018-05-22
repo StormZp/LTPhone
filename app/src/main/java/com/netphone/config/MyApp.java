@@ -6,6 +6,7 @@ import android.os.Build;
 import android.os.StrictMode;
 import android.support.multidex.MultiDex;
 
+import com.netphone.BuildConfig;
 import com.netphone.netsdk.LTConfigure;
 import com.netphone.utils.CrashHandler;
 import com.netphone.utils.ToastUtil;
@@ -33,6 +34,7 @@ public class MyApp extends Application {
 
         LTConfigure.init(mContext);
 
+        LTConfigure.getInstance().setLog(BuildConfig.DEBUG);
         //分包
         MultiDex.install(this);
 

@@ -114,6 +114,7 @@
             android:layout_height="@dimen/dp48"
             android:background="@color/white"
             android:onClick="@{click.sex}"
+            android:visibility="gone"
             android:gravity="center_vertical">
 
             <TextView

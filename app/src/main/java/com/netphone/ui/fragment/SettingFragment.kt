@@ -33,6 +33,7 @@ import com.storm.tool.base.BaseFragment
 import com.yancy.imageselector.ImageConfig
 import com.yancy.imageselector.ImageSelector
 import com.yancy.imageselector.ImageSelectorActivity
+import kotlin.concurrent.thread
 
 
 /**
@@ -52,48 +53,57 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == ImageSelector.IMAGE_REQUEST_CODE && resultCode == RESULT_OK && data != null) {
-            // Get Image Path List
-            val pathList = data!!.getStringArrayListExtra(ImageSelectorActivity.EXTRA_RESULT)
-            for (path in pathList) {
+        thread {
+            if (requestCode == ImageSelector.IMAGE_REQUEST_CODE && resultCode == RESULT_OK && data != null) {
+                activity.runOnUiThread {
+                    toasts(context.getResources().getString(R.string.start_file))
+                }
+                // Get Image Path List
+                val pathList = data!!.getStringArrayListExtra(ImageSelectorActivity.EXTRA_RESULT)
+                for (path in pathList) {
 //                Log.i("ImagePathList", path)
-                LTApi.getInstance().upImage(path, object : OnUpFileListener {
+                    LTApi.getInstance().upImage(path, object : OnUpFileListener {
+                        override fun upFail() {
+                            activity.runOnUiThread {
+                                toasts(context.getResources().getString(R.string.update_fail))
+                            }
+                        }
+
+                        override fun upSuccess(path: String?) {
+                            activity.runOnUiThread {
+                                toasts(context.getResources().getString(R.string.upload_seccess))
+                            }
+                        }
+                    });
+                }
+            } else if (requestCode == FILE_COED && data != null) {
+                activity.runOnUiThread {
+                    toasts(context.getResources().getString(R.string.start_file))
+                }
+
+                var uri = data.getData();
+                var path = WebFileUtils.getPath(getActivity(), uri)
+                LTApi.getInstance().upFile(path, object : OnUpFileListener {
                     override fun upFail() {
                         activity.runOnUiThread {
                             toasts(context.getResources().getString(R.string.update_fail))
                         }
                     }
 
-                    override fun upSuccess( path:String?) {
+                    override fun upSuccess(path: String?) {
                         activity.runOnUiThread {
                             toasts(context.getResources().getString(R.string.upload_seccess))
                         }
                     }
                 });
             }
-        }else if (requestCode == FILE_COED&& data != null){
-            var uri = data.getData();
-            var path = WebFileUtils.getPath(getActivity(), uri)
-            LTApi.getInstance().upFile(path, object : OnUpFileListener {
-                override fun upFail() {
-                    activity.runOnUiThread {
-                        toasts(context.getResources().getString(R.string.update_fail))
-                    }
-                }
-
-                override fun upSuccess(path:String?) {
-                    activity.runOnUiThread {
-                        toasts(context.getResources().getString(R.string.upload_seccess))
-                    }
-                }
-            });
         }
     }
 
     override fun receiveEvent(appBean: AppBean<Any>) {
 
-        when(appBean.code){
-            EventConfig.REFRESH_SELF->{
+        when (appBean.code) {
+            EventConfig.REFRESH_SELF -> {
                 initData()
             }
             EventConfig.BROADCAST_STATE -> {
@@ -148,8 +158,8 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>() {
 
         }
 
-        if (BuildConfig.DEBUG) {
-//            binding.lltex
+        if (!BuildConfig.DEBUG) {
+            binding.llTest.visibility = View.GONE
         }
 
 

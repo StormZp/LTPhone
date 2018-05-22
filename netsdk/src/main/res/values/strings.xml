@@ -66,6 +66,7 @@
     <string name="call_for_help">一键呼救</string>
     <string name="delivery_location">发送位置</string>
     <string name="Upload_photo">上传图片</string>
+    <string name="start_file">开始上传</string>
     <string name="upload_file">上传文件</string>
     <string name="receive_file">接收文件</string>
     <string name="upload_seccess">上传成功</string>

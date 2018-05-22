@@ -46,7 +46,10 @@ open class GroupChatActivity : BaseActivity<ActivityChatGroupBinding>() {
 
 
     override fun initData() {
-        groupInfo = intent.extras.getSerializable("bean") as GroupInfoBean
+        if (intent.extras.containsKey("bean"))
+            groupInfo = intent.extras.getSerializable("bean") as GroupInfoBean
+        else
+            finish()
         binding.title.title.text = groupInfo.groupName
         binding.title.menuDate.visibility = View.VISIBLE
         binding.title.menuDate.setImageResource(R.mipmap.icon_qz)
@@ -198,23 +201,23 @@ open class GroupChatActivity : BaseActivity<ActivityChatGroupBinding>() {
 //                LogUtil.error("GroupChatActivity.kt","194\treceiveEvent()\n"+"infoBean:"+infoBean.groupID+"\tcurrent:"+groupInfo.groupID);
                 activity.runOnUiThread {
                     if (infoBean != null && !TextUtils.isEmpty(infoBean.groupID) && infoBean.groupID.equals(groupInfo.groupID))
-                        LogUtil.error("GroupChatActivity.kt","201\treceiveEvent()\n"+"userId:"+infoBean.micer.userId+"\t"+Gson().toJson(infoBean.micer));
-                        if (infoBean.micer != null && !TextUtils.isEmpty(infoBean.micer.userId)) {
-                            binding.layMic.visibility = View.VISIBLE
-                            var userInfo = LTApi.getInstance().getUserInfo(infoBean.micer.userId)
-                            LogUtil.error("GroupChatActivity.kt","205\treceiveEvent()\n"+Gson().toJson(userInfo));
-                            if (userInfo == null) {
-                                binding.layMic.visibility = View.GONE
-                                return@runOnUiThread
-                            } else {
-                                binding.tvCurrent.setText(userInfo.realName)
-                                Glide.with(LTConfigure.mContext).load(TcpConfig.URL + userInfo.getHeadIcon()).placeholder(R.mipmap.icon_defult_detail).error(R.mipmap.icon_defult_detail).transform(mGlideCircleTransform).into(binding.ivCurrent)
-
-                            }
-                            LogUtil.error("GroupChatActivity.kt", "201\treceiveEvent()\n" + Gson().toJson(userInfo));
-                        } else {
+                        LogUtil.error("GroupChatActivity.kt", "201\treceiveEvent()\n" + "userId:" + infoBean.micer.userId + "\t" + Gson().toJson(infoBean.micer));
+                    if (infoBean.micer != null && !TextUtils.isEmpty(infoBean.micer.userId)) {
+                        binding.layMic.visibility = View.VISIBLE
+                        var userInfo = LTApi.getInstance().getUserInfo(infoBean.micer.userId)
+                        LogUtil.error("GroupChatActivity.kt", "205\treceiveEvent()\n" + Gson().toJson(userInfo));
+                        if (userInfo == null) {
                             binding.layMic.visibility = View.GONE
+                            return@runOnUiThread
+                        } else {
+                            binding.tvCurrent.setText(userInfo.realName)
+                            Glide.with(LTConfigure.mContext).load(TcpConfig.URL + userInfo.getHeadIcon()).placeholder(R.mipmap.icon_defult_detail).error(R.mipmap.icon_defult_detail).transform(mGlideCircleTransform).into(binding.ivCurrent)
+
                         }
+                        LogUtil.error("GroupChatActivity.kt", "201\treceiveEvent()\n" + Gson().toJson(userInfo));
+                    } else {
+                        binding.layMic.visibility = View.GONE
+                    }
                 }
 
             }

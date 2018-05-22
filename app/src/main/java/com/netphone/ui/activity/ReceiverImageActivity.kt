@@ -24,6 +24,7 @@ class ReceiverImageActivity : BaseActivity<ActivityReceiverImageBinding>() {
 //        var receiverImages = LTApi.getInstance().getReceiverImages(LtConstant.info.userId)
         var receiverImages = LTApi.getInstance().getReceiverImages(LTApi.getInstance().currentInfo.userId)
 
+        binding.title!!.title.setText(context.resources.getString(R.string.photo))
         binding.recycle.adapter = ImageAdapter(context, receiverImages)
         binding.recycle.layoutManager = LinearLayoutManager(context)
     }

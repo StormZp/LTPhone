@@ -533,10 +533,16 @@ public class TcpCmd {
                         UdpSocket.Companion.getInstance().connect(bean.getPort());
                         UdpSocket.Companion.getInstance().play();
 
-                        GroupInfoBean groupInfoBean = mGroupInfoBeanDao.queryBuilder().where(GroupInfoBeanDao.Properties.GroupID.eq(bean.getGroupId())).build().unique();
+                        GroupInfoBean groupInfoBean1 = new GroupInfoBean();
+                        groupInfoBean1.setUserId(bean.getAdminUserId());
+                        groupInfoBean1.setGroupID(bean.getGroupId());
+                        groupInfoBean1.setGroupName(bean.getGroupName());
+
+                        mGroupInfoBeanDao.insertOrReplace(groupInfoBean1);
+//                        GroupInfoBean groupInfoBean = mGroupInfoBeanDao.queryBuilder().where(GroupInfoBeanDao.Properties.GroupID.eq(bean.getGroupId())).build().unique();
 
                         if (LTApi.getInstance().onReFreshListener != null) {
-                            LTApi.getInstance().onReFreshListener.groupCome(groupInfoBean);
+                            LTApi.getInstance().onReFreshListener.groupCome(groupInfoBean1);
                         }
                     }
 

@@ -68,6 +68,7 @@
     <string name="call_for_help">One button for help</string>
     <string name="delivery_location">Delivery location</string>
     <string name="Upload_photo">Upload photo</string>
+    <string name="start_file">Start uploading</string>
     <string name="find_voice">Find voice record</string>
     <string name="upload_file">Upload file</string>
     <string name="receive_file">Receive file</string>
