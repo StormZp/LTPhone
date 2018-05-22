@@ -57,7 +57,7 @@ open class UserInfoActivity : BaseActivity<ActivityUserInfoBinding>() {
                         if (!TextUtils.isEmpty(path)) {
                             activity.runOnUiThread {
                                 //                            toasts(context.getResources().getString(R.string.upload_seccess))
-                                LogUtil.error("UserInfoActivity.kt","59\tupSuccess()\n"+path);
+                                LogUtil.error("UserInfoActivity.kt", "59\tupSuccess()\n" + path);
                                 Glide.with(context).load(TcpConfig.URL + path!!).placeholder(R.mipmap.icon_defult_detail).error(R.mipmap.icon_defult_detail).transform(GlideCircleTransform(context)).into(binding.ivHead)
 
                             }
@@ -73,17 +73,21 @@ open class UserInfoActivity : BaseActivity<ActivityUserInfoBinding>() {
         binding.title.title.text = context.resources.getString(R.string.user_info)
 
         var currentInfo = LTApi.getInstance().currentInfo
-        binding.account.setText(currentInfo.realName)
-        binding.sex.setText(currentInfo.gender)
-        Glide.with(context).load(TcpConfig.URL + currentInfo!!.headIcon).placeholder(R.mipmap.icon_defult_detail).error(R.mipmap.icon_defult_detail).transform(GlideCircleTransform(context)).into(binding.ivHead)
+
+        if (currentInfo != null && !TextUtils.isEmpty(currentInfo.realName)) {
+            binding.account.setText(currentInfo.realName)
+            binding.sex.setText(currentInfo.gender)
+
+            Glide.with(context).load(TcpConfig.URL + currentInfo!!.headIcon).placeholder(R.mipmap.icon_defult_detail).error(R.mipmap.icon_defult_detail).transform(GlideCircleTransform(context)).into(binding.ivHead)
 
 
-        if (currentInfo.getGender() == null || currentInfo.getGender().equals("0"))
-            binding.sex.setText(getApplicationContext().getResources().getString(R.string.woman));
-        else
-            binding.sex.setText(getApplicationContext().getResources().getString(R.string.man));
+            if (currentInfo.getGender() == null || currentInfo.getGender().equals("0"))
+                binding.sex.setText(getApplicationContext().getResources().getString(R.string.woman));
+            else
+                binding.sex.setText(getApplicationContext().getResources().getString(R.string.man));
 
-        binding.content.setText(currentInfo.description)
+            binding.content.setText(currentInfo.description)
+        }
     }
 
     override fun initListener() {

@@ -196,6 +196,7 @@ public class TcpCmd {
                                     port = ByteUtil.getInt(bodyBytes, 1);//udp端口,占4位
                                     isGroupBeat = true;
                                     LogUtil.error("TcpCmd", "177\tcmdExplore()\n" + "群聊端口号:" + port);
+                                    UdpSocket.Companion.getInstance().stopPlay();
                                     UdpSocket.Companion.getInstance().connect(port);
                                     UdpSocket.Companion.getInstance().play();
 

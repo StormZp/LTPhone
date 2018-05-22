@@ -14,18 +14,18 @@ public class TcpConfig {
     /**
      * tcp连接host
      */
-    public static final String HOST = "172.16.1.185";//本地
-//            public static final String HOST = "183.3.210.168";//外网
+//    public static final String HOST = "172.16.1.185";//本地
+            public static final String HOST = "183.3.210.168";//外网
     /**
      * 服务器url
      */
-    public static final String URL  = "http://" + HOST + ":83";//本地
-//        public static final String URL = "http://"+HOST;//外网
+//    public static final String URL  = "http://" + HOST + ":83";//本地
+        public static final String URL = "http://"+HOST;//外网
 
     /**
      * 服务器port
      */
-    public static final int PORT       = 2012;//立同
+    public static final int PORT       = 3012;//立同
     //    public static final int PORT = 3012;//菲律宾
 //            public static final int PORT = 4012;//服务器
     /**
