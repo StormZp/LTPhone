@@ -476,6 +476,7 @@ public class TcpCmd {
                     case 0x0B://在群聊中时,麦权被抢占
                         if (LTConfigure.getInstance().getLtApi().groupStateListener != null) {
                             body = ByteIntUtils.utfToString(bodyBytes);
+                            UdpSocket.Companion.getInstance().sendData(new byte[]{}, 0);
                             UserInfoBean user = mGson.fromJson(body, UserInfoBean.class);
                             LTConfigure.getInstance().getLtApi().groupStateListener.onMenberhaveMac(user);
                         }

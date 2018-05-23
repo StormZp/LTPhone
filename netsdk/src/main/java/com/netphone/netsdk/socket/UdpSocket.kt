@@ -129,7 +129,7 @@ class UdpSocket {
      * @param audios
      * @param sendMode 0：表示普通模式，用client发送；1;表示强制广播模式，用brocastClient发送
      */
-    private fun sendData(audios: ByteArray, sendMode: Int) {
+    open fun sendData(audios: ByteArray, sendMode: Int) {
         var udpDataEncode = UdpUtil.udpDataEncode(audios)
 //        ByteUtil.putLong(bArray,System.currentTimeMillis(),0)
 //        var udpDataEncode = UdpUtil.udpDataEncode(bArray)//todo 测试用

@@ -33,6 +33,7 @@ import com.storm.tool.base.BaseFragment
 import com.yancy.imageselector.ImageConfig
 import com.yancy.imageselector.ImageSelector
 import com.yancy.imageselector.ImageSelectorActivity
+import com.yanzhenjie.permission.AndPermission
 import kotlin.concurrent.thread
 
 
@@ -98,6 +99,33 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>() {
                 });
             }
         }
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        AndPermission.onRequestPermissionsResult(requestCode, permissions, grantResults, object : com.yanzhenjie.permission.PermissionListener {
+            override fun onSucceed(requestCode: Int, grantPermissions: MutableList<String>?) {
+                val imageConfig = ImageConfig.Builder(GlideLoader())
+                        .steepToolBarColor(resources.getColor(R.color.blue))
+                        .titleBgColor(resources.getColor(R.color.blue))
+                        .titleSubmitTextColor(resources.getColor(R.color.white))
+                        .titleTextColor(resources.getColor(R.color.white))
+                        // 开启单选   （默认为多选）
+                        .singleSelect()
+                        // 开启拍照功能 （默认关闭）
+                        .showCamera()
+                        // 拍照后存放的图片路径（默认 /temp/picture） （会自动创建）
+                        .filePath("/ImageSelector/Pictures")
+                        .build()
+
+
+                ImageSelector.open(fragment, imageConfig)   // 开启图片选择器
+            }
+
+            override fun onFailed(requestCode: Int, deniedPermissions: MutableList<String>?) {
+                // 第一种：用默认的提示语。
+            }
+        });
     }
 
     override fun receiveEvent(appBean: AppBean<Any>) {
@@ -234,32 +262,55 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>() {
         }
 
         open fun upImage(view: View) {
-            PermissionUtil.requiestPermission(activity, context, object : PermissionListener {
-                override fun PermissionFail() {
-                    toasts("你需要同意该权限才能使用该功能")
-                }
+            if (  AndPermission.hasPermission(context,Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {//有权限
+                val imageConfig = ImageConfig.Builder(GlideLoader())
+                        .steepToolBarColor(resources.getColor(R.color.blue))
+                        .titleBgColor(resources.getColor(R.color.blue))
+                        .titleSubmitTextColor(resources.getColor(R.color.white))
+                        .titleTextColor(resources.getColor(R.color.white))
+                        // 开启单选   （默认为多选）
+                        .singleSelect()
+                        // 开启拍照功能 （默认关闭）
+                        .showCamera()
+                        // 拍照后存放的图片路径（默认 /temp/picture） （会自动创建）
+                        .filePath("/ImageSelector/Pictures")
+                        .build()
+                ImageSelector.open(fragment, imageConfig)   // 开启图片选择器
+            }else{
+                AndPermission.with(fragment!!)
+                        .requestCode(100)
+                        .permission(Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                        .send();
 
-                override fun PermissionNever() {
-                }
-
-                override fun PermissionSuccess() {
-                    val imageConfig = ImageConfig.Builder(GlideLoader())
-                            .steepToolBarColor(resources.getColor(R.color.blue))
-                            .titleBgColor(resources.getColor(R.color.blue))
-                            .titleSubmitTextColor(resources.getColor(R.color.white))
-                            .titleTextColor(resources.getColor(R.color.white))
-                            // 开启单选   （默认为多选）
-                            .singleSelect()
-                            // 开启拍照功能 （默认关闭）
-                            .showCamera()
-                            // 拍照后存放的图片路径（默认 /temp/picture） （会自动创建）
-                            .filePath("/ImageSelector/Pictures")
-                            .build()
+            }
 
 
-                    ImageSelector.open(fragment, imageConfig)   // 开启图片选择器
-                }
-            }, Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+//            PermissionUtil.requiestPermission(activity, context, object : PermissionListener {
+//                override fun PermissionFail() {
+//                    toasts("你需要同意该权限才能使用该功能")
+//                }
+//
+//                override fun PermissionNever() {
+//                }
+//
+//                override fun PermissionSuccess() {
+//                    val imageConfig = ImageConfig.Builder(GlideLoader())
+//                            .steepToolBarColor(resources.getColor(R.color.blue))
+//                            .titleBgColor(resources.getColor(R.color.blue))
+//                            .titleSubmitTextColor(resources.getColor(R.color.white))
+//                            .titleTextColor(resources.getColor(R.color.white))
+//                            // 开启单选   （默认为多选）
+//                            .singleSelect()
+//                            // 开启拍照功能 （默认关闭）
+//                            .showCamera()
+//                            // 拍照后存放的图片路径（默认 /temp/picture） （会自动创建）
+//                            .filePath("/ImageSelector/Pictures")
+//                            .build()
+//
+//
+//                    ImageSelector.open(fragment, imageConfig)   // 开启图片选择器
+//                }
+//            }, Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE)
         }
 
         open fun upFile(view: View) {

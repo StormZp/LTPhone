@@ -29,7 +29,7 @@ import com.netphone.ui.fragment.SettingFragment
 import com.netphone.utils.ToastUtil
 import com.storm.developapp.tools.AppManager
 import com.storm.tool.base.BaseActivity
-import io.reactivex.functions.Consumer
+import com.yanzhenjie.permission.AndPermission
 
 
 class MainActivity : BaseActivity<ActivityMainBinding>() {
@@ -97,17 +97,26 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         }
         binding.viewpage.offscreenPageLimit = 4//缓存页数
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
-            getRxPermissions().shouldShowRequestPermissionRationale(activity, Manifest.permission.RECORD_AUDIO).subscribe(object : Consumer<Boolean> {
-                override fun accept(t: Boolean?) {
-                    if (!t!!) {
-                        jump(PermissionDialog::class.java)
-                    } else {
-                        LogUtil.error("MainActivity.kt","105\taccept()\n"+"都有权限");
-                        LTConfigure.getInstance().startLocationService()
-                    }
-                }
-            })
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+
+            if (  AndPermission.hasPermission(context,Manifest.permission.RECORD_AUDIO, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.READ_EXTERNAL_STORAGE)){//有权限
+                LogUtil.error("MainActivity.kt","105\taccept()\n"+"都有权限");
+                LTConfigure.getInstance().startLocationService()
+            }else{//申请权限
+                jump(PermissionDialog::class.java)
+            }
+
+        }
+//            getRxPermissions().shouldShowRequestPermissionRationale(activity, Manifest.permission.RECORD_AUDIO).subscribe(object : Consumer<Boolean> {
+//                override fun accept(t: Boolean?) {
+//                    if (!t!!) {
+//                        jump(PermissionDialog::class.java)
+//                    } else {
+//                        LogUtil.error("MainActivity.kt","105\taccept()\n"+"都有权限");
+//                        LTConfigure.getInstance().startLocationService()
+//                    }
+//                }
+//            })
         LTListener.newInstance().setOnReFreshListener()
         LTListener.newInstance().setOnManagerListener()
         LTListener.newInstance().setOnBroadcastListener()

@@ -11,7 +11,6 @@ import com.bigkoo.alertview.OnItemClickListener
 import com.bumptech.glide.Glide
 import com.netphone.R
 import com.netphone.databinding.ActivityUserInfoBinding
-import com.netphone.listener.PermissionListener
 import com.netphone.netsdk.LTApi
 import com.netphone.netsdk.Tool.TcpConfig
 import com.netphone.netsdk.base.AppBean
@@ -21,11 +20,12 @@ import com.netphone.netsdk.listener.OnUpFileListener
 import com.netphone.netsdk.utils.LogUtil
 import com.netphone.utils.GlideCircleTransform
 import com.netphone.utils.GlideLoader
-import com.netphone.utils.PermissionUtil
 import com.storm.tool.base.BaseActivity
 import com.yancy.imageselector.ImageConfig
 import com.yancy.imageselector.ImageSelector
 import com.yancy.imageselector.ImageSelectorActivity
+import com.yanzhenjie.permission.AndPermission
+import com.yanzhenjie.permission.PermissionListener
 
 /**
  * Created by XYSM on 2018/4/16.
@@ -101,37 +101,91 @@ open class UserInfoActivity : BaseActivity<ActivityUserInfoBinding>() {
     override fun receiveStickyEvent(appBean: AppBean<Any>) {
     }
 
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
+        AndPermission.onRequestPermissionsResult(requestCode, permissions, grantResults, object : PermissionListener {
+            override fun onSucceed(requestCode: Int, grantPermissions: MutableList<String>?) {
+                val imageConfig = ImageConfig.Builder(GlideLoader())
+                        .steepToolBarColor(resources.getColor(R.color.blue))
+                        .titleBgColor(resources.getColor(R.color.blue))
+                        .titleSubmitTextColor(resources.getColor(R.color.white))
+                        .titleTextColor(resources.getColor(R.color.white))
+                        // 开启单选   （默认为多选）
+                        .singleSelect()
+                        // 开启拍照功能 （默认关闭）
+                        .showCamera()
+                        // 拍照后存放的图片路径（默认 /temp/picture） （会自动创建）
+                        .filePath("/ImageSelector/Pictures")
+                        .build()
+
+                ImageSelector.open(activity, imageConfig)   // 开启图片选择器
+            }
+
+            override fun onFailed(requestCode: Int, deniedPermissions: MutableList<String>?) {
+                // 第一种：用默认的提示语。
+            }
+        });
+
+    }
+
     inner class OnClick {
         open fun back(view: View) {
 
         }
 
         open fun changeHead(view: View) {
-            PermissionUtil.requiestPermission(activity, context, object : PermissionListener {
-                override fun PermissionFail() {
-                    toasts("你需要同意该权限才能使用该功能")
-                }
 
-                override fun PermissionNever() {
-                }
 
-                override fun PermissionSuccess() {
-                    val imageConfig = ImageConfig.Builder(GlideLoader())
-                            .steepToolBarColor(resources.getColor(R.color.blue))
-                            .titleBgColor(resources.getColor(R.color.blue))
-                            .titleSubmitTextColor(resources.getColor(R.color.white))
-                            .titleTextColor(resources.getColor(R.color.white))
-                            // 开启单选   （默认为多选）
-                            .singleSelect()
-                            // 开启拍照功能 （默认关闭）
-                            .showCamera()
-                            // 拍照后存放的图片路径（默认 /temp/picture） （会自动创建）
-                            .filePath("/ImageSelector/Pictures")
-                            .build()
+            if ( AndPermission.hasPermission(context,Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {//有权限
+                val imageConfig = ImageConfig.Builder(GlideLoader())
+                        .steepToolBarColor(resources.getColor(R.color.blue))
+                        .titleBgColor(resources.getColor(R.color.blue))
+                        .titleSubmitTextColor(resources.getColor(R.color.white))
+                        .titleTextColor(resources.getColor(R.color.white))
+                        // 开启单选   （默认为多选）
+                        .singleSelect()
+                        // 开启拍照功能 （默认关闭）
+                        .showCamera()
+                        // 拍照后存放的图片路径（默认 /temp/picture） （会自动创建）
+                        .filePath("/ImageSelector/Pictures")
+                        .build()
 
-                    ImageSelector.open(activity, imageConfig)   // 开启图片选择器
-                }
-            }, Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                ImageSelector.open(activity, imageConfig)   // 开启图片选择器
+            }else{
+                AndPermission.with(activity)
+                        .requestCode(100)
+                        .permission(Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                        .send();
+
+            }
+
+
+//            PermissionUtil.requiestPermission(activity, context, object : PermissionListener {
+//                override fun PermissionFail() {
+//                    toasts("你需要同意该权限才能使用该功能")
+//                }
+//
+//                override fun PermissionNever() {
+//                }
+//
+//                override fun PermissionSuccess() {
+//                    val imageConfig = ImageConfig.Builder(GlideLoader())
+//                            .steepToolBarColor(resources.getColor(R.color.blue))
+//                            .titleBgColor(resources.getColor(R.color.blue))
+//                            .titleSubmitTextColor(resources.getColor(R.color.white))
+//                            .titleTextColor(resources.getColor(R.color.white))
+//                            // 开启单选   （默认为多选）
+//                            .singleSelect()
+//                            // 开启拍照功能 （默认关闭）
+//                            .showCamera()
+//                            // 拍照后存放的图片路径（默认 /temp/picture） （会自动创建）
+//                            .filePath("/ImageSelector/Pictures")
+//                            .build()
+//
+//                    ImageSelector.open(activity, imageConfig)   // 开启图片选择器
+//                }
+//            }, Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE)
         }
 
         open fun sex(view: View) {
