@@ -34,8 +34,10 @@ class BroadcastSendActivity : BaseActivity<ActivityBroadcastSendBinding>() {
         var extras = intent.extras
         var state = extras.getInt("state", 0)
         if (state == 0) {//接收方
-            binding.submit.visibility = View.GONE
+            binding.submit.visibility = View.INVISIBLE
+            binding.tvHint.setText(context.resources.getString(R.string.service_accept_brocast))
         } else {//广播方
+            binding.tvHint.setText(context.resources.getString(R.string.service_mandatory_brocast))
             binding.click = OnClick()
             binding.submit.visibility = View.VISIBLE
 //            binding.tv

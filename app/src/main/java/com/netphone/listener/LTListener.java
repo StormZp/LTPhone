@@ -190,7 +190,7 @@ public class LTListener {
 //                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 //                MyApp.getContext().startActivity(intent);
 
-                jump( FriendVoiceActivity.class,bundle);
+                jump(FriendVoiceActivity.class, bundle);
             }
 
             @Override
@@ -203,7 +203,7 @@ public class LTListener {
 //                intent.putExtras(bundle);
 //                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 //                MyApp.getContext().startActivity(intent);
-                jump( VoicePlayActivity.class,bundle);
+                jump(VoicePlayActivity.class, bundle);
             }
 
             @Override
@@ -220,7 +220,7 @@ public class LTListener {
 //                intent.putExtras(bundle);
 //                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 //                MyApp.getContext().startActivity(intent);
-                jump( VoicePlayActivity.class,bundle);
+                jump(VoicePlayActivity.class, bundle);
             }
         });
     }
@@ -327,7 +327,7 @@ public class LTListener {
                 bundle.putSerializable("bean", msgBean);
 //                intent.putExtras(bundle);
 //                MyApp.getInstense().getContext().startActivity(intent);
-                jump( MessageDialog.class,bundle);
+                jump(MessageDialog.class, bundle);
             }
 
             @Override
@@ -346,7 +346,7 @@ public class LTListener {
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("bean", bean);
 //                MyApp.getContext().startActivity(new Intent(MyApp.getContext(), BigImageActivity.class).putExtras(bundle));
-                jump( BigImageActivity.class,bundle);
+                jump(BigImageActivity.class, bundle);
             }
 
             @Override
@@ -364,7 +364,7 @@ public class LTListener {
 //                intent.putExtras(bundle);
 //                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 //                MyApp.getInstense().getContext().startActivity(intent);
-                jump( BroadcastSendActivity.class,bundle);
+                jump(BroadcastSendActivity.class, bundle);
             }
 
             @Override
@@ -376,7 +376,7 @@ public class LTListener {
 //                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 //                MyApp.getInstense().getContext().startActivity(intent.putExtras(bundle));
 
-                jump( FriendVoiceActivity.class,bundle);
+                jump(FriendVoiceActivity.class, bundle);
             }
 
             @Override
@@ -420,9 +420,14 @@ public class LTListener {
         LTApi.getInstance().setOnBroadcastListener(new OnBroadcastListener() {
             @Override
             public void onSend() {
-                Intent intent = new Intent(MyApp.getContext(), BroadcastSendActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                MyApp.getInstense().getContext().startActivity(intent);
+//                Intent intent = new Intent(MyApp.getContext(), BroadcastSendActivity.class);
+//                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                MyApp.getInstense().getContext().startActivity(intent);
+
+                Bundle bundle = new Bundle();
+                bundle.putInt("state", 1);
+                jump(BroadcastSendActivity.class, bundle);
+
             }
 
             @Override
@@ -432,12 +437,9 @@ public class LTListener {
 
             @Override
             public void onReceiver() {
-                Intent intent = new Intent(MyApp.getContext(), BroadcastSendActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putInt("state", 0);
-                intent.putExtras(bundle);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                MyApp.getInstense().getContext().startActivity(intent);
+                jump(BroadcastSendActivity.class, bundle);
             }
         });
     }

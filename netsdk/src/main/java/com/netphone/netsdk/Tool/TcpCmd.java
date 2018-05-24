@@ -590,23 +590,32 @@ public class TcpCmd {
                         UdpSocket.Companion.getInstance().stopPlay();
                         break;
                     case 0x1F://从服务台发起广播(发起方) 收到端口号
-//                        port = ByteUtil.getInt(bodyBytes, 0);//udp 端口
+                        port = ByteUtil.getInt(bodyBytes, 0);//udp 端口
+                        UdpSocket.Companion.getInstance().connect(port);
+                        UdpSocket.Companion.getInstance().record();
                         if (LTApi.getInstance().onBroadcastListener != null) {
                             LTApi.getInstance().onBroadcastListener.onSend();
                         }
                         break;
                     case 0x20://广播到达最大时长(发起方) 中断广播
+                        UdpSocket.Companion.getInstance().stopPlay();
+                        UdpSocket.Companion.getInstance().stopRecord();
                         if (LTApi.getInstance().onBroadcastListener != null) {
                             LTApi.getInstance().onBroadcastListener.onStop();
                         }
                         break;
                     case 0x21://开始接收广播内容
-                        //                        port = ByteUtil.getInt(bodyBytes, 0);//udp 端口
+                        port = ByteUtil.getInt(bodyBytes, 0);//udp 端口
+                        UdpSocket.Companion.getInstance().connect(port);
+                        UdpSocket.Companion.getInstance().play();
                         if (LTApi.getInstance().onBroadcastListener != null) {
                             LTApi.getInstance().onBroadcastListener.onReceiver();
                         }
                         break;
                     case 0x22://停止接收广播内容
+                        UdpSocket.Companion.getInstance().stopPlay();
+                        UdpSocket.Companion.getInstance().stopRecord();
+
                         if (LTApi.getInstance().onBroadcastListener != null) {
                             LTApi.getInstance().onBroadcastListener.onStop();
                         }
