@@ -25,7 +25,7 @@ public class TcpConfig {
     /**
      * 服务器port
      */
-    public static final int PORT       = 3012;//立同
+    public static final int PORT       = 2012;//立同
     //    public static final int PORT = 3012;//菲律宾
 //            public static final int PORT = 4012;//服务器
     /**

@@ -906,6 +906,8 @@ public class TcpCmd {
                         }.getType());
                         for (int i = 0; i < users.size(); i++) {
                             UserInfoBean unique1 = mUserInfoBeanDao.queryBuilder().where(UserInfoBeanDao.Properties.UserId.eq(users.get(i).getUserId())).build().unique();
+                            if (unique1 == null)
+                                continue;
                             if (users.get(i) != null && !TextUtils.isEmpty(users.get(i).getIsOnLine()))
                                 unique1.setIsOnLine(users.get(i).getIsOnLine());
                             else
