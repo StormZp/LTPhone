@@ -25,7 +25,7 @@ class UdpSocket {
     private var udpPacket: DatagramPacket? = null//UDP发送包
 
     private var recordPort: Int = 0//录音端口号
-    private var voiceUtil:VoiceUtil ?=null
+    private var voiceUtil: VoiceUtil? = null
 
 
     fun connect(recordPort: Int) {
@@ -37,7 +37,7 @@ class UdpSocket {
             udpSocket = DatagramSocket(recordPort)//新建一个DatagramSocket,获取客户端本地端口号
 
         } catch (e: Exception) {
-            LogUtil.error("UdpSocket.kt"+"39\tconnect()\n" , e);
+            LogUtil.error("UdpSocket.kt" + "39\tconnect()\n", e);
 //            e.printStackTrace()
         }
 
@@ -50,7 +50,7 @@ class UdpSocket {
                 udpSocket = DatagramSocket(recordPort)//新建一个DatagramSocket,获取客户端本地端口号
 
             } catch (e: Exception) {
-                LogUtil.error("UdpSocket.kt"+"53\tconnect()\n",e);
+                LogUtil.error("UdpSocket.kt" + "53\tconnect()\n", e);
 //                LogUtil.error("UdpSocket.kt", "39\tconnect()\n" + e);
 //                e.printStackTrace()
             }
@@ -130,25 +130,30 @@ class UdpSocket {
      * @param sendMode 0：表示普通模式，用client发送；1;表示强制广播模式，用brocastClient发送
      */
     open fun sendData(audios: ByteArray, sendMode: Int) {
-        var udpDataEncode = UdpUtil.udpDataEncode(audios)
+        try {
+            var udpDataEncode = UdpUtil.udpDataEncode(audios)
 //        ByteUtil.putLong(bArray,System.currentTimeMillis(),0)
 //        var udpDataEncode = UdpUtil.udpDataEncode(bArray)//todo 测试用
-        when (sendMode) {
-            0 -> {
+            when (sendMode) {
+                0 -> {
 
-                udpPacket = getCommonDatagramPacket(udpDataEncode, udpDataEncode.size, address!!, recordPort)
-                if (udpSocket != null && !udpSocket!!.isClosed) {
-                    LogUtil.error("SocketManageService.kt", "582\n" + "发送音频数据${udpDataEncode.size}::"+udpPacket)
+                    udpPacket = getCommonDatagramPacket(udpDataEncode, udpDataEncode.size, address!!, recordPort)
+                    if (udpSocket != null && !udpSocket!!.isClosed) {
+                        LogUtil.error("SocketManageService.kt", "582\n" + "发送音频数据${udpDataEncode.size}::" + udpPacket)
 
-                    udpSocket!!.send(udpPacket)
-                } else {
+                        udpSocket!!.send(udpPacket)
+                    } else {
 //                    initClient()
-                    instance
+                        instance
+                    }
+                }
+                1 -> {
                 }
             }
-            1 -> {
-            }
+        } catch (e: Exception) {
+            LogUtil.error("UdpSocket.kt" + "\t154\tsendData()\n", e);
         }
+
     }
 
     private fun getCommonDatagramPacket(recvBuf: ByteArray, length: Int, addr: InetAddress, port: Int): DatagramPacket {
@@ -158,7 +163,7 @@ class UdpSocket {
     var sdFormat = SimpleDateFormat("yyyy-MM-dd hh:mm:ss SSS")
     private val playVoiceWork = Runnable {
         // 接收udp
-        val recvBuf = ByteArray(VoiceUtil.BUFFER_SIZE + VoiceUtil.HEAD_SIZE )
+        val recvBuf = ByteArray(VoiceUtil.BUFFER_SIZE + VoiceUtil.HEAD_SIZE)
         var count = 0
         val recvPacket = DatagramPacket(recvBuf, recvBuf.size)
 
@@ -176,7 +181,7 @@ class UdpSocket {
                     }
                 }
             } catch (e: IOException) {
-                LogUtil.error("UdpSocket.kt","176\t()\n",e);
+                LogUtil.error("UdpSocket.kt", "176\t()\n", e);
 //                e.printStackTrace()
             }
         }
