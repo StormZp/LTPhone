@@ -420,6 +420,7 @@ public class TcpCmd {
                             LTApi.getInstance().onFriendCallListener.onCallStart();
                         }
                         port = ByteUtil.getInt(bodyBytes, 0);//udp端口,占4位
+                        UdpSocket.Companion.getInstance().stopPlay();
                         UdpSocket.Companion.getInstance().connect(port);
                         UdpSocket.Companion.getInstance().play();
                         UdpSocket.Companion.getInstance().record();
@@ -606,6 +607,7 @@ public class TcpCmd {
                         break;
                     case 0x21://开始接收广播内容
                         port = ByteUtil.getInt(bodyBytes, 0);//udp 端口
+                        UdpSocket.Companion.getInstance().stopPlay();
                         UdpSocket.Companion.getInstance().connect(port);
                         UdpSocket.Companion.getInstance().play();
                         if (LTApi.getInstance().onBroadcastListener != null) {
@@ -625,7 +627,7 @@ public class TcpCmd {
                         body = ByteIntUtils.utfToString(bodyBytes);
                         Gson     gson = new Gson();
                         PortBean info = gson.fromJson(body, PortBean.class);
-
+                        UdpSocket.Companion.getInstance().stopPlay();
                         UdpSocket.Companion.getInstance().connect(Integer.parseInt(info.getPort()));
                         UdpSocket.Companion.getInstance().play();
 

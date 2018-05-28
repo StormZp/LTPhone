@@ -17,14 +17,14 @@ import com.netphone.netsdk.LTConfigure;
  * Created Storm<p>
  * Time    2018/5/21 10:17<p>
  * Message {  网络改变监控广播
-              <p>
-              监听网络的改变状态,只有在用户操作网络连接开关(wifi,mobile)的时候接受广播,<p>
-              然后对相应的界面进行相应的操作，并将 状态 保存在我们的APP里面}
+ * <p>
+ * 监听网络的改变状态,只有在用户操作网络连接开关(wifi,mobile)的时候接受广播,<p>
+ * 然后对相应的界面进行相应的操作，并将 状态 保存在我们的APP里面}
  */
 public class NetworkConnectChangedReceiver extends BroadcastReceiver {
 
     @Override
-    public void onReceive(Context context, Intent intent) {
+    public void onReceive(final Context context, final Intent intent) {
         // 这个监听wifi的打开与关闭，与wifi的连接无关
 //        if (WifiManager.WIFI_STATE_CHANGED_ACTION.equals(intent.getAction())) {
 //            int wifiState = intent.getIntExtra(WifiManager.EXTRA_WIFI_STATE, 0);
@@ -71,39 +71,49 @@ public class NetworkConnectChangedReceiver extends BroadcastReceiver {
         // 这个监听网络连接的设置，包括wifi和移动数据的打开和关闭。.
         // 最好用的还是这个监听。wifi如果打开，关闭，以及连接上可用的连接都会接到监听。见log
         // 这个广播的最大弊端是比上边两个广播的反应要慢，如果只是要监听wifi，我觉得还是用上边两个配合比较合适
-        if (ConnectivityManager.CONNECTIVITY_ACTION.equals(intent.getAction())) {
-            ConnectivityManager manager = (ConnectivityManager) context
-                    .getSystemService(Context.CONNECTIVITY_SERVICE);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                if (ConnectivityManager.CONNECTIVITY_ACTION.equals(intent.getAction())) {
+                    ConnectivityManager manager = (ConnectivityManager) context
+                            .getSystemService(Context.CONNECTIVITY_SERVICE);
 //            LogUtil.error(  "CONNECTIVITY_ACTION");
 
-            NetworkInfo activeNetwork = manager.getActiveNetworkInfo();
-            if (activeNetwork != null) { // connected to the internet
-                if (activeNetwork.isConnected()) {
-                    if (activeNetwork.getType() == ConnectivityManager.TYPE_WIFI) {
-                        // connected to wifi
+                    NetworkInfo activeNetwork = manager.getActiveNetworkInfo();
+                    if (activeNetwork != null) { // connected to the internet
+                        if (activeNetwork.isConnected()) {
+                            if (activeNetwork.getType() == ConnectivityManager.TYPE_WIFI) {
+                                // connected to wifi
 //                        LogUtil.error(  "当前WiFi连接可用 ");
-                        if (  LTConfigure.getInstance().mOnNetworkListener!=null)   LTConfigure.getInstance().mOnNetworkListener.onWifiNet();
-                    } else if (activeNetwork.getType() == ConnectivityManager.TYPE_MOBILE) {
-                        // connected to the mobile provider's data plan
+                                if (LTConfigure.getInstance().mOnNetworkListener != null)
+                                    LTConfigure.getInstance().mOnNetworkListener.onWifiNet();
+                            } else if (activeNetwork.getType() == ConnectivityManager.TYPE_MOBILE) {
+                                // connected to the mobile provider's data plan
 //                        LogUtil.error(  "当前移动网络连接可用 ");
-                        if (  LTConfigure.getInstance().mOnNetworkListener!=null)   LTConfigure.getInstance().mOnNetworkListener.onMobileNet();
-                    }
-                } else {
+                                if (LTConfigure.getInstance().mOnNetworkListener != null)
+                                    LTConfigure.getInstance().mOnNetworkListener.onMobileNet();
+                            }
+                        } else {
 //                    LogUtil.error(  "当前没有网络连接，请确保你已经打开网络 ");
-                    if (  LTConfigure.getInstance().mOnNetworkListener!=null)   LTConfigure.getInstance().mOnNetworkListener.onNoNet();
-                }
+                            if (LTConfigure.getInstance().mOnNetworkListener != null)
+                                LTConfigure.getInstance().mOnNetworkListener.onNoNet();
+                        }
 //                 LogUtil.error( "info.getTypeName()" + activeNetwork.getTypeName());
 //                LogUtil.error(  "getSubtypeName()" + activeNetwork.getSubtypeName());
 //                LogUtil.error(  "getState()" + activeNetwork.getState());
 //                LogUtil.error(  "getDetailedState()" + activeNetwork.getDetailedState().name());
 //                LogUtil.error(  "getDetailedState()" + activeNetwork.getExtraInfo());
 //                LogUtil.error(  "getType()" + activeNetwork.getType());
-            } else {   // not connected to the internet
+                    } else {   // not connected to the internet
 //                LogUtil.error(  "当前没有网络连接，请确保你已经打开网络 ");
-                if (  LTConfigure.getInstance().mOnNetworkListener!=null)   LTConfigure.getInstance().mOnNetworkListener.onNoNet();
+                        if (LTConfigure.getInstance().mOnNetworkListener != null)
+                            LTConfigure.getInstance().mOnNetworkListener.onNoNet();
 //                EventBusUtil.sendEvent(new AppBean(EventConfig.NET_WORK_CHANGE,1));
 
+                    }
+                }
             }
-        }
+        }).start();
+
     }
 }
